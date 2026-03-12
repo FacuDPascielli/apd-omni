@@ -1,27 +1,29 @@
-# Entorno Virtual
+# Seguridad: Credenciales y variables de entorno
+credentials.json
+.env
+*.pem
+*.key
+
+# Archivos de caché de Python y entornos virtuales
+__pycache__/
+*.py[cod]
+*$py.class
 venv/
 env/
 .venv/
 
-# Variables de Entorno (Credenciales)
-.env
+# Logs y Archivos de Debugging (Playwright, etc.)
+*.log
+*.png
+*.html
 
-# Cachés de Python
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-
-# Base de datos y cachés del scraper
+# Bases de datos antiguas obsoletas
 ofertas.db
 notified_ids.json
 
-# Logs y Debug
-*.log
-debug_filtro.png
-error_clic.png
-*.html
-output_log.txt
-
-# Directorio de Playwright (por si acaso)
-.playwright/
+# ==========================================================
+# IMPORTANTE: NO IGNORAR ofertas_enviadas.json
+# ==========================================================
+# El archivo ofertas_enviadas.json no está en esta lista.
+# Esto asegura que Git lo rastree y GitHub Actions pueda 
+# hacerle "push" para guardar la memoria de los correos.
