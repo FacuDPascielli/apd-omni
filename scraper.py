@@ -4,6 +4,7 @@ Lógica para buscar ofertas en el portal ABC, extraer la tabla y aplicar los fil
 from playwright.sync_api import Page
 import re
 from auth import login_abc
+from database_google import coincide_distrito
 
 APD_URL = "https://misservicios.abc.gob.ar/actos.publicos.digitales/"
 
@@ -384,12 +385,6 @@ def scrape_ofertas(page: Page, distritos: list):
             # --- VALIDACIÓN DEL FILTRO DE DISTRITO ---
             if page.locator(".card").count() > 0:
                 try:
-                    import unicodedata
-                    def unidecode_str(s):
-                        return ''.join(c for c in unicodedata.normalize('NFD', s) if unicodedata.category(c) != 'Mn')
-                        
-                    dist_buscado_norm = unidecode_str(distrito.upper())
-                    
                     # Intentos de validación cruzada
                     intentos_validacion = 2
                     for intento in range(intentos_validacion):
@@ -398,9 +393,9 @@ def scrape_ofertas(page: Page, distritos: list):
                         
                         if match_distrito_check:
                             distrito_leido = match_distrito_check.group(1).strip().upper()
-                            dist_leido_norm = unidecode_str(distrito_leido)
                             
-                            if dist_buscado_norm not in dist_leido_norm and dist_leido_norm not in dist_buscado_norm:
+                            # === Uso de Coincidencia Inteligente ===
+                            if not coincide_distrito(distrito, distrito_leido):
                                 if intento < intentos_validacion - 1:
                                     print(f"[SCRAPER] ⚠ Falso positivo potencial de Distrito. Leímos '{distrito_leido}' en vez de '{distrito}'. Esperando 2s y volviendo a leer...")
                                     page.wait_for_timeout(2000)

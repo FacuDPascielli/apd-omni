@@ -6,6 +6,7 @@ import gspread
 import unicodedata
 import os
 import json
+import re
 from oauth2client.service_account import ServiceAccountCredentials
 
 SCOPES = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
@@ -25,12 +26,61 @@ def normalizar_texto(texto):
         return "N DE JULIO"
 
     if "JOSE C" in texto and "PAZ" in texto:
-        return "JOSE C. PAZ"
+        return "JOSE C PAZ"
 
-    # Limpieza general de puntos para el resto de los casos
-    texto = texto.replace(".", "")
+    # Limpieza general de puntos y caracteres especiales que puedan fallar
+    texto = texto.replace(".", " ").replace(",", " ")
+    
+    # Remover múltiples espacios
+    texto = re.sub(r'\s+', ' ', texto).strip()
 
     return texto
+
+def coincide_distrito(buscado, leido):
+    if not buscado or not leido:
+        return False
+        
+    buscado_norm = normalizar_texto(buscado)
+    leido_norm = normalizar_texto(leido)
+    
+    # Expansión de prefijos/abreviaturas seguras multiletra
+    expansiones = {
+        "ALMTE": "ALMIRANTE",
+        "PTE": "PRESIDENTE",
+        "GRL": "GENERAL",
+        "GRAL": "GENERAL",
+        "VTE": "VICENTE",
+        "CNEL": "CORONEL",
+        "CAP": "CAPITAN"
+    }
+    
+    palabras_buscado = buscado_norm.split()
+    palabras_clave_buscado = []
+    
+    for p in palabras_buscado:
+        # 1. Expandimos si está en nuestro diccionario seguro
+        if p in expansiones:
+            p = expansiones[p]
+            
+        # 2. Descartar palabras de 1 o 2 caracteres (elimina L., T., V., DE, LA, EL...)
+        if len(p) > 2:
+            palabras_clave_buscado.append(p)
+            
+    # Fallback si por alguna razón purgaron todo 
+    # (ej: todas las palabras del distrito tenían <= 2 letras)
+    if not palabras_clave_buscado:
+        palabras_clave_buscado = palabras_buscado
+        
+    palabras_leido = leido_norm.split()
+    texto_leido_completo = " " + " ".join(palabras_leido) + " "
+    
+    # Verificamos que todas las palabras clave estén presentes en lo leído 
+    # (ya sea como palabra aislada o subcadena)
+    for clave in palabras_clave_buscado:
+        if clave not in palabras_leido and clave not in texto_leido_completo:
+            return False
+            
+    return True
 
 
 def obtener_usuarios_desde_sheets():

@@ -8,7 +8,7 @@ import json
 import schedule
 from dotenv import load_dotenv
 from scraper import scrape_ofertas
-from database_google import obtener_usuarios_desde_sheets, normalizar_texto
+from database_google import obtener_usuarios_desde_sheets, normalizar_texto, coincide_distrito
 from notifier import enviar_correo
 from playwright.sync_api import sync_playwright
 
@@ -96,11 +96,13 @@ def job():
                 ofertas_match = []
                 for oferta in lista_maestra:
                     oferta_id = oferta["id"]
-                    oferta_distrito = normalizar_texto(oferta["distrito"])
+                    oferta_distrito = oferta["distrito"]
                     oferta_codigo = oferta["codigo_area"].upper().strip()
                     
-                    # 1. Filtro por Distrito y Materia
-                    if oferta_distrito in distritos_usuario and oferta_codigo in materias_usuario:
+                    # 1. Filtro por Distrito y Materia (Coincidencia Inteligente)
+                    match_dist = any(coincide_distrito(d_usuario, oferta_distrito) for d_usuario in distritos_usuario)
+                    
+                    if match_dist and oferta_codigo in materias_usuario:
                         # 2. Filtro por Memoria Individual (que no haya sido enviada ANTES a este mail)
                         if oferta_id not in usuario_sent_ids:
                             ofertas_match.append(oferta)
