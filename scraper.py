@@ -4,7 +4,7 @@ Lógica para buscar ofertas en el portal ABC, extraer la tabla y aplicar los fil
 from playwright.sync_api import Page
 import re
 from auth import login_abc
-from database_google import coincide_distrito
+from database_google import coincide_distrito, limpiar_texto_abc
 
 APD_URL = "https://misservicios.abc.gob.ar/actos.publicos.digitales/"
 
@@ -199,6 +199,8 @@ def extraer_todas_paginas(page: Page) -> list:
                 # Buscar código en paréntesis ej (FIA)
                 match_codigo = re.search(r'\(([A-Z0-9\/\+\-]+)\)', texto_upper)
                 codigo_area = match_codigo.group(1).strip() if match_codigo else "DESCONOCIDO"
+                if codigo_area != "DESCONOCIDO":
+                    codigo_area = limpiar_texto_abc(codigo_area)
 
                 # IGE
                 match_ige = re.search(r'#(?:IGE)?\s*(\d+)', texto_upper)
@@ -209,6 +211,8 @@ def extraer_todas_paginas(page: Page) -> list:
                 # Distrito: Extraer de "DISTRITO: <valor>" para evitar domicilios
                 match_distrito = re.search(r'DISTRITO\s*:\s*([^\n]+)', texto_upper)
                 distrito_tarjeta = match_distrito.group(1).strip() if match_distrito else "DESCONOCIDO"
+                if distrito_tarjeta != "DESCONOCIDO":
+                    distrito_tarjeta = limpiar_texto_abc(distrito_tarjeta)
 
                 # Limpieza de líneas
                 lineas = [line.strip() for line in texto_tarjeta.split('\n') if line.strip()]
@@ -251,7 +255,8 @@ def extraer_todas_paginas(page: Page) -> list:
                     "escuela": escuela,
                     "horarios": horarios,
                     "observaciones": observaciones,
-                    "texto_completo": texto_tarjeta
+                    "texto_completo": texto_tarjeta,
+                    "pagina_actual": pagina_actual
                 })
             except Exception as loop_e:
                 print(f"  -> [ERROR] Fallo al procesar la tarjeta índice {i} ({loop_e}). Saltando...")
@@ -303,9 +308,12 @@ def extraer_todas_paginas(page: Page) -> list:
     return ofertas_extraidas
 
 
-def scrape_ofertas(page: Page, distritos: list):
-    ofertas_encontradas = []
-    
+def scrape_ofertas(page: Page):
+    """
+    Inicia el Cosechador Masivo: extrae absolutamente todas las ofertas listadas en el portal publicamente.
+    Itera automáticamente a través de todas las páginas de paginación disponibles.
+    No aplica filtros previos por UI. La purga y el filtrado se hace en Base de Datos.
+    """
     page_activa = gestionar_estado_sesion(page)
     if page_activa is None:
         print("Abortando extracción de ofertas por fallo en la sesión/navegación.")
@@ -320,173 +328,9 @@ def scrape_ofertas(page: Page, distritos: list):
     except Exception:
         print("[SCRAPER] Advertencia: título de la sección no detectado (continuando de todas formas).")
 
-    modo_barrido_total = False
-    fallos_filtro = 0
+    print("\n[BARRIDO TOTAL] Extrayendo TODAS las ofertas de la provincia...")
+    ofertas_provinciales = extraer_todas_paginas(page)
 
-    for distrito in distritos:
-        if modo_barrido_total:
-            # Si estamos en barrido total, no iteramos por distritos, rompemos el ciclo
-            break
+    print(f"[SCRAPER] Fin total de barrido. Extracciones enviadas a orquestador: {len(ofertas_provinciales)}")
+    return ofertas_provinciales
 
-        print(f"\n--- Procesando Distrito: {distrito} ---")
-        exito_filtro = False
-        
-        try:
-            print("[SCRAPER] Abriendo modal de Distrito...")
-            boton_distrito = page.locator("div.filtro", has_text="Distrito").locator("button")
-            boton_distrito.scroll_into_view_if_needed()
-            boton_distrito.click(force=True)
-            
-            page.wait_for_selector("input[role='combobox']", state="visible", timeout=10000)
-            print(f"[SCRAPER] Limpiando input y tipeando '{distrito}'...")
-            page.locator("input[role='combobox']").clear()
-            page.type("input[role='combobox']", distrito, delay=150)
-            page.wait_for_timeout(1500)
-            
-            # Chequear preventivamente si dice "No items found"
-            dropdown_panel = page.locator("ng-dropdown-panel")
-            if dropdown_panel.is_visible():
-                panel_texto = dropdown_panel.inner_text().lower()
-                if "no items found" in panel_texto or "no se encontraron" in panel_texto:
-                    raise Exception("Dropdown muestra 'No items found'")
-            
-            print(f"[SCRAPER] Esperando opción '{distrito}'...")
-            opcion = page.locator("span.ng-option-label", has_text=distrito)
-            opcion.wait_for(state="visible", timeout=6000)
-            page.screenshot(path="debug_filtro.png")
-            opcion.first.click()
-            page.wait_for_timeout(1500)
-            
-            print("[SCRAPER] Presionando Buscar en el modal...")
-            btn_buscar = page.locator(".modal-footer button", has_text=re.compile(r"Buscar", re.IGNORECASE))
-            btn_buscar.wait_for(state="visible", timeout=10000)
-            btn_buscar.click(force=True)
-            # --- PROTECCIÓN CONTRA RACE CONDITION ---
-            
-            # 1. Esperar obligatoriamente la desaparición de spinners/loaders antes de chequear el DOM
-            try:
-                print(f"[SCRAPER] Esperando que desaparezcan indicadores de carga para {distrito}...")
-                page.locator(".spinner-border, .loader, [role='status'], text='Cargando'").locator("visible=true").first.wait_for(state="hidden", timeout=15000)
-            except Exception:
-                pass
-                
-            # 1.5 Esperar obligatoriamente que el modal se cierre (state='hidden')
-            try:
-                page.locator(".modal-content, .modal").locator("visible=true").first.wait_for(state="hidden", timeout=10000)
-            except Exception:
-                pass
-            
-            print(f"[SCRAPER] Modal cerrado, esperando 3s para estabilidad del DOM...")
-            page.wait_for_timeout(3000)
-            
-            # 2. Verificación por Contenido (Esperar por tarjetas o el mensaje de '0 registros')
-            print(f"[SCRAPER] Esperando resolución del DOM (tarjetas o mensaje de cero)...")
-            try:
-                page.wait_for_function(
-                    "() => document.querySelectorAll('.card').length > 0 || document.body.innerText.toLowerCase().includes('0 registros encontrados') || document.body.innerText.toLowerCase().includes('no se encontraron resultados')",
-                    timeout=10000
-                )
-            except Exception:
-                print("[SCRAPER] ⏱ Timeout de 10s esperando un estado definitivo en el DOM. Podría estar lento...")
-
-            page.wait_for_load_state("networkidle", timeout=5000)
-            
-            # --- VALIDACIÓN DEL FILTRO DE DISTRITO ---
-            if page.locator(".card").count() > 0:
-                try:
-                    # Intentos de validación cruzada
-                    intentos_validacion = 2
-                    for intento in range(intentos_validacion):
-                        primera_tarjeta_texto = page.locator(".card").first.evaluate("node => node.innerText").upper()
-                        match_distrito_check = re.search(r'DISTRITO\s*:\s*([^\n]+)', primera_tarjeta_texto)
-                        
-                        if match_distrito_check:
-                            distrito_leido = match_distrito_check.group(1).strip().upper()
-                            
-                            # === Uso de Coincidencia Inteligente ===
-                            if not coincide_distrito(distrito, distrito_leido):
-                                if intento < intentos_validacion - 1:
-                                    print(f"[SCRAPER] ⚠ Falso positivo potencial de Distrito. Leímos '{distrito_leido}' en vez de '{distrito}'. Esperando 2s y volviendo a leer...")
-                                    page.wait_for_timeout(2000)
-                                    continue
-                                else:
-                                    print(f"[SCRAPER] ❌ ERROR DE FILTRO EN PORTAL (Confirmado): Buscábamos '{distrito}', pero vimos tarjetas de '{distrito_leido}'.")
-                                    raise Exception("Portal ignoró el filtro de búsqueda de distrito")
-                            else:
-                                print(f"[SCRAPER] ✓ Validación de filtro correcta (Tarjeta indica '{distrito_leido}')")
-                                break # Match exitoso, salir del loop
-                        else:
-                            # Si no pudimos leer el regex no rompemos todo, pasamos al siguiente intento o confirmamos
-                            break 
-                            
-                except Exception as e_val:
-                    if "Portal ignoró" in str(e_val):
-                        raise e_val
-                    print(f"[SCRAPER] Advertencia durante validación cruzada del filtro: {e_val}")
-                    
-            exito_filtro = True
-
-        except Exception as e:
-            print(f"[SCRAPER] ⚠ Falla al administrar el modal de distritos {distrito}: {e}")
-            exito_filtro = False
-
-        if not exito_filtro:
-            fallos_filtro += 1
-            print(f"[SCRAPER] ⚠ Detectado fallo en carga de {distrito} (Intento {fallos_filtro}/2). Refrescando vista pacientemente...")
-            # Refrescar la vista a ver si soluciona el problema de Angular
-            page = _navegar_a_ofertas(page)
-            
-            if fallos_filtro >= 2:
-                print("⚠️ Carga de distritos fallida reiteradamente. Iniciando escaneo manual de páginas para garantizar resultados")
-                modo_barrido_total = True
-                break
-            continue
-
-        # --- GUARDIA MEJORADA CON PRIORIDAD Y RETARDO EXTENDIDO ---
-        try:
-            texto_pagina = page.inner_text("body").lower()
-            hay_cero = "0 registros encontrados" in texto_pagina or "no se encontraron resultados" in texto_pagina
-            hay_tarjetas = page.locator(".card").count() > 0
-
-            # 3. Prioridad a las Ofertas
-            if hay_tarjetas:
-                print(f"[SCRAPER] ✓ Se detectaron tarjetas de oferta en {distrito}.")
-            elif hay_cero:
-                # 4. Aumentar Doble Chequeo a 5s
-                print(f"[SCRAPER] ⚠ Detectado '0 registros' sin tarjetas. Esperando 5s térmicos para confirmación (Doble Chequeo)...")
-                page.wait_for_timeout(5000)
-                
-                texto_pagina_2 = page.inner_text("body").lower()
-                hay_tarjetas_2 = page.locator(".card").count() > 0
-                hay_cero_2 = "0 registros encontrados" in texto_pagina_2 or "no se encontraron resultados" in texto_pagina_2
-
-                if hay_tarjetas_2:
-                    print(f"[SCRAPER] 🟢 Falso positivo evitado (Doble Chequeo). Las tarjetas de {distrito} terminaron de cargar en el fondo.")
-                elif hay_cero_2:
-                    print(f"[SCRAPER] 🛑 Confirmado: Distrito {distrito} tiene 0 registros reales (comprobado). Saltando al siguiente.")
-                    page = _navegar_a_ofertas(page)
-                    continue
-                else:
-                    print(f"[SCRAPER] 🟢 Estado incierto pero asumimos que carga ofertas ocultas.")
-        except Exception as e:
-            print(f"[SCRAPER] Error durante la guardia de 0 registros: {e}")
-
-        print(f"[SCRAPER] ✓ Distrito {distrito} procesado. Iniciando extracción de datos...")
-        ofertas_distrito = extraer_todas_paginas(page)
-        ofertas_encontradas.extend(ofertas_distrito)
-        
-        # Reset para el siguiente distrito
-        page = _navegar_a_ofertas(page)
-
-    if modo_barrido_total:
-        print("\n[BARRIDO TOTAL] Extrayendo TODAS las ofertas sin aplicar filtros en portal...")
-        ofertas_barrido = extraer_todas_paginas(page)
-        
-        # Merge para evitar duplicados en caso de que algún distrito haya sido exitoso antes de fallar
-        ids_existentes = {o['id'] for o in ofertas_encontradas}
-        for o in ofertas_barrido:
-            if o['id'] not in ids_existentes:
-                ofertas_encontradas.append(o)
-
-    print(f"[SCRAPER] Fin total. Extracciones útiles enviadas a orquestador: {len(ofertas_encontradas)}")
-    return ofertas_encontradas

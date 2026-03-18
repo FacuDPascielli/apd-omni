@@ -73,3 +73,46 @@ def enviar_correo(ofertas, destinatario, nombre="Colega"):
         print(f"Correo de notificación enviado con éxito a {destinatario}: {len(ofertas)} ofertas notificadas.")
     except Exception as e:
         print(f"Error crítico al enviar el correo a {destinatario}: {e}")
+
+def enviar_correo_vencimiento(destinatario, nombre="Colega"):
+    """
+    Envía un mail de cortesía informando que la suscripción pasó al Plan Gratis.
+    """
+    remitente = os.environ.get("EMAIL_REMITENTE")
+    password = os.environ.get("EMAIL_PASSWORD")
+
+    if not remitente or not password:
+        return False
+
+    msg = MIMEMultipart('alternative')
+    msg['Subject'] = "Aviso importante: Pasaste al Plan Gratis de Lector ABC"
+    msg['From'] = remitente
+    msg['To'] = destinatario
+
+    html = f"""
+    <div style="font-family: Arial, sans-serif; color: #333;">
+      <h2 style="color: #ffaa00;">Aviso de suscripción vencida</h2>
+      <p>Hola, <strong>{nombre}</strong>.</p>
+      <p>Nos comunicamos para avisarte que han pasado más de 30 días desde tu último pago, por lo que <b>tu suscripción Premium ha finalizado</b>.</p>
+      <p>Para que no te pierdas todas las alertas, te hemos mantenido en el sistema pero te hemos pasado automáticamente al <b>Plan Gratis</b> (limitado a tu primer distrito y primera materia registrada).</p>
+      <p>Si deseas recuperar el acceso <b>Premium</b> (con todos tus distritos y materias), por favor renueva tu suscripción a la brevedad.</p>
+      <br>
+      <p style="font-size: 13px; color: #555;">Si ya pagaste, por favor desestima este mensaje; el sistema puede demorar unos minutos en procesarlo.</p>
+      <p style="font-size: 11px; color: #999;"><b>Bot Automático Lector ABC</b> | Automate & Professionalize</p>
+    </div>
+    """
+
+    parte_html = MIMEText(html, 'html')
+    msg.attach(parte_html)
+
+    try:
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        server.login(remitente, password)
+        server.sendmail(remitente, destinatario, msg.as_string())
+        server.quit()
+        print(f"Correo de vencimiento enviado a {destinatario}.")
+        return True
+    except Exception as e:
+        print(f"Error al enviar correo de vencimiento a {destinatario}: {e}")
+        return False

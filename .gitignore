@@ -17,10 +17,14 @@ env/
 *.png
 *.html
 
-# Bases de datos antiguas obsoletas
+# Bases de datos y memoria local
 ofertas.db
 notified_ids.json
+usuarios.json
 
+# Desactivar GitHub Actions por ahora
+.github/workflows/
+*.yml
 # ==========================================================
 # IMPORTANTE: NO IGNORAR ofertas_enviadas.json
 # ==========================================================
