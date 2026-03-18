@@ -12,10 +12,8 @@ venv/
 env/
 .venv/
 
-# Logs y Archivos de Debugging (Playwright, etc.)
+# Logs y Archivos de Debugging
 *.log
-*.png
-*.html
 
 # Bases de datos y memoria local
 ofertas.db

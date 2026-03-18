@@ -1,0 +1,202 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//en"><html lang="en"><head>
+
+	<meta charset="utf-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0">
+	<meta name="format-detection" content="telephone=no">
+	<link rel="shortcut icon" href="/nidp/images/customization/images/gba-favicon.ico">
+
+	<title>GBA - Iniciar sesi¾n</title>
+
+	<!--css-->
+	<link rel="stylesheet" href="/nidp/images/customization/loginGBA/css/font-awesome.min.css">
+	<link rel="stylesheet" href="/nidp/images/customization/loginGBA/css/font-awesome.css" type="text/css">
+	<link href="/nidp/images/customization/loginGBA/css/materialize.css" type="text/css" rel="stylesheet">
+	<link href="/nidp/images/customization/loginGBA/css/style.css" type="text/css" rel="stylesheet">
+
+	<link rel="stylesheet" type="text/css" href="/nidp/images/customization/loginGBA/css/estructure.css">
+	<link rel="stylesheet" type="text/css" href="/nidp/images/customization/loginGBA/css/responsive.css">
+
+	<script type="text/javascript" src="/nidp/images/customization/loginGBA/js/jquery-2.1.1.min.js"></script>
+
+	<!-- begin novell javascript-->
+
+	<script type="text/javascript" src="/nidp/images/showhide_2.js"></script>
+<script language="JavaScript">
+	var i = 0;
+	function imageSubmit()
+	{
+		if (i == 0)
+		{
+			i = 1;
+			document.IDPLogin.submit();
+		}
+
+		return false;
+	}
+
+	function onLoadFocus()
+	{
+		if(document.IDPLogin.Ecom_User_ID.value)
+			document.IDPLogin.Ecom_Password.focus();
+		else
+			document.IDPLogin.Ecom_User_ID.focus();
+
+	}
+
+	$(function() {
+		if(screen.width > 1600 )/* 480 */
+			$('.placeholderclass').removeAttr('placeholder');
+		onLoadFocus();
+	});
+</script>
+<script src="/nidp/javascript/login_jsp.js"></script>
+<!-- end novell javascript -->
+</head>
+<body class="loginbody" style="overflow: hidden; width: 1280px;">
+	<nav class="login navModal">
+		<div class="nav-wrapper white">
+			<a href="#" class="brand-logo center loginlog">
+				<img src="/nidp/images/customization/loginGBA/img/pcia.png" class="responsive-img">
+			</a>
+		</div>
+	</nav>
+	<footer>
+
+	</footer>
+	<div id="modallog" class="modal loginmod open" style="display: block; top: 10%; z-index: 1003; opacity: 1; transform: scaleX(1);">
+		<div class="modal-content">
+			<div class="row nobottom">
+				<div class="col m6 s12 leftlogin">
+					<img src="/nidp/images/customization/loginGBA/img/logoabcai.png" class="responsive-img">
+					<p>Para acceder a Plataforma abc ingresß tu cuenta <b>@abc.gob.ar</b> o tu n·mero de CUIL sin guiones ni espacios (ej:30314067863), y tu contrase±a.</p>
+					<div class="help">
+						<ul class="foot">
+							<li>Mesa de Ayuda Tel: 0800 222 6588</li>
+							<li>infoayuda@abc.gob.ar</li>
+						</ul>
+					</div>
+				</div>
+				<div class="col m6 s12 rightlogin">
+					<div class="row formlog nobottom">
+						<script src="/nidp/javascript/respond.js"></script>
+						<form class="col s12" name="IDPLogin" enctype="application/x-www-form-urlencoded" method="POST" action="https://login.abc.gob.ar/nidp/idff/sso?sid=0&amp;sid=0" autocomplete="off">
+							<div class="row">
+								<input type="hidden" name="option" value="credential">
+								
+								<input type="hidden" name="target" value="https://misservicios.abc.gob.ar/actos.publicos.digitales/">
+								
+								<div class="input-field col s12 tooltipped" data-position="right" data-delay="50" data-tooltip="Ingresa tu cuenta @abc.gob.ar o CUIL" data-tooltip-id="2da52b89-85e6-f805-a7e0-507c6893646c">
+									<input type="text" class="validate" name="Ecom_User_ID" id="Ecom_User_ID" value="">
+									<label for="Ecom_User_ID" style="top: -5px;">CUIL o cuenta @abc.gob.ar</label>
+								</div>
+							</div>
+							<div class="row">
+								<div class="input-field col s12 tooltipped" data-position="right" data-delay="50" data-tooltip="Ingresa tu contrase±a" data-tooltip-id="42e01bc5-bf19-1493-8c31-ec2892b1ba80">
+									
+						<input type="password" name="Ecom_Password" id="Ecom_Password" class="validate">
+						<label for="Ecom_Password" data-error="" data-success="" style="top: -5px;">Contrase±a</label>
+						<span class="error-msg" style=""></span>
+						<span>*Ingresa con la misma que utilizabas en Servicios del Portal abc anterior.</span>
+					</div>
+					<div class="clearfix"></div>
+					<div class="mostrar">
+						<input type="checkbox" id="checkbox_pass" value="Mostrar">
+						<label for="checkbox_pass" style="top: -5px;">Mostrar contrase±a</label>
+					</div>
+				</div>
+			</form>
+			<div class="clearfix"></div>
+			<a href="https://olvidemiclave.abc.gob.ar/" class="linklog">┐Olvidaste tu contrase±a?</a>
+			<a href="http://servicios.abc.gob.ar/recursos/registro/instructivo.ingreso.abc.4-21.pdf" class="linklog">┐No estas registrado? Instructivo paso a paso</a>
+			<a href="https://autoregistracion.abc.gob.ar/myprofile/guest/new" class="linklog">Registrar NUEVO Usuario</a>
+			<a href="http://anses.gob.ar/seccion/cuil-3" target="_blank" class="linklog">┐QuÚ es el CUIL?</a>
+		</div>
+		<div class="row btn-in">
+			<a href="#" class="waves-effect waves-light" onclick="return imageSubmit()">ENTRAR</a>
+		</div>
+	</div><!--/rightlogin-->
+</div><!--/row-->
+</div><!--/modal-content-->
+</div>
+<!--/modal-->
+
+
+
+<!--Scripts-->
+<script type="text/javascript" src="/nidp/images/customization/loginGBA/js/materialize.min.js"></script>
+<script type="text/javascript" src="/nidp/images/customization/loginGBA/js/formkeycontrol.js"></script>
+<script>
+	$(".button-collapse").sideNav();
+</script>
+<script>
+	function checkIexplorer() {
+		var ua = window.navigator.userAgent;
+
+				var msie = ua.indexOf('MSIE ');//IE 10 or older
+				var trident = ua.indexOf('Trident/');//IE11
+				var edge = ua.indexOf('Edge/');//Edge
+
+				if(msie || trident || edge){
+					var modal = document.getElementById('modallog');
+					modal.style.display = "block";
+					modal.style.top = "90px";
+					var labels = document.getElementsByTagName("label");
+					for(var i = 0; i < labels.length;i++){
+						labels[i].style.top = "-5px";
+					}
+					// var form = document.getElementById("IDPLogin");
+					// form.addEventListener("keypress",function(){
+					// 	keyCode = (window.event) ? event.keyCode : e.which;
+			    //   keyCode = keyCode || e.keyCode;
+			    //   if(keyCode == 13){
+			    //     imageSubmit();
+			    //   }
+					// });
+				}
+			}
+
+		checkIexplorer();//checkeo y mustro el modal para internet explorer
+		$(document).ready(function(){
+			$('.slider').slider({full_width: true});
+			$('.collapsiblehome').collapsible({
+				accordion : true
+			});
+			$('.collapsibleperfil').collapsible({
+				accordion : true
+			});
+			// the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
+			$('.modal-trigger').leanModal({
+				dismissible: false
+			});
+			$('#modallog').openModal({
+				dismissible: false
+			});
+			$('.tooltipped').tooltip({delay: 50});
+		});
+	</script>
+	<script>
+		$(function () {
+			$("#checkbox_pass").click(function (event) {
+				var change = "";
+				if ($('#checkbox_pass').is(':checked')) {
+					change = "text";
+					$("#Ecom_Password").attr("type","text")
+				} else {
+					change = "password";
+					$("#Ecom_Password").attr("type","password")
+				}
+			});
+
+		});
+	</script>
+	<script>
+		$(document).ready(function() {
+			if ($(window).width() < 800) {
+				$('.tooltipped').tooltip('remove');
+			}
+		});
+	</script>
+
+
+<div class="material-tooltip" id="e7b5b54f-dbda-a53c-42bf-caddece0f865"><span>Ingresa tu cuenta @abc.gob.ar o CUIL</span><div class="backdrop" style="top: 0px; left: 0px;"></div></div><div class="material-tooltip" id="a0d891d3-5fe7-ae7d-956d-593f0f6b7d66"><span>Ingresa tu contrase±a</span><div class="backdrop" style="top: 0px; left: 0px;"></div></div><div class="hiddendiv common"></div><div class="lean-overlay" id="materialize-lean-overlay-1" style="z-index: 1002; display: block; opacity: 0.5;"></div><div class="material-tooltip" id="2da52b89-85e6-f805-a7e0-507c6893646c"><span>Ingresa tu cuenta @abc.gob.ar o CUIL</span><div class="backdrop" style="top: 0px; left: 0px;"></div></div><div class="material-tooltip" id="42e01bc5-bf19-1493-8c31-ec2892b1ba80"><span>Ingresa tu contrase±a</span><div class="backdrop" style="top: 0px; left: 0px;"></div></div></body></html>

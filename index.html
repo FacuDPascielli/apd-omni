@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DocentesZonaSur - Herramientas</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+    </style>
+    <!-- Leaflet CSS & JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <style>        :root {
+            /* Docentes Brown Aesthetic */
+            --primary: #8b5a2b;
+            /* Brown */
+            --primary-hover: #a06b35;
+            --accent: #d4af37;
+            /* Gold */
+            --bg-dark: #120e0a;
+            --glass-bg: rgba(43, 30, 22, 0.4);
+            --glass-border: rgba(139, 90, 43, 0.2);
+            --glass-border-hover: rgba(212, 175, 55, 0.4);
+            --text-main: #fcf8f2;
+            --text-muted: #b8a99a;
+            --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-dark);
+            background-image:
+                radial-gradient(circle at 10% 20%, rgba(139, 90, 43, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(212, 175, 55, 0.1) 0%, transparent 40%);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            box-sizing: border-box;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .header h1 {
+            font-size: 42px;
+            font-weight: 700;
+            margin: 0 0 10px 0;
+            background: linear-gradient(135deg, #f1e3d3, var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
+        }
+
+        .header p {
+            font-size: 18px;
+            color: var(--text-muted);
+            margin: 0;
+            font-weight: 300;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        .card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 30px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: var(--card-shadow);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: var(--glass-border-hover);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(212, 175, 55, 0.1);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card-icon {
+            font-size: 36px;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #f1e3d3, var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin: 0 0 12px 0;
+            color: #fff;
+        }
+
+        .card-desc {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin: 0;
+            line-height: 1.6;
+            flex-grow: 1;
+        }
+
+        .badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(212, 175, 55, 0.2);
+            color: var(--accent);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-content {
+            background: #1a1410;
+            border: 1px solid var(--glass-border-hover);
+            border-radius: 24px;
+            width: 100%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 40px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            transform: scale(0.95) translateY(20px);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1) translateY(0);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: #fff;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: background 0.2s;
+        }
+
+        .close-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Form Controls */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #ced4da;
+        }
+
+        .form-control {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 14px 16px;
+            color: var(--text-main);
+            font-size: 15px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
+        }
+
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23d4af37' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            background-size: 16px;
+        }
+
+        select.form-control option {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+        }
+
+        .btn-primary {
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(139, 90, 43, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(139, 90, 43, 0.6);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .btn-mp {
+            background: #009EE3;
+            /* Blue */
+            box-shadow: 0 4px 15px rgba(0, 158, 227, 0.4);
+            border: none;
+        }
+
+        .btn-mp:hover {
+            background: #0081ba;
+            box-shadow: 0 8px 25px rgba(0, 158, 227, 0.6);
+        }
+
+        /* Search Results Styles */
+        .search-results {
+            margin-top: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .oferta-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-left: 4px solid var(--accent);
+            padding: 16px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .oferta-card h4 {
+            margin: 0 0 8px 0;
+            color: var(--accent);
+            font-size: 16px;
+        }
+
+        .oferta-card p {
+            margin: 4px 0;
+            color: #ddd;
+        }
+
+        .oferta-card b {
+            color: #fff;
+        }
+
+        /* Helpers */
+        .info-alert {
+            background: rgba(212, 175, 55, 0.1);
+            border-left: 3px solid var(--accent);
+            padding: 12px 16px;
+            border-radius: 4px 8px 8px 4px;
+            font-size: 13px;
+            color: #f1e3d3;
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+
+        .status-message {
+            margin-top: 16px;
+            text-align: center;
+            font-size: 14px;
+            display: none;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .status-success {
+            color: #4ade80;
+            background: rgba(74, 222, 128, 0.1);
+            display: block;
+        }
+
+        .status-error {
+            color: #f87171;
+            background: rgba(248, 113, 113, 0.1);
+            display: block;
+        }
+
+        /* Custom Scrollbar for Modal */
+        .modal-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .modal-content::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb:hover {
+            background: var(--accent);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .grid-container {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                padding: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>DocentesZonaSur</h1>
+        <p>Herramientas</p>
+    </div>
+
+    <div class="grid-container">
+        <!-- Tarjeta 1: Buscador -->
+        <div class="card" onclick="openModal('modalSearch')">
+            <div class="card-icon">🔎</div>
+            <h3 class="card-title">Buscador de Cargos</h3>
+            <p class="card-desc">Gancho gratuito. Consulta nuestra base de datos sincronizada de ofertas APD al
+                instante, filtrando por distrito y materia.</p>
+        </div>
+
+        <!-- Tarjeta 2: Plan Gratis -->
+        <div class="card" onclick="openModal('modalFree')">
+            <div class="card-icon">🔔</div>
+            <h3 class="card-title">Alertas Gratis</h3>
+            <p class="card-desc">Recibe notificaciones automáticas en tu correo en cuanto se publican. Limitado a 1
+                distrito y 1 código de materia.</p>
+        </div>
+
+        <!-- Tarjeta 3: Premium -->
+        <div class="card" onclick="openModal('modalPremium')">
+            <div class="card-icon">⭐</div>
+            <h3 class="card-title">Alertas Premium</h3>
+            <p class="card-desc">Desbloquea alertas y notificaciones ilimitadas. Agrega todos los distritos y materias
+                que necesites sin restricciones.</p>
+        </div>
+
+        <!-- Tarjeta 4: Buscador de Escuelas -->
+        <div class="card" onclick="openModal('modalEscuelas')">
+            <div class="card-icon">🗺️</div>
+            <h3 class="card-title">Buscador de Escuelas</h3>
+            <p class="card-desc">Accedé al padrón completo de escuelas de la PBA, con mapas y datos de contacto.</p>
+        </div>
+    </div>
+
+    <!-- MODAL 1: Buscador de Cargos -->
+    <div class="modal-overlay" id="modalSearch">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal('modalSearch')">×</button>
+            <h2 style="margin-top:0; color: var(--accent);">Buscador de Cargos</h2>
+            <p style="color: var(--text-muted); font-size:14px; margin-bottom: 24px; line-height: 1.5;">
+                Encuentra las ofertas vigentes extraídas del portal al instante. No necesitas iniciar sesión.
+            </p>
+
+            <form id="searchForm" onsubmit="event.preventDefault(); window.searchOfertas();">
+                <div class="form-group">
+                    <label class="form-label">Distrito</label>
+                    <select id="searchDistrito" class="form-control">
+                        <option value="Todos">Todos los distritos</option>
+                        <option value="N DE JULIO">9 de Julio</option>
+                        <option value="25 DE MAYO">25 de Mayo</option>
+                        <option value="A ALSINA">A. Alsina</option>
+                        <option value="ADOLFO GONZALES CHAVES">Adolfo Gonzales Chaves</option>
+                        <option value="ALBERTI">Alberti</option>
+                        <option value="A BROWN">Almirante Brown</option>
+                        <option value="ARRECIFES">Arrecifes</option>
+                        <option value="AVELLANEDA">Avellaneda</option>
+                        <option value="AYACUCHO">Ayacucho</option>
+                        <option value="AZUL">Azul</option>
+                        <option value="B BLANCA">B. Blanca</option>
+                        <option value="BALCARCE">Balcarce</option>
+                        <option value="BARADERO">Baradero</option>
+                        <option value="BERAZATEGUI">Berazategui</option>
+                        <option value="BERISSO">Berisso</option>
+                        <option value="BOLIVAR">Bolívar</option>
+                        <option value="BRAGADO">Bragado</option>
+                        <option value="CAMPANA">Campana</option>
+                        <option value="CAÑUELAS">Cañuelas</option>
+                        <option value="C SARMIENTO">C. Sarmiento</option>
+                        <option value="C CASARES">C. Casares</option>
+                        <option value="C TEJEDOR">C. Tejedor</option>
+                        <option value="C DE ARECO">C. de Areco</option>
+                        <option value="CASTELLI">Castelli</option>
+                        <option value="CHACABUCO">Chacabuco</option>
+                        <option value="CHASCOMUS">Chascomús</option>
+                        <option value="CHIVILCOY">Chivilcoy</option>
+                        <option value="COLON">Colón</option>
+                        <option value="CORONEL BRANDSEN">Coronel Brandsen</option>
+                        <option value="C DORREGO">C. Dorrego</option>
+                        <option value="C PRINGLES">C. Pringles</option>
+                        <option value="C ROSALES">C. Rosales</option>
+                        <option value="C SUAREZ">C. Suárez</option>
+                        <option value="DAIREAUX">Daireaux</option>
+                        <option value="DOLORES">Dolores</option>
+                        <option value="ENSENADA">Ensenada</option>
+                        <option value="ESCOBAR">Escobar</option>
+                        <option value="E ECHEVERRIA">Esteban Echeverría</option>
+                        <option value="E DE LA CRUZ">E. de la Cruz</option>
+                        <option value="EZEIZA">Ezeiza</option>
+                        <option value="F AMEGHINO">F. Ameghino</option>
+                        <option value="F VARELA">Florencio Varela</option>
+                        <option value="G ALVARADO">G. Alvarado</option>
+                        <option value="G ALVEAR">G. Alvear</option>
+                        <option value="G ARENALES">G. Arenales</option>
+                        <option value="G BELGRANO">G. Belgrano</option>
+                        <option value="G CHAVES">G. Chaves</option>
+                        <option value="G GUIDO">G. Guido</option>
+                        <option value="G LAMADRID">G. LaMadrid</option>
+                        <option value="G LAS HERAS">G. Las Heras</option>
+                        <option value="G LAVALLE">G. Lavalle</option>
+                        <option value="G MADARIAGA">G. Madariaga</option>
+                        <option value="G PAZ">G. Paz</option>
+                        <option value="G PINTO">G. Pinto</option>
+                        <option value="G PUEYRREDON">G. Pueyrredón</option>
+                        <option value="G RODRIGUEZ">G. Rodríguez</option>
+                        <option value="G SAN MARTIN">G. San Martín</option>
+                        <option value="G SARMIENTO">G. Sarmiento</option>
+                        <option value="G VIAMONTE">G. Viamonte</option>
+                        <option value="G VILLEGAS">G. Villegas</option>
+                        <option value="GUAMINI">Guaminí</option>
+                        <option value="H YRIGOYEN">H. Yrigoyen</option>
+                        <option value="HURLINGHAM">Hurlingham</option>
+                        <option value="ITUZAINGO">Ituzaingó</option>
+                        <option value="JOSE C PAZ">José C. Paz</option>
+                        <option value="JUNIN">Junín</option>
+                        <option value="L N ALEM">L. N. Alem</option>
+                        <option value="LA COSTA">La Costa</option>
+                        <option value="LA MATANZA">La Matanza</option>
+                        <option value="LA PLATA">La Plata</option>
+                        <option value="LANUS">Lanús</option>
+                        <option value="LAPRIDA">Laprida</option>
+                        <option value="LAS FLORES">Las Flores</option>
+                        <option value="LEANDRO N ALEM">Leandro N. Alem</option>
+                        <option value="LINCOLN">Lincoln</option>
+                        <option value="LOBERIA">Lobería</option>
+                        <option value="LOBOS">Lobos</option>
+                        <option value="L DE ZAMORA">Lomas de Zamora</option>
+                        <option value="LUJAN">Luján</option>
+                        <option value="MAGDALENA">Magdalena</option>
+                        <option value="MAIPU">Maipú</option>
+                        <option value="MALVINAS ARG">Malvinas Arg.</option>
+                        <option value="M CHIQUITA">M. Chiquita</option>
+                        <option value="MARCOS PAZ">Marcos Paz</option>
+                        <option value="MERCEDES">Mercedes</option>
+                        <option value="MERLO">Merlo</option>
+                        <option value="MONTE">Monte</option>
+                        <option value="M HERMOSO">M. Hermoso</option>
+                        <option value="MORENO">Moreno</option>
+                        <option value="MORON">Morón</option>
+                        <option value="NAVARRO">Navarro</option>
+                        <option value="NECOCHEA">Necochea</option>
+                        <option value="OLAVARRIA">Olavarría</option>
+                        <option value="PEHUAJO">Pehuajó</option>
+                        <option value="PELLEGRINI">Pellegrini</option>
+                        <option value="PERGAMINO">Pergamino</option>
+                        <option value="PILA">Pila</option>
+                        <option value="PILAR">Pilar</option>
+                        <option value="PINAMAR">Pinamar</option>
+                        <option value="PTE PERON">Presidente Perón</option>
+                        <option value="PUAN">Puan</option>
+                        <option value="PUNTA INDIO">Punta Indio</option>
+                        <option value="QUILMES">Quilmes</option>
+                        <option value="RAMALLO">Ramallo</option>
+                        <option value="RAUCH">Rauch</option>
+                        <option value="RIVADAVIA">Rivadavia</option>
+                        <option value="ROJAS">Rojas</option>
+                        <option value="R PEREZ">R. Pérez</option>
+                        <option value="SAAVEDRA">Saavedra</option>
+                        <option value="SALADILLO">Saladillo</option>
+                        <option value="SALLIQUELO">Salliqueló</option>
+                        <option value="SALTO">Salto</option>
+                        <option value="S A DE GILES">S. A. de Giles</option>
+                        <option value="S A DE ARECO">S. A. de Areco</option>
+                        <option value="SAN CAYETANO">San Cayetano</option>
+                        <option value="SAN FERNANDO">San Fernando</option>
+                        <option value="SAN ISIDRO">San Isidro</option>
+                        <option value="SAN MIGUEL">San Miguel</option>
+                        <option value="SAN NICOLAS">San Nicolás</option>
+                        <option value="SAN PEDRO">San Pedro</option>
+                        <option value="SAN VICENTE">San Vicente</option>
+                        <option value="SUIPACHA">Suipacha</option>
+                        <option value="TANDIL">Tandil</option>
+                        <option value="TAPALQUE">Tapalqué</option>
+                        <option value="TIGRE">Tigre</option>
+                        <option value="TORDILLO">Tordillo</option>
+                        <option value="TORNQUIST">Tornquist</option>
+                        <option value="T LAUQUEN">T. Lauquen</option>
+                        <option value="TRES ARROYOS">Tres Arroyos</option>
+                        <option value="T DE FEBRERO">Tres de Febrero</option>
+                        <option value="TRES LOMAS">Tres Lomas</option>
+                        <option value="V GESELL">V. Gesell</option>
+                        <option value="VILLARINO">Villarino</option>
+                        <option value="V LOPEZ">V. López</option>
+                        <option value="ZARATE">Zárate</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Código de Materia (Ej: CCD, /PR)</label>
+                    <input type="text" id="searchMateria" class="form-control" placeholder="Ej: PR, EFC, CCD" required>
+                </div>
+                <button type="submit" class="btn-primary" id="btnSearch">Buscar Ofertas (Base Local)</button>
+            </form>
+            <div class="search-results" id="searchResults"></div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: Plan Gratis -->
+    <div class="modal-overlay" id="modalFree">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal('modalFree')">×</button>
+            <h2 style="margin-top:0; color: var(--accent);">Activar Plan Gratis</h2>
+            <div class="info-alert">
+                El Plan Gratis está estrictamente limitado a <b>1 distrito</b> y <b>1 código de materia</b>.<br>
+                Ideal para monitorear un único perfil docente.
+            </div>
+
+            <form id="freemiumForm">
+                <div class="form-group">
+                    <label class="form-label">Nombre y Apellido (Opcional)</label>
+                    <input type="text" id="freeNombre" class="form-control" placeholder="Escribe tu nombre">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Correo Electrónico *</label>
+                    <input type="email" id="freeEmail" class="form-control" placeholder="tu@correo.com.ar" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Distrito *</label>
+                    <select id="freeDistrito" class="form-control" required>
+                        <option value="" disabled selected>Selecciona un distrito</option>
+                        <option value="N DE JULIO">9 de Julio</option>
+                        <option value="25 DE MAYO">25 de Mayo</option>
+                        <option value="A ALSINA">A. Alsina</option>
+                        <option value="ADOLFO GONZALES CHAVES">Adolfo Gonzales Chaves</option>
+                        <option value="ALBERTI">Alberti</option>
+                        <option value="A BROWN">Almirante Brown</option>
+                        <option value="ARRECIFES">Arrecifes</option>
+                        <option value="AVELLANEDA">Avellaneda</option>
+                        <option value="AYACUCHO">Ayacucho</option>
+                        <option value="AZUL">Azul</option>
+                        <option value="B BLANCA">B. Blanca</option>
+                        <option value="BALCARCE">Balcarce</option>
+                        <option value="BARADERO">Baradero</option>
+                        <option value="BERAZATEGUI">Berazategui</option>
+                        <option value="BERISSO">Berisso</option>
+                        <option value="BOLIVAR">Bolívar</option>
+                        <option value="BRAGADO">Bragado</option>
+                        <option value="CAMPANA">Campana</option>
+                        <option value="CAÑUELAS">Cañuelas</option>
+                        <option value="C SARMIENTO">C. Sarmiento</option>
+                        <option value="C CASARES">C. Casares</option>
+                        <option value="C TEJEDOR">C. Tejedor</option>
+                        <option value="C DE ARECO">C. de Areco</option>
+                        <option value="CASTELLI">Castelli</option>
+                        <option value="CHACABUCO">Chacabuco</option>
+                        <option value="CHASCOMUS">Chascomús</option>
+                        <option value="CHIVILCOY">Chivilcoy</option>
+                        <option value="COLON">Colón</option>
+                        <option value="CORONEL BRANDSEN">Coronel Brandsen</option>
+                        <option value="C DORREGO">C. Dorrego</option>
+                        <option value="C PRINGLES">C. Pringles</option>
+                        <option value="C ROSALES">C. Rosales</option>
+                        <option value="C SUAREZ">C. Suárez</option>
+                        <option value="DAIREAUX">Daireaux</option>
+                        <option value="DOLORES">Dolores</option>
+                        <option value="ENSENADA">Ensenada</option>
+                        <option value="ESCOBAR">Escobar</option>
+                        <option value="E ECHEVERRIA">Esteban Echeverría</option>
+                        <option value="E DE LA CRUZ">E. de la Cruz</option>
+                        <option value="EZEIZA">Ezeiza</option>
+                        <option value="F AMEGHINO">F. Ameghino</option>
+                        <option value="F VARELA">Florencio Varela</option>
+                        <option value="G ALVARADO">G. Alvarado</option>
+                        <option value="G ALVEAR">G. Alvear</option>
+                        <option value="G ARENALES">G. Arenales</option>
+                        <option value="G BELGRANO">G. Belgrano</option>
+                        <option value="G CHAVES">G. Chaves</option>
+                        <option value="G GUIDO">G. Guido</option>
+                        <option value="G LAMADRID">G. LaMadrid</option>
+                        <option value="G LAS HERAS">G. Las Heras</option>
+                        <option value="G LAVALLE">G. Lavalle</option>
+                        <option value="G MADARIAGA">G. Madariaga</option>
+                        <option value="G PAZ">G. Paz</option>
+                        <option value="G PINTO">G. Pinto</option>
+                        <option value="G PUEYRREDON">G. Pueyrredón</option>
+                        <option value="G RODRIGUEZ">G. Rodríguez</option>
+                        <option value="G SAN MARTIN">G. San Martín</option>
+                        <option value="G SARMIENTO">G. Sarmiento</option>
+                        <option value="G VIAMONTE">G. Viamonte</option>
+                        <option value="G VILLEGAS">G. Villegas</option>
+                        <option value="GUAMINI">Guaminí</option>
+                        <option value="H YRIGOYEN">H. Yrigoyen</option>
+                        <option value="HURLINGHAM">Hurlingham</option>
+                        <option value="ITUZAINGO">Ituzaingó</option>
+                        <option value="JOSE C PAZ">José C. Paz</option>
+                        <option value="JUNIN">Junín</option>
+                        <option value="L N ALEM">L. N. Alem</option>
+                        <option value="LA COSTA">La Costa</option>
+                        <option value="LA MATANZA">La Matanza</option>
+                        <option value="LA PLATA">La Plata</option>
+                        <option value="LANUS">Lanús</option>
+                        <option value="LAPRIDA">Laprida</option>
+                        <option value="LAS FLORES">Las Flores</option>
+                        <option value="LEANDRO N ALEM">Leandro N. Alem</option>
+                        <option value="LINCOLN">Lincoln</option>
+                        <option value="LOBERIA">Lobería</option>
+                        <option value="LOBOS">Lobos</option>
+                        <option value="L DE ZAMORA">Lomas de Zamora</option>
+                        <option value="LUJAN">Luján</option>
+                        <option value="MAGDALENA">Magdalena</option>
+                        <option value="MAIPU">Maipú</option>
+                        <option value="MALVINAS ARG">Malvinas Arg.</option>
+                        <option value="M CHIQUITA">M. Chiquita</option>
+                        <option value="MARCOS PAZ">Marcos Paz</option>
+                        <option value="MERCEDES">Mercedes</option>
+                        <option value="MERLO">Merlo</option>
+                        <option value="MONTE">Monte</option>
+                        <option value="M HERMOSO">M. Hermoso</option>
+                        <option value="MORENO">Moreno</option>
+                        <option value="MORON">Morón</option>
+                        <option value="NAVARRO">Navarro</option>
+                        <option value="NECOCHEA">Necochea</option>
+                        <option value="OLAVARRIA">Olavarría</option>
+                        <option value="PEHUAJO">Pehuajó</option>
+                        <option value="PELLEGRINI">Pellegrini</option>
+                        <option value="PERGAMINO">Pergamino</option>
+                        <option value="PILA">Pila</option>
+                        <option value="PILAR">Pilar</option>
+                        <option value="PINAMAR">Pinamar</option>
+                        <option value="PTE PERON">Presidente Perón</option>
+                        <option value="PUAN">Puan</option>
+                        <option value="PUNTA INDIO">Punta Indio</option>
+                        <option value="QUILMES">Quilmes</option>
+                        <option value="RAMALLO">Ramallo</option>
+                        <option value="RAUCH">Rauch</option>
+                        <option value="RIVADAVIA">Rivadavia</option>
+                        <option value="ROJAS">Rojas</option>
+                        <option value="R PEREZ">R. Pérez</option>
+                        <option value="SAAVEDRA">Saavedra</option>
+                        <option value="SALADILLO">Saladillo</option>
+                        <option value="SALLIQUELO">Salliqueló</option>
+                        <option value="SALTO">Salto</option>
+                        <option value="S A DE GILES">S. A. de Giles</option>
+                        <option value="S A DE ARECO">S. A. de Areco</option>
+                        <option value="SAN CAYETANO">San Cayetano</option>
+                        <option value="SAN FERNANDO">San Fernando</option>
+                        <option value="SAN ISIDRO">San Isidro</option>
+                        <option value="SAN MIGUEL">San Miguel</option>
+                        <option value="SAN NICOLAS">San Nicolás</option>
+                        <option value="SAN PEDRO">San Pedro</option>
+                        <option value="SAN VICENTE">San Vicente</option>
+                        <option value="SUIPACHA">Suipacha</option>
+                        <option value="TANDIL">Tandil</option>
+                        <option value="TAPALQUE">Tapalqué</option>
+                        <option value="TIGRE">Tigre</option>
+                        <option value="TORDILLO">Tordillo</option>
+                        <option value="TORNQUIST">Tornquist</option>
+                        <option value="T LAUQUEN">T. Lauquen</option>
+                        <option value="TRES ARROYOS">Tres Arroyos</option>
+                        <option value="T DE FEBRERO">Tres de Febrero</option>
+                        <option value="TRES LOMAS">Tres Lomas</option>
+                        <option value="V GESELL">V. Gesell</option>
+                        <option value="VILLARINO">Villarino</option>
+                        <option value="V LOPEZ">V. López</option>
+                        <option value="ZARATE">Zárate</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Código de Materia *</label>
+                    <input type="text" id="freeMateria" class="form-control"
+                        placeholder="Asegúrate de no usar comas (Ej: /PR)" required>
+                </div>
+                <button type="submit" class="btn-primary" id="btnFreeSubmit">Activar Suscripción Gratis</button>
+                <div id="freeStatus" class="status-message"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 3: Plan Premium -->
+    <div class="modal-overlay" id="modalPremium">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal('modalPremium')">×</button>
+            <h2 style="margin-top:0; color: var(--accent);">Ascender a Premium</h2>
+            <p style="color: var(--text-muted); font-size:15px; margin-bottom: 24px; line-height:1.7;">
+                Monitorea todos tus habilitantes de manera profesional y aumenta drásticamente tus posibilidades de
+                tomar horas.<br><br>
+                ✔️ <b>Distritos Ilimitados</b>: Sin restricción geográfica.<br>
+                ✔️ <b>Materias Ilimitadas</b>: Múltiples cargos al mismo tiempo.<br>
+                ✔️ <b>Actualizaciones Diarias</b>: No te pierdas ninguna publicación.<br>
+                ✔️ <b>Notificaciones Directas</b> en tu correo.
+            </p>
+
+            <div class="info-alert" style="text-align:center; font-size:18px;">
+                Suscripción Mensual: <b>$2.500 ARS</b>
+            </div>
+
+            <a href="https://mpago.la/1s7fyUe" target="_blank" style="text-decoration:none;">
+                <button class="btn-primary btn-mp">Suscribirse con Mercado Pago</button>
+            </a>
+
+            <p style="text-align:center; font-size: 13px; color: var(--text-muted); margin-top:16px;">
+                *Una vez procesado el pago, tu cuenta será activada como Premium en la Base de Datos automáticamente
+                dentro de las 24hs hábiles.
+            </p>
+        </div>
+    </div>
+
+    <!-- MODAL 5: Buscador de Escuelas -->
+    <div class="modal-overlay" id="modalEscuelas">
+        <div class="modal-content" style="max-height: 90vh; overflow-y: auto;">
+            <button class="close-btn" onclick="closeEscuelasModal()">×</button>
+            <h2 style="margin-top:0; color: var(--accent);">Buscador de Escuelas</h2>
+            <p style="color: var(--text-muted); font-size:14px; margin-bottom: 24px; line-height: 1.5;">
+                Filtra y encuentra la ubicación y contacto de cualquier escuela de la Provincia.
+            </p>
+
+            <!-- SECCIÓN 1: BÚSQUEDA -->
+            <form id="escuelasForm" style="margin-bottom: 20px;" onsubmit="event.preventDefault();">
+                <div class="form-group">
+                    <label class="form-label">Sector</label>
+                    <select id="escSector" class="form-control" onchange="fillMunicipios()">
+                        <option value="" disabled selected>Selecciona Sector</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Municipio</label>
+                    <select id="escMunicipio" class="form-control" onchange="fillNiveles()" disabled>
+                        <option value="" disabled selected>Selecciona Municipio</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Nivel</label>
+                    <select id="escNivel" class="form-control" onchange="fillModalidades()" disabled>
+                        <option value="" disabled selected>Selecciona Nivel</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Modalidad</label>
+                    <select id="escModalidad" class="form-control" onchange="fillEscuelas()" disabled>
+                        <option value="" disabled selected>Selecciona Modalidad</option>
+                    </select>
+                </div>
+                <div class="form-group" style="margin-bottom:0;">
+                    <label class="form-label">Nro de Escuela</label>
+                    <select id="escNumero" class="form-control" onchange="showEscuelaDetails()" disabled>
+                        <option value="" disabled selected>Selecciona Escuela</option>
+                    </select>
+                </div>
+            </form>
+            
+            <!-- SECCIÓN 2: RESULTADOS -->
+            <div id="seccionResultados" style="display:none; animation: fadeIn 0.4s ease; border-top: 1px solid var(--glass-border); padding-top:20px;">
+                <h3 style="margin-top:0; color:var(--accent); text-align:center; font-size:1.1rem; letter-spacing:1px; margin-bottom: 15px;">RESULTADOS</h3>
+                
+                <h4 id="fichaNombre" style="margin-top:0; color:#fff; font-size:1.2rem; margin-bottom:5px;"></h4>
+                <p style="margin:0 0 15px 0; color:#ccc;"><b>📍 Dirección:</b> <span id="fichaDireccion"></span></p>
+                
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:20px;">
+                    <div style="background:rgba(0,0,0,0.4); padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.05); text-align:center;">
+                        <span style="display:block; font-size:11px; color:var(--text-muted); text-transform:uppercase;">Sector</span>
+                        <strong id="fichaSector" style="color:#fff; display:block; margin-top:4px;"></strong>
+                    </div>
+                    <div style="background:rgba(0,0,0,0.4); padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.05); text-align:center;">
+                        <span style="display:block; font-size:11px; color:var(--text-muted); text-transform:uppercase;">Nro de Escuela</span>
+                        <strong id="fichaNro" style="color:#fff; display:block; margin-top:4px;"></strong>
+                    </div>
+                    <div style="background:rgba(0,0,0,0.4); padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.05); text-align:center; grid-column:span 2;">
+                        <span style="display:block; font-size:11px; color:var(--text-muted); text-transform:uppercase;">Nivel / Modalidad</span>
+                        <strong id="fichaNivelMod" style="color:#fff; display:block; margin-top:4px; word-break: break-all;"></strong>
+                    </div>
+                    <div style="background:rgba(220,180,80,0.15); padding:12px; border-radius:8px; border:1px solid var(--accent); text-align:center; grid-column:span 2;">
+                        <span style="display:block; font-size:12px; color:var(--accent); text-transform:uppercase; font-weight:700;">Desfavorabilidad</span>
+                        <strong id="fichaDesfav" style="color:#fff; font-size:1.1rem; display:block; margin-top:5px;"></strong>
+                    </div>
+                    <div style="background:rgba(0,0,0,0.4); padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.05); text-align:center; grid-column:span 2;">
+                        <span style="display:block; font-size:11px; color:var(--text-muted); text-transform:uppercase;">Teléfono</span>
+                        <strong id="fichaTelText" style="color:#fff; display:block; margin-top:4px; word-break: break-all; user-select: text;"></strong>
+                    </div>
+                    <div style="background:rgba(0,0,0,0.4); padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.05); text-align:center; grid-column:span 2;">
+                        <span style="display:block; font-size:11px; color:var(--text-muted); text-transform:uppercase;">Email</span>
+                        <strong id="fichaMailText" style="color:#fff; display:block; margin-top:4px; word-break: break-all; user-select: text;"></strong>
+                    </div>
+                </div>
+
+                <!-- Mapa Leaflet funcional -->
+                <div id="escuelaMap" style="height: 250px; width: 100%; border-radius:12px; border: 1px solid var(--glass-border); z-index:1; margin-bottom:20px; display:none;"></div>
+
+                <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                    <a id="fichaTel" href="#" class="btn-primary" style="flex:1; text-align:center; padding:12px 10px; text-decoration:none; font-size:14px; box-shadow:0 4px 15px rgba(0,0,0,0.3);">📞 Llamar</a>
+                    <a id="fichaMail" href="#" class="btn-primary" style="flex:1; text-align:center; padding:12px 10px; text-decoration:none; font-size:14px; box-shadow:0 4px 15px rgba(0,0,0,0.3);">✉ Correo</a>
+                    <a id="fichaMapLink" href="#" target="_blank" style="flex:1; min-width:100%; text-align:center; padding:12px 10px; text-decoration:none; font-size:14px; background:linear-gradient(135deg, #d32f2f, #b71c1c); color:white; border-radius:8px; font-weight:600; box-shadow:0 4px 15px rgba(211, 47, 47, 0.4); border:1px solid #ff5252; transition:all 0.3s; font-family: 'Inter', sans-serif;">📍 Ver Ubicación (Mapas)</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 4: Éxito -->
+    <div class="modal-overlay" id="modalSuccess">
+        <div class="modal-content" style="text-align:center; max-width: 400px;">
+            <div style="font-size: 64px; margin-bottom: 0px; margin-top:-20px;">🎉</div>
+            <h2 style="margin-top:20px; color: var(--accent);">¡Suscripción Activada!</h2>
+            <p style="color: var(--text-muted); font-size:15px; margin-bottom: 24px; line-height:1.6;">
+                Tus alertas gratuitas para el distrito y la materia elegidos ya están configuradas.
+            </p>
+            <button class="btn-primary" onclick="closeSuccessModal()">Perfecto</button>
+        </div>
+    </div>
+
+    <script>
+        // Modal Handlers
+        function openModal(id) {
+            document.getElementById(id).classList.add('active');
+            if (id === 'modalEscuelas') {
+                initEscuelasBusqueda();
+            }
+        }
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+            if (id === 'modalFree') {
+                document.getElementById('freeStatus').style.display = 'none';
+            }
+        }
+        function closeSuccessModal() {
+            closeModal('modalSuccess');
+            closeModal('modalFree');
+            document.getElementById('freemiumForm').reset();
+        }
+        window.onclick = function (event) {
+            if (event.target.classList.contains('modal-overlay')) {
+                if (event.target.id === 'modalEscuelas') {
+                    closeEscuelasModal();
+                    return;
+                }
+                event.target.classList.remove('active');
+                if (event.target.id === 'modalSuccess') {
+                    closeModal('modalFree');
+                    document.getElementById('freemiumForm').reset();
+                }
+            }
+        }
+
+        // --- SUBMIT FORM GRATIS (Conecta con Apps Script) ---
+        document.getElementById('freemiumForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const btn = document.getElementById('btnFreeSubmit');
+            const statusDiv = document.getElementById('freeStatus');
+            const materiaInput = document.getElementById('freeMateria').value.trim();
+
+            if (materiaInput.includes(',') || materiaInput.includes(';')) {
+                statusDiv.textContent = "El Plan Gratis solo permite 1 código de materia a la vez. Quita las comas.";
+                statusDiv.className = "status-message status-error";
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = "Guardando Datos...";
+            statusDiv.style.display = "none";
+
+            const payload = {
+                nombre: document.getElementById('freeNombre').value.trim() || 'Colega',
+                email: document.getElementById('freeEmail').value.trim().toLowerCase(),
+                distrito: document.getElementById('freeDistrito').value,
+                materia: materiaInput
+            };
+
+            console.log("Iniciando envío de formulario. Payload a enviar:", payload);
+
+            // IMPORTANTE: URL del APPS SCRIPT (Asegúrate de reemplazarlo si actualizaste el deployment)
+            const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbw2Rkgmy3EiwzBJW3zoadm3nKopDwrQIQ42J3myzHIs-Z6GhAzSYcYpKrDPu4Qz8PXn/exec";
+
+            try {
+                // Al usar mode: no-cors y text/plain, evadimos el preflight 401 Unauthorized del CORS de Google.
+                const response = await fetch(WEB_APP_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'text/plain' },
+                    body: JSON.stringify(payload)
+                });
+
+                console.log("Petición fetch finalizada sin errores de CORS.");
+
+                // En lugar de mostrar el texto online, mostramos el modal flotante
+                openModal('modalSuccess');
+            } catch (error) {
+                console.error("Error crítico durante el fetch:", error);
+                statusDiv.textContent = "Hubo un error de conexión con los servidores de Google Sheets.";
+                statusDiv.className = "status-message status-error";
+            } finally {
+                btn.disabled = false;
+                btn.textContent = "Activar Suscripción Gratis";
+            }
+        });
+
+
+        // --- LÓGICA DE BUSCADOR DE CARGOS LOCAL (ofertas_db.json) ---
+        function removeAccents(str) {
+            return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        }
+
+        window.searchOfertas = async function () {
+            const btn = document.getElementById('btnSearch');
+            const resultsDiv = document.getElementById('searchResults');
+            const distritoSeleccionado = document.getElementById('searchDistrito').value;
+            let materiaInput = document.getElementById('searchMateria').value.toUpperCase().trim();
+            materiaInput = materiaInput.replace(/\./g, ' ').replace(/,/g, ' ').trim();
+
+            btn.disabled = true;
+            btn.textContent = "Leyendo Base de Datos...";
+            resultsDiv.innerHTML = "";
+
+            try {
+                // Obtenemos el json local generado por main.py (debe servirse desde un servidor http ej: python -m http.server)
+                const response = await fetch('ofertas_db.json');
+                if (!response.ok) throw new Error('No se encontró el archivo ofertas_db.json');
+
+                const db = await response.json();
+                const ofertas = db.ofertas || {};
+
+                let html = "";
+                let count = 0;
+
+                for (const [id, o] of Object.entries(ofertas)) {
+                    if (o.estado !== 'activa') continue;
+
+                    const d_oferta = removeAccents((o.distrito || "").toUpperCase());
+                    const m_oferta = (o.codigo_area || "").toUpperCase();
+
+                    // Match Distrito
+                    let matchDistrito = true;
+                    if (distritoSeleccionado !== 'Todos') {
+                        let d_buscado = removeAccents(distritoSeleccionado.toUpperCase());
+                        // Lógicas de alias para la base local oficial
+                        if (d_buscado === 'LOMAS DE ZAMORA') d_buscado = 'L DE ZAMORA';
+                        if (d_buscado === 'ALMIRANTE BROWN') d_buscado = 'A BROWN';
+                        if (d_buscado === 'ESTEBAN ECHEVERRIA') d_buscado = 'E ECHEVERRIA';
+
+                        // Validar si el nombre del distrito de la oferta contiene lo buscado
+                        matchDistrito = d_oferta.includes(removeAccents(distritoSeleccionado.toUpperCase())) || d_oferta.includes(d_buscado);
+                    }
+
+                    // Match Materia
+                    let matchMateria = m_oferta.includes(materiaInput);
+
+                    if (matchDistrito && matchMateria) {
+                        count++;
+                        let horarios = (o.horarios || 'Ver en portal').replace(/\n/g, '<br>').replace(/ \| /g, '<br>');
+                        html += `
+                            <div class="oferta-card">
+                                <h4>${o.encabezado || 'N/A'}</h4>
+                                <p><b>Nivel:</b> ${o.nivel || '-'} | <b>Escuela:</b> ${o.escuela || '-'}</p>
+                                <p><b>Horarios:</b><br>${horarios}</p>
+                                <p><b>Observaciones:</b> ${o.observaciones || '-'}</p>
+                                <p style="font-size:12px; color:#aaa; margin-top:8px;">Nro IGE: ${o.ige || '-'}</p>
+                            </div>
+                        `;
+                    }
+                }
+
+                if (count === 0) {
+                    resultsDiv.innerHTML = `<div class="info-alert" style="background: rgba(255,255,255,0.05); border-left-color: #888; color: #ccc;">No se encontraron ofertas activas en tu zona en este instante. ¡Activá las alertas para ser el primero en enterarte!</div>`;
+                } else {
+                    resultsDiv.innerHTML = `<div style="color:var(--accent); font-weight:600; margin-bottom:8px;">Se encontraron ${count} ofertas en sistema:</div>` + html;
+                }
+
+            } catch (error) {
+                console.error(error);
+                resultsDiv.innerHTML = `<div class="info-alert" style="background: rgba(248,113,113,0.1); border-left-color: #f87171; color: #f87171;">Error al leer las ofertas. Asegúrate de estar ejecutando la web desde un servidor local (Ej: Live Server o Python http.server) y que exista ofertas_db.json en la carpeta.</div>`;
+            } finally {
+                btn.disabled = false;
+                btn.textContent = "Buscar Ofertas";
+            }
+        };
+
+        // --- LÓGICA DE BUSCADOR DE ESCUELAS ---
+        let escuelasData = null;
+        let mapInstance = null;
+        let markerInstance = null;
+
+        async function initEscuelasBusqueda() {
+            if (!escuelasData) {
+                try {
+                    const escBtn = document.getElementById('escSector');
+                    escBtn.options[0].text = 'Cargando datos...';
+                    const response = await fetch('escuelas_pba.json');
+                    escuelasData = await response.json();
+                    escBtn.options[0].text = 'Selecciona Sector';
+                    
+                    // Populate Sector
+                    const sectores = [...new Set(escuelasData.map(e => e.sector))].filter(Boolean).sort();
+                    sectores.forEach(s => {
+                        const opt = document.createElement('option');
+                        opt.value = opt.textContent = s;
+                        escBtn.appendChild(opt);
+                    });
+                } catch (error) {
+                    console.error("Error cargando escuelas:", error);
+                    alert("Error al cargar el padrón de escuelas.");
+                }
+            }
+        }
+
+        function closeEscuelasModal() {
+            closeModal('modalEscuelas');
+            document.getElementById('escuelasForm').reset();
+            document.getElementById('escMunicipio').disabled = true;
+            document.getElementById('escNivel').disabled = true;
+            document.getElementById('escModalidad').disabled = true;
+            document.getElementById('escNumero').disabled = true;
+            
+            document.getElementById('escMunicipio').innerHTML = '<option value="" disabled selected>Selecciona Municipio</option>';
+            document.getElementById('escNivel').innerHTML = '<option value="" disabled selected>Selecciona Nivel</option>';
+            document.getElementById('escModalidad').innerHTML = '<option value="" disabled selected>Selecciona Modalidad</option>';
+            document.getElementById('escNumero').innerHTML = '<option value="" disabled selected>Selecciona Escuela</option>';
+            
+            document.getElementById('seccionResultados').style.display = 'none';
+        }
+
+        function fillMunicipios() {
+            const sector = document.getElementById('escSector').value;
+            const munis = [...new Set(escuelasData.filter(e => e.sector === sector).map(e => e.municipio_nombre))].filter(Boolean).sort();
+            
+            const sel = document.getElementById('escMunicipio');
+            sel.innerHTML = '<option value="" disabled selected>Selecciona Municipio</option>';
+            munis.forEach(m => {
+                const opt = document.createElement('option');
+                opt.value = opt.textContent = m;
+                sel.appendChild(opt);
+            });
+            sel.disabled = false;
+            
+            // cascades
+            document.getElementById('escNivel').innerHTML = '<option value="" disabled selected>Selecciona Nivel</option>';
+            document.getElementById('escNivel').disabled = true;
+            document.getElementById('escModalidad').innerHTML = '<option value="" disabled selected>Selecciona Modalidad</option>';
+            document.getElementById('escModalidad').disabled = true;
+            document.getElementById('escNumero').innerHTML = '<option value="" disabled selected>Selecciona Escuela</option>';
+            document.getElementById('escNumero').disabled = true;
+            document.getElementById('seccionResultados').style.display = 'none';
+        }
+
+        function fillNiveles() {
+            const sector = document.getElementById('escSector').value;
+            const muni = document.getElementById('escMunicipio').value;
+            
+            const niveles = [...new Set(escuelasData.filter(e => e.sector === sector && e.municipio_nombre === muni).map(e => e.nivel))].filter(Boolean).sort();
+            
+            const sel = document.getElementById('escNivel');
+            sel.innerHTML = '<option value="" disabled selected>Selecciona Nivel</option>';
+            niveles.forEach(n => {
+                const opt = document.createElement('option');
+                opt.value = opt.textContent = n;
+                sel.appendChild(opt);
+            });
+            sel.disabled = false;
+            
+            // cascades
+            document.getElementById('escModalidad').innerHTML = '<option value="" disabled selected>Selecciona Modalidad</option>';
+            document.getElementById('escModalidad').disabled = true;
+            document.getElementById('escNumero').innerHTML = '<option value="" disabled selected>Selecciona Escuela</option>';
+            document.getElementById('escNumero').disabled = true;
+            document.getElementById('seccionResultados').style.display = 'none';
+        }
+
+        function fillModalidades() {
+            const sector = document.getElementById('escSector').value;
+            const muni = document.getElementById('escMunicipio').value;
+            const nivel = document.getElementById('escNivel').value;
+            
+            const mods = [...new Set(escuelasData.filter(e => e.sector === sector && e.municipio_nombre === muni && e.nivel === nivel).map(e => e.modalidad))].filter(Boolean).sort();
+            
+            const sel = document.getElementById('escModalidad');
+            sel.innerHTML = '<option value="" disabled selected>Selecciona Modalidad</option>';
+            mods.forEach(m => {
+                const opt = document.createElement('option');
+                opt.value = opt.textContent = m;
+                sel.appendChild(opt);
+            });
+            sel.disabled = false;
+            
+            // cascades
+            document.getElementById('escNumero').innerHTML = '<option value="" disabled selected>Selecciona Escuela</option>';
+            document.getElementById('escNumero').disabled = true;
+            document.getElementById('seccionResultados').style.display = 'none';
+        }
+
+        function fillEscuelas() {
+            const sector = document.getElementById('escSector').value;
+            const muni = document.getElementById('escMunicipio').value;
+            const nivel = document.getElementById('escNivel').value;
+            const modalidad = document.getElementById('escModalidad').value;
+            
+            const escList = escuelasData.filter(e => e.sector === sector && e.municipio_nombre === muni && e.nivel === nivel && e.modalidad === modalidad);
+            
+            // Can have duplicates if there are different courses, filter unique by nro_escuela/establecimiento_nombre
+            const uniqueMap = new Map();
+            escList.forEach(e => {
+                const key = `${e.nro_escuela}-${e.establecimiento_nombre}`;
+                if (!uniqueMap.has(key)) {
+                    uniqueMap.set(key, e);
+                }
+            });
+            
+            const sel = document.getElementById('escNumero');
+            sel.innerHTML = '<option value="" disabled selected>Selecciona Escuela</option>';
+            Array.from(uniqueMap.values())
+                 .sort((a,b) => (a.nro_escuela || 0) - (b.nro_escuela || 0))
+                 .forEach((e, idx) => {
+                const opt = document.createElement('option');
+                opt.value = idx; // temporary index to fetch from unique array
+                opt.textContent = `Nº ${e.nro_escuela || '-'} - ${e.establecimiento_nombre}`;
+                // store complete object to retrieve later
+                opt.dataset.escuela = JSON.stringify(e);
+                sel.appendChild(opt);
+            });
+            sel.disabled = false;
+            
+            document.getElementById('seccionResultados').style.display = 'none';
+        }
+
+        function showEscuelaDetails() {
+            const sel = document.getElementById('escNumero');
+            const opt = sel.options[sel.selectedIndex];
+            if (!opt.value) return;
+            
+            const e = JSON.parse(opt.dataset.escuela);
+            
+            document.getElementById('fichaNombre').textContent = e.establecimiento_nombre || 'Escuela sin nombre';
+            document.getElementById('fichaDireccion').textContent = e.direccion || 'No registrada';
+            document.getElementById('fichaSector').textContent = e.sector || '-';
+            document.getElementById('fichaNro').textContent = e.nro_escuela || '-';
+            document.getElementById('fichaNivelMod').textContent = (e.nivel || '') + ' / ' + (e.modalidad || '');
+            
+            let desfavText = 'No declarada';
+            if (e.desfavorabilidad !== undefined && e.desfavorabilidad !== null && e.desfavorabilidad !== '') {
+                desfavText = e.desfavorabilidad;
+            }
+            document.getElementById('fichaDesfav').textContent = desfavText;
+
+            const telStr = (e.telefono && e.telefono !== '-') ? e.telefono : 'No registrado';
+            document.getElementById('fichaTelText').textContent = telStr;
+
+            const mailStr = (e.email && e.email !== '-') ? e.email : 'No registrado';
+            document.getElementById('fichaMailText').textContent = mailStr;
+            
+            const btnTel = document.getElementById('fichaTel');
+            if (e.telefono && e.telefono !== '-') {
+                btnTel.href = 'tel:' + e.telefono;
+                btnTel.style.pointerEvents = 'auto';
+                btnTel.style.opacity = '1';
+            } else {
+                btnTel.href = '#';
+                btnTel.style.pointerEvents = 'none';
+                btnTel.style.opacity = '0.5';
+            }
+
+            const btnMail = document.getElementById('fichaMail');
+            if (e.email && e.email !== '-') {
+                btnMail.href = 'mailto:' + e.email;
+                btnMail.style.pointerEvents = 'auto';
+                btnMail.style.opacity = '1';
+            } else {
+                btnMail.href = '#';
+                btnMail.style.pointerEvents = 'none';
+                btnMail.style.opacity = '0.5';
+            }
+            
+            const btnMap = document.getElementById('fichaMapLink');
+            const mapDiv = document.getElementById('escuelaMap');
+            if (e.latitud && e.longitud && !isNaN(e.latitud) && !isNaN(e.longitud)) {
+                btnMap.href = `https://www.google.com/maps?q=${e.latitud},${e.longitud}`;
+                btnMap.style.display = 'block';
+                mapDiv.style.display = 'block';
+                
+                if (!mapInstance) {
+                    mapInstance = L.map('escuelaMap');
+                    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '&copy; <a href="https://www.openstreetmap.org/">OSM</a>'
+                    }).addTo(mapInstance);
+                }
+                
+                setTimeout(() => {
+                    mapInstance.invalidateSize();
+                    mapInstance.setView([e.latitud, e.longitud], 16);
+                    if (markerInstance) {
+                        markerInstance.setLatLng([e.latitud, e.longitud]);
+                    } else {
+                        markerInstance = L.marker([e.latitud, e.longitud]).addTo(mapInstance);
+                    }
+                }, 100);
+            } else {
+                btnMap.style.display = 'none';
+                mapDiv.style.display = 'none';
+            }
+            
+            document.getElementById('seccionResultados').style.display = 'block';
+            
+            setTimeout(() => {
+                document.getElementById('seccionResultados').scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+        }
+    </script>
+</body>
+
+</html>
