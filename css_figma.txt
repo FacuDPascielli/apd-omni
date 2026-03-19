@@ -1,0 +1,1754 @@
+/* Landing */
+
+position: relative;
+width: 1920px;
+height: 3631px;
+
+background: #F5F5F5;
+
+
+/* Rectangle 6 */
+
+position: absolute;
+width: 328px;
+height: 55px;
+left: 1480px;
+top: 53px;
+
+background: #F0C842;
+border-radius: 22px;
+
+
+/* Group */
+
+position: absolute;
+left: 17.99%;
+right: 72.55%;
+top: 1.86%;
+bottom: 97.57%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 17.99%;
+right: 81.18%;
+top: 1.86%;
+bottom: 97.58%;
+
+background: #4A6FFE;
+
+
+/* Vector */
+
+position: absolute;
+left: 19.05%;
+right: 80.04%;
+top: 1.86%;
+bottom: 97.57%;
+
+background: #4A6FFE;
+
+
+/* Vector */
+
+position: absolute;
+left: 20.25%;
+right: 78.97%;
+top: 1.87%;
+bottom: 97.58%;
+
+background: #4A6FFE;
+
+
+/* Vector */
+
+position: absolute;
+left: 21.39%;
+right: 77.86%;
+top: 1.87%;
+bottom: 97.58%;
+
+background: #4A6FFE;
+
+
+/* Vector */
+
+position: absolute;
+left: 22.49%;
+right: 76.84%;
+top: 1.87%;
+bottom: 97.58%;
+
+background: #4A6FFE;
+
+
+/* Vector */
+
+position: absolute;
+left: 23.48%;
+right: 75.83%;
+top: 1.87%;
+bottom: 97.58%;
+
+background: #4A6FFE;
+
+
+/* Vector */
+
+position: absolute;
+left: 24.36%;
+right: 74.79%;
+top: 1.87%;
+bottom: 97.58%;
+
+background: #4A6FFE;
+
+
+/* Vector */
+
+position: absolute;
+left: 25.46%;
+right: 73.76%;
+top: 1.87%;
+bottom: 97.58%;
+
+background: #4A6FFE;
+
+
+/* Vector */
+
+position: absolute;
+left: 26.54%;
+right: 72.55%;
+top: 1.86%;
+bottom: 97.57%;
+
+background: #4A6FFE;
+
+
+/* Group */
+
+position: absolute;
+left: 6.35%;
+right: 87.83%;
+top: 1.86%;
+bottom: 97.57%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 6.35%;
+right: 92.78%;
+top: 1.87%;
+bottom: 97.59%;
+
+background: #4A6FFE;
+
+
+/* Vector */
+
+position: absolute;
+left: 7.34%;
+right: 91.67%;
+top: 1.86%;
+bottom: 97.57%;
+
+background: #4A6FFE;
+
+
+/* Vector */
+
+position: absolute;
+left: 8.49%;
+right: 90.64%;
+top: 1.87%;
+bottom: 97.59%;
+
+background: #4A6FFE;
+
+
+/* Vector */
+
+position: absolute;
+left: 9.48%;
+right: 89.68%;
+top: 1.87%;
+bottom: 97.59%;
+
+background: #4A6FFE;
+
+
+/* Vector */
+
+position: absolute;
+left: 10.31%;
+right: 88.71%;
+top: 1.87%;
+bottom: 97.59%;
+
+background: #4A6FFE;
+
+
+/* Vector */
+
+position: absolute;
+left: 11.42%;
+right: 87.83%;
+top: 1.87%;
+bottom: 97.59%;
+
+background: #4A6FFE;
+
+
+/* Group */
+
+position: absolute;
+left: 12.44%;
+right: 82.71%;
+top: 1.86%;
+bottom: 97.57%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 12.44%;
+right: 86.7%;
+top: 1.87%;
+bottom: 97.59%;
+
+background: #4A6FFE;
+
+
+/* Vector */
+
+position: absolute;
+left: 13.45%;
+right: 85.68%;
+top: 1.87%;
+bottom: 97.59%;
+
+background: #4A6FFE;
+
+
+/* Vector */
+
+position: absolute;
+left: 14.45%;
+right: 84.55%;
+top: 1.86%;
+bottom: 97.57%;
+
+background: #4A6FFE;
+
+
+/* Vector */
+
+position: absolute;
+left: 15.6%;
+right: 83.65%;
+top: 1.87%;
+bottom: 97.59%;
+
+background: #4A6FFE;
+
+
+/* Vector */
+
+position: absolute;
+left: 16.5%;
+right: 82.71%;
+top: 1.87%;
+bottom: 97.59%;
+
+background: #4A6FFE;
+
+
+/* Herramientas */
+
+position: absolute;
+left: 34.17%;
+right: 53.65%;
+top: 1.76%;
+bottom: 96.92%;
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 500;
+font-size: 27px;
+line-height: 33px;
+
+color: #4A6FFE;
+
+
+
+/* Te ayudamos a simplificar el proceso de búsqueda para achicar barreras en el ejercicio de la docencia, desde y para el Conurbano Bonaerénse. */
+
+position: absolute;
+left: 6.35%;
+right: 50.21%;
+top: 13.94%;
+bottom: 82.18%;
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 600;
+font-size: 32px;
+line-height: 44px;
+/* o 138% */
+letter-spacing: 0.01em;
+
+color: #181713;
+
+
+
+/* Cursos */
+
+position: absolute;
+left: 50.94%;
+right: 43.12%;
+top: 1.76%;
+bottom: 96.92%;
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 500;
+font-size: 27px;
+line-height: 33px;
+
+color: #4A6FFE;
+
+
+
+/* Quiénes somos */
+
+position: absolute;
+left: 61.41%;
+right: 25.68%;
+top: 1.76%;
+bottom: 96.92%;
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 500;
+font-size: 27px;
+line-height: 33px;
+
+color: #4A6FFE;
+
+
+
+/* Formas de colaborar */
+
+position: absolute;
+left: 78.85%;
+right: 3.44%;
+top: 1.76%;
+bottom: 96.92%;
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 500;
+font-size: 27px;
+line-height: 33px;
+
+color: #4A6FFE;
+
+
+
+/* La web que te acerca al aula. */
+
+position: absolute;
+left: 6.35%;
+right: 45.26%;
+top: 7.85%;
+bottom: 83.92%;
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 900;
+font-size: 90px;
+line-height: 106px;
+/* o 118% */
+letter-spacing: 0.02em;
+
+color: #181713;
+
+
+
+/* manito */
+
+position: absolute;
+left: 65.78%;
+right: 5.83%;
+top: 7.02%;
+bottom: 74.18%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 78.95%;
+right: 18.65%;
+top: 12.31%;
+bottom: 84.47%;
+
+background: #4A6FFE;
+
+
+/* Vector */
+
+position: absolute;
+left: 76.56%;
+right: 18.65%;
+top: 5.69%;
+bottom: 86.48%;
+
+background: #4A6FFE;
+
+
+/* Group */
+
+position: absolute;
+left: 0%;
+right: 83.77%;
+top: 8.45%;
+bottom: 66.9%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 1.12%;
+right: 84.89%;
+top: 9.37%;
+bottom: 67.83%;
+
+background: #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 0%;
+right: 83.77%;
+top: 8.45%;
+bottom: 66.9%;
+
+background: #4A6FFE;
+
+
+/* Group */
+
+position: absolute;
+left: 79.11%;
+right: 0%;
+top: 8.45%;
+bottom: 66.9%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 80.22%;
+right: 1.12%;
+top: 9.37%;
+bottom: 67.83%;
+
+background: #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 79.11%;
+right: 0%;
+top: 8.45%;
+bottom: 66.9%;
+
+background: #4A6FFE;
+
+
+/* Group */
+
+position: absolute;
+left: 13.99%;
+right: 56.32%;
+top: 8.45%;
+bottom: 66.9%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 15.11%;
+right: 57.44%;
+top: 9.37%;
+bottom: 67.83%;
+
+background: #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 13.99%;
+right: 56.32%;
+top: 8.45%;
+bottom: 66.9%;
+
+background: #4A6FFE;
+
+
+/* Vector */
+
+position: absolute;
+left: 23.17%;
+right: 19.78%;
+top: 0.93%;
+bottom: 0.93%;
+
+background: #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 50.99%;
+right: 29.23%;
+top: 1.52%;
+bottom: 86.15%;
+
+background: #4A6FFE;
+
+
+/* Vector */
+
+position: absolute;
+left: 33.38%;
+right: 43.96%;
+top: 0%;
+bottom: 78.51%;
+
+background: #4A6FFE;
+
+
+/* Vector */
+
+position: absolute;
+left: 61.16%;
+right: 18.65%;
+top: 1.53%;
+bottom: 78.17%;
+
+background: #4A6FFE;
+
+
+/* Vector */
+
+position: absolute;
+left: 22.03%;
+right: 18.66%;
+top: 8.45%;
+bottom: 0%;
+
+background: #4A6FFE;
+
+
+/* Vector */
+
+position: absolute;
+left: 79.1%;
+right: 18.65%;
+top: 11.67%;
+bottom: 85.83%;
+
+background: #4A6FFE;
+
+
+/* Group */
+
+position: absolute;
+left: 12.66%;
+right: 82.06%;
+top: 9.54%;
+bottom: 68.7%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 13.79%;
+right: 83.17%;
+top: 10.47%;
+bottom: 69.63%;
+
+background: #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 12.66%;
+right: 82.06%;
+top: 9.54%;
+bottom: 68.7%;
+
+background: #4A6FFE;
+
+
+/* Group */
+
+position: absolute;
+left: 4.52%;
+right: 91.86%;
+top: 16.17%;
+bottom: 74.33%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 5.64%;
+right: 92.99%;
+top: 17.1%;
+bottom: 75.26%;
+
+background: #4A6FFE;
+
+
+/* Vector */
+
+position: absolute;
+left: 4.52%;
+right: 91.86%;
+top: 16.17%;
+bottom: 74.33%;
+
+background: #4A6FFE;
+
+
+/* Group */
+
+position: absolute;
+left: 83.33%;
+right: 14.43%;
+top: 9.7%;
+bottom: 68.25%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 84.45%;
+right: 15.55%;
+top: 10.63%;
+bottom: 69.17%;
+
+background: #4A6FFE;
+
+
+/* Vector */
+
+position: absolute;
+left: 83.33%;
+right: 14.43%;
+top: 9.7%;
+bottom: 68.25%;
+
+background: #4A6FFE;
+
+
+/* Vector */
+
+position: absolute;
+left: 15.7%;
+right: 64.38%;
+top: 16.18%;
+bottom: 81.97%;
+
+background: #4A6FFE;
+
+
+/* Vector */
+
+position: absolute;
+left: 14.19%;
+right: 64.38%;
+top: 22.65%;
+bottom: 75.5%;
+
+background: #4A6FFE;
+
+
+/* Rectangle 1 */
+
+position: absolute;
+width: 1918px;
+left: calc(50% - 1918px/2 - 1px);
+top: 24.57%;
+bottom: 52%;
+
+background: #4A6FFE;
+border-radius: 22px;
+
+
+/* Rectangle 9 */
+
+position: absolute;
+width: 1925px;
+left: calc(50% - 1925px/2 - 2.5px);
+top: 74.44%;
+bottom: 4.3%;
+
+background: #4A6FFE;
+border-radius: 22px;
+
+
+/* Quiénes somos */
+
+position: absolute;
+width: 746px;
+height: 124px;
+left: 134px;
+top: 2796px;
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 700;
+font-size: 48px;
+line-height: 58px;
+letter-spacing: 0.01em;
+
+color: #F5F5F5;
+
+
+
+/* Capa_1 */
+
+position: absolute;
+width: 261.46px;
+height: 80.45px;
+left: 179px;
+top: 2231px;
+
+transform: rotate(-42.99deg);
+
+
+/* Vector */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0.01%;
+bottom: 0%;
+
+background: #4A6FFE;
+transform: rotate(-42.99deg);
+
+
+/* Capa_1 */
+
+position: absolute;
+width: 242px;
+height: 240px;
+left: 1324px;
+top: 2330px;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 0%;
+right: 0.01%;
+top: 0%;
+bottom: 0%;
+
+background: #4A6FFE;
+
+
+/* Vector */
+
+position: absolute;
+left: 33.86%;
+right: 50.88%;
+top: 42.56%;
+bottom: 42.67%;
+
+background: #4A6FFE;
+
+
+/* Vector */
+
+position: absolute;
+left: 41.82%;
+right: 46.6%;
+top: 58.25%;
+bottom: 37.59%;
+
+background: #4A6FFE;
+
+
+/* Vector */
+
+position: absolute;
+left: 50.87%;
+right: 38.02%;
+top: 42.83%;
+bottom: 53.87%;
+
+background: #4A6FFE;
+
+
+/* Capa_1 */
+
+position: absolute;
+left: 80.1%;
+right: 10.1%;
+top: 53.76%;
+bottom: 40.84%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 4.85%;
+right: 4.84%;
+top: 4.7%;
+bottom: 64.82%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 4.85%;
+right: 4.84%;
+top: 24.61%;
+bottom: 42.75%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 4.85%;
+right: 4.84%;
+top: 46.67%;
+bottom: 20.93%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 4.85%;
+right: -0.01%;
+top: 0%;
+bottom: 16.25%;
+
+background: #4A6FFE;
+
+
+/* Vector */
+
+position: absolute;
+left: 4.84%;
+right: 0.01%;
+top: 19.93%;
+bottom: 60.14%;
+
+background: #4A6FFE;
+
+
+/* Vector */
+
+position: absolute;
+left: 4.84%;
+right: 0.01%;
+top: 41.99%;
+bottom: 38.08%;
+
+background: #4A6FFE;
+
+
+/* Vector */
+
+position: absolute;
+left: 45.95%;
+right: 45.95%;
+top: 40.43%;
+bottom: 51.75%;
+
+background: #4A6FFE;
+
+
+/* Vector */
+
+position: absolute;
+left: 0%;
+right: 95.15%;
+top: 0.02%;
+bottom: 0%;
+
+background: #4A6FFE;
+
+
+/* Capa_1 */
+
+position: absolute;
+width: 183.15px;
+height: 203.22px;
+left: 157px;
+top: 1838px;
+
+transform: rotate(-24.13deg);
+
+
+/* Vector */
+
+position: absolute;
+left: 11.98%;
+right: 23.28%;
+top: 17.02%;
+bottom: 25.51%;
+
+background: #4A6FFE;
+transform: rotate(-24.13deg);
+
+
+/* Vector */
+
+position: absolute;
+left: 24.97%;
+right: 50.3%;
+top: 36.12%;
+bottom: 41.93%;
+
+background: #4A6FFE;
+transform: rotate(-24.13deg);
+
+
+/* Vector */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+background: #4A6FFE;
+transform: rotate(-24.13deg);
+
+
+/* Capa_1 */
+
+position: absolute;
+width: 209px;
+height: 150px;
+left: 813px;
+top: 2432px;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 6.24%;
+right: 53.86%;
+top: 20.86%;
+bottom: 65.59%;
+
+background: #4A6FFE;
+
+
+/* Vector */
+
+position: absolute;
+left: 6.25%;
+right: 53.86%;
+top: 39.26%;
+bottom: 47.19%;
+
+background: #4A6FFE;
+
+
+/* Vector */
+
+position: absolute;
+left: 6.24%;
+right: 53.86%;
+top: 59.69%;
+bottom: 26.77%;
+
+background: #4A6FFE;
+
+
+/* Vector */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: -0.01%;
+
+background: #4A6FFE;
+
+
+/* Vector */
+
+position: absolute;
+left: 53.86%;
+right: 6.24%;
+top: 20.85%;
+bottom: 65.6%;
+
+background: #4A6FFE;
+
+
+/* Vector */
+
+position: absolute;
+left: 53.86%;
+right: 6.24%;
+top: 39.26%;
+bottom: 47.19%;
+
+background: #4A6FFE;
+
+
+/* Vector */
+
+position: absolute;
+left: 53.86%;
+right: 6.24%;
+top: 59.69%;
+bottom: 26.77%;
+
+background: #4A6FFE;
+
+
+/* Rectangle 10 */
+
+position: absolute;
+width: 440px;
+height: 59px;
+left: calc(50% - 440px/2 + 36px);
+top: 1886px;
+
+background: #4A6FFE;
+border-radius: 22px;
+
+
+/* Cursos y tutoriales */
+
+position: absolute;
+width: 783px;
+height: 58px;
+left: calc(50% - 783px/2 + 37.5px);
+top: 1978px;
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 700;
+font-size: 48px;
+line-height: 58px;
+/* idéntico a la altura del cuadro */
+text-align: center;
+letter-spacing: 0.01em;
+
+color: #181713;
+
+
+
+/* próximamente */
+
+position: absolute;
+width: 303px;
+height: 39px;
+left: calc(50% - 303px/2 + 36.5px);
+top: 1896px;
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 700;
+font-size: 32px;
+line-height: 39px;
+/* idéntico a la altura del cuadro */
+text-align: center;
+letter-spacing: 0.01em;
+text-transform: uppercase;
+
+color: #F5F5F5;
+
+
+
+/* Rectangle 11 */
+
+position: absolute;
+width: 440px;
+height: 59px;
+left: calc(50% - 440px/2 - 625px);
+top: 3445px;
+
+background: #F0C842;
+border-radius: 22px;
+
+
+/* próximamente */
+
+position: absolute;
+width: 303px;
+height: 39px;
+left: calc(50% - 303px/2 - 624.5px);
+top: 3455px;
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 700;
+font-size: 32px;
+line-height: 39px;
+/* idéntico a la altura del cuadro */
+text-align: center;
+letter-spacing: 0.01em;
+text-transform: uppercase;
+
+color: #F5F5F5;
+
+
+
+/* Estamos trabajando para diseñar capacitaciones que aclaren tus dudas sobre el funcionamiento del sistema de cargos docentes y crear un espacio de apoyo entre profes. */
+
+position: absolute;
+width: 800px;
+left: calc(50% - 800px/2 + 37px);
+top: 56.24%;
+bottom: 38.91%;
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 400;
+font-size: 32px;
+line-height: 44px;
+/* o 138% */
+text-align: center;
+letter-spacing: 0.01em;
+
+color: #181713;
+
+
+
+/* Somos un equipo formado íntegramente en la educación pública. Como graduad@s del Profesorado Joaquín V. González y de la Universidad Nacional de Lanús (UNLa), conocemos de primera mano el valor de nuestras instituciones, pero también las trabas burocráticas que los docentes enfrentamos al intentar tomar cargos en la PBA. Entendemos que el tiempo que pasamos descifrando listados o formularios es tiempo que le restamos a la planificación y al descanso. Por eso, decidimos unir la filosofía y la comunicación visual para crear una herramienta que simplifique lo complejo. No somos una empresa externa: somos colegas que detectaron un nudo en el sistema y decidieron programar la solución. */
+
+position: absolute;
+width: 1340px;
+left: calc(50% - 1340px/2 - 156px);
+top: 79.48%;
+bottom: 7.19%;
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 500;
+font-size: 32px;
+line-height: 44px;
+/* o 138% */
+letter-spacing: 0.01em;
+
+color: #FFFFFF;
+
+
+
+/* Rectangle 2 */
+
+position: absolute;
+width: 286px;
+height: 403px;
+left: 119px;
+top: 1137px;
+
+
+
+/* Rectangle 2 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+background: #F5F5F5;
+border-radius: 22px;
+
+
+/* Rectangle 3 */
+
+position: absolute;
+width: 286px;
+height: 403px;
+left: 463px;
+top: 1137px;
+
+background: #F5F5F5;
+border-radius: 22px;
+
+
+/* Rectangle 4 */
+
+position: absolute;
+width: 286px;
+height: 403px;
+left: 804px;
+top: 1137px;
+
+background: #F0C842;
+border-radius: 22px;
+
+
+/* Rectangle 5 */
+
+position: absolute;
+width: 286px;
+height: 403px;
+left: 1145px;
+top: 1137px;
+
+background: #F5F5F5;
+border-radius: 22px;
+
+
+/* Rectangle 7 */
+
+position: absolute;
+width: 286px;
+height: 406px;
+left: 1500px;
+top: 1134px;
+
+background: #F5F5F5;
+border-radius: 22px;
+
+
+/* Conocé nuestras herramientas */
+
+position: absolute;
+width: 783px;
+height: 124px;
+left: 113px;
+top: 952px;
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 700;
+font-size: 48px;
+line-height: 58px;
+text-align: center;
+letter-spacing: 0.01em;
+
+color: #F5F5F5;
+
+
+
+/* Buscador  de cargos */
+
+position: absolute;
+width: 311px;
+height: 130px;
+left: 152px;
+top: 1250px;
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 900;
+font-size: 30px;
+line-height: 36px;
+letter-spacing: 0.01em;
+
+color: #181713;
+
+
+
+/* Alertas gratuitas */
+
+position: absolute;
+width: 311px;
+height: 130px;
+left: 496px;
+top: 1250px;
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 900;
+font-size: 30px;
+line-height: 36px;
+letter-spacing: 0.01em;
+
+color: #181713;
+
+
+
+/* Buscador de escuelas */
+
+position: absolute;
+width: 311px;
+height: 130px;
+left: 1183px;
+top: 1250px;
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 900;
+font-size: 30px;
+line-height: 36px;
+letter-spacing: 0.01em;
+
+color: #181713;
+
+
+
+/* Alertas ilimitadas */
+
+position: absolute;
+width: 311px;
+height: 130px;
+left: 840px;
+top: 1250px;
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 900;
+font-size: 30px;
+line-height: 36px;
+letter-spacing: 0.01em;
+
+color: #181713;
+
+
+
+/* Diccionario de materias */
+
+position: absolute;
+width: 311px;
+height: 130px;
+left: 1532px;
+top: 1250px;
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 900;
+font-size: 30px;
+line-height: 36px;
+letter-spacing: 0.01em;
+
+color: #181713;
+
+
+
+/* Encuentra las ofertas vigentes extraídas del portal al instante. */
+
+position: absolute;
+left: 8.18%;
+right: 81.15%;
+top: 36.66%;
+bottom: 58%;
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 500;
+font-size: 22px;
+line-height: 27px;
+letter-spacing: 0.01em;
+
+color: #181713;
+
+
+
+/* El Plan Gratis está limitado a un distrito y materia. Ideal para monitorear un único perfil docente. */
+
+position: absolute;
+left: 26.09%;
+right: 62.6%;
+top: 36.66%;
+bottom: 58%;
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 500;
+font-size: 22px;
+line-height: 27px;
+
+color: #181713;
+
+
+
+/* Monitorea todos tus habilitantes de manera profesional y aumenta tus posibilidades de tomar horas. */
+
+position: absolute;
+left: 43.85%;
+right: 44.84%;
+top: 36.66%;
+bottom: 56.62%;
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 500;
+font-size: 22px;
+line-height: 27px;
+
+color: #181713;
+
+
+
+/* Filtra y encuentra la ubicación y contacto de cualquier escuela de la Provincia. */
+
+position: absolute;
+left: 61.61%;
+right: 27.55%;
+top: 36.66%;
+bottom: 58%;
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 500;
+font-size: 22px;
+line-height: 27px;
+
+color: #181713;
+
+
+
+/* Encontrá el código de cualquier materia en el ABC en un solo click. */
+
+position: absolute;
+left: 79.79%;
+right: 8.96%;
+top: 36.66%;
+bottom: 58%;
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 500;
+font-size: 22px;
+line-height: 27px;
+
+color: #181713;
+
+
+
+/* Capa_1 */
+
+position: absolute;
+width: 104.45px;
+height: 32.31px;
+left: 497px;
+top: 1178px;
+
+transform: rotate(180deg);
+
+
+/* Vector */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0.01%;
+bottom: 0%;
+
+background: #181713;
+transform: rotate(180deg);
+
+
+/* Capa_1 */
+
+position: absolute;
+width: 96px;
+height: 96px;
+left: 837px;
+top: 1154px;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 0%;
+right: 0.01%;
+top: 0%;
+bottom: 0%;
+
+background: #181713;
+
+
+/* Vector */
+
+position: absolute;
+left: 33.86%;
+right: 50.88%;
+top: 42.56%;
+bottom: 42.67%;
+
+background: #181713;
+
+
+/* Vector */
+
+position: absolute;
+left: 41.82%;
+right: 46.6%;
+top: 58.25%;
+bottom: 37.59%;
+
+background: #181713;
+
+
+/* Vector */
+
+position: absolute;
+left: 50.87%;
+right: 38.02%;
+top: 42.83%;
+bottom: 53.87%;
+
+background: #181713;
+
+
+/* Capa_1 */
+
+position: absolute;
+left: 61.67%;
+right: 34.43%;
+top: 31.95%;
+bottom: 65.9%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 4.85%;
+right: 4.84%;
+top: 4.7%;
+bottom: 64.82%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 4.85%;
+right: 4.84%;
+top: 24.61%;
+bottom: 42.75%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 4.85%;
+right: 4.84%;
+top: 46.67%;
+bottom: 20.93%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 4.85%;
+right: -0.01%;
+top: 0%;
+bottom: 16.25%;
+
+background: #181713;
+
+
+/* Vector */
+
+position: absolute;
+left: 4.84%;
+right: 0.01%;
+top: 19.93%;
+bottom: 60.14%;
+
+background: #181713;
+
+
+/* Vector */
+
+position: absolute;
+left: 4.84%;
+right: 0.01%;
+top: 41.99%;
+bottom: 38.08%;
+
+background: #181713;
+
+
+/* Vector */
+
+position: absolute;
+left: 45.95%;
+right: 45.95%;
+top: 40.43%;
+bottom: 51.75%;
+
+background: #181713;
+
+
+/* Vector */
+
+position: absolute;
+left: 0%;
+right: 95.15%;
+top: 0.02%;
+bottom: 0%;
+
+background: #181713;
+
+
+/* Capa_1 */
+
+position: absolute;
+width: 73px;
+height: 81px;
+left: 135px;
+top: 1157px;
+
+transform: rotate(-24.13deg);
+
+
+/* Vector */
+
+position: absolute;
+left: 11.98%;
+right: 23.28%;
+top: 17.02%;
+bottom: 25.51%;
+
+background: #181713;
+transform: rotate(-24.13deg);
+
+
+/* Vector */
+
+position: absolute;
+left: 24.97%;
+right: 50.3%;
+top: 36.12%;
+bottom: 41.93%;
+
+background: #181713;
+transform: rotate(-24.13deg);
+
+
+/* Vector */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+background: #181713;
+transform: rotate(-24.13deg);
+
+
+/* Capa_1 */
+
+position: absolute;
+width: 92px;
+height: 66px;
+left: 1532px;
+top: 1155px;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 6.24%;
+right: 53.86%;
+top: 20.86%;
+bottom: 65.59%;
+
+background: #181713;
+
+
+/* Vector */
+
+position: absolute;
+left: 6.25%;
+right: 53.86%;
+top: 39.26%;
+bottom: 47.19%;
+
+background: #181713;
+
+
+/* Vector */
+
+position: absolute;
+left: 6.24%;
+right: 53.86%;
+top: 59.69%;
+bottom: 26.77%;
+
+background: #181713;
+
+
+/* Vector */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: -0.01%;
+
+background: #181713;
+
+
+/* Vector */
+
+position: absolute;
+left: 53.86%;
+right: 6.24%;
+top: 20.85%;
+bottom: 65.6%;
+
+background: #181713;
+
+
+/* Vector */
+
+position: absolute;
+left: 53.86%;
+right: 6.24%;
+top: 39.26%;
+bottom: 47.19%;
+
+background: #181713;
+
+
+/* Vector */
+
+position: absolute;
+left: 53.86%;
+right: 6.24%;
+top: 59.69%;
+bottom: 26.77%;
+
+background: #181713;
