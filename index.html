@@ -8,12 +8,11 @@
     <title>DocentesZonaSur - Herramientas</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@300;400;500;600;700;900&display=swap');
-
     </style>
     <!-- Leaflet CSS & JS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-        <style>
+    <style>
         :root {
             --nav-bg: #1739aa;
             --hero-bg: #ffffff;
@@ -46,7 +45,11 @@
             box-sizing: border-box;
         }
 
-        h1, h2, h3, h4, .card-title {
+        h1,
+        h2,
+        h3,
+        h4,
+        .card-title {
             font-weight: 900 !important;
         }
 
@@ -58,6 +61,7 @@
             justify-content: space-between;
             align-items: center;
         }
+
         .nav-brand {
             color: #ffffff;
             font-size: 24px;
@@ -65,13 +69,16 @@
             letter-spacing: 1px;
             text-transform: uppercase;
         }
+
         .nav-brand span {
             font-weight: 300;
         }
+
         .nav-buttons {
             display: flex;
             gap: 15px;
         }
+
         .pill-btn {
             background-color: #fefca6;
             color: #1739aa;
@@ -84,6 +91,7 @@
             transition: transform 0.2s;
             text-transform: uppercase;
         }
+
         .pill-btn:hover {
             transform: scale(1.05);
         }
@@ -100,10 +108,12 @@
             margin: 0 auto;
             box-sizing: border-box;
         }
+
         .hero-content {
             flex: 1;
             max-width: 600px;
         }
+
         .hero-content h1 {
             color: var(--text-dark);
             font-size: 54px;
@@ -111,6 +121,7 @@
             margin: 0 0 20px 0;
             text-transform: uppercase;
         }
+
         .hero-content p {
             color: var(--text-light-blue);
             font-size: 20px;
@@ -118,12 +129,14 @@
             margin: 0;
             font-weight: 500;
         }
+
         .hero-image-placeholder {
             flex: 1;
             display: flex;
             justify-content: flex-end;
             align-items: center;
         }
+
         .hero-image-placeholder img {
             max-width: 100%;
             height: auto;
@@ -137,18 +150,21 @@
             justify-content: center;
             width: 100%;
         }
+
         .grid-section {
             padding: 60px 40px;
             width: 100%;
             max-width: 1200px;
             box-sizing: border-box;
         }
+
         .grid-container {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 20px;
             width: 100%;
         }
+
         .card {
             border-radius: 16px;
             padding: 30px 24px;
@@ -159,6 +175,7 @@
             box-shadow: none;
             border: none;
         }
+
         .card:hover {
             transform: translateY(-5px);
         }
@@ -167,25 +184,39 @@
             background-color: var(--card1-bg);
             color: #ffffff;
         }
-        .card-1 .card-desc { color: rgba(255,255,255,0.9); }
+
+        .card-1 .card-desc {
+            color: rgba(255, 255, 255, 0.9);
+        }
 
         .card-2 {
             background-color: var(--card2-bg);
             color: var(--card2-text);
         }
-        .card-2 .card-desc { color: var(--card2-text); font-weight: 600;}
+
+        .card-2 .card-desc {
+            color: var(--card2-text);
+            font-weight: 600;
+        }
 
         .card-3 {
             background-color: var(--card3-bg);
             color: var(--card3-text);
         }
-        .card-3 .card-desc { color: var(--card3-text-light); font-weight: 600;}
+
+        .card-3 .card-desc {
+            color: var(--card3-text-light);
+            font-weight: 600;
+        }
 
         .card-4 {
             background-color: var(--card4-bg);
             color: #ffffff;
         }
-        .card-4 .card-desc { color: rgba(255,255,255,0.9); }
+
+        .card-4 .card-desc {
+            color: rgba(255, 255, 255, 0.9);
+        }
 
         .card-title {
             font-size: 24px;
@@ -193,6 +224,7 @@
             line-height: 1.2;
             text-transform: uppercase;
         }
+
         .card-desc {
             font-size: 15px;
             line-height: 1.5;
@@ -202,69 +234,178 @@
         /* Modals Overrides */
         .modal-overlay {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background: rgba(0, 0, 0, 0.4);
-            display: flex; align-items: center; justify-content: center;
-            z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.3s;
-            padding: 20px; box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            padding: 20px;
+            box-sizing: border-box;
         }
-        .modal-overlay.active { opacity: 1; pointer-events: all; }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
         .modal-content {
             background: #ffffff;
             border-radius: 20px;
-            width: 95%; max-width: 600px; max-height: 90vh; overflow-y: auto;
-            padding: 40px; box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+            width: 95%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 40px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
             position: relative;
-            transform: scale(0.95); transition: all 0.3s;
+            transform: scale(0.95);
+            transition: all 0.3s;
         }
-        .modal-overlay.active .modal-content { transform: scale(1); }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
         .close-btn {
-            position: absolute; top: 20px; right: 20px; background: #e0e4eb;
-            border: none; color: #1937b0; width: 32px; height: 32px; border-radius: 50%;
-            cursor: pointer; display: flex; align-items: center; justify-content: center;
-            font-size: 18px; transition: background 0.2s; font-weight: bold;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #e0e4eb;
+            border: none;
+            color: #e53e3e;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: all 0.2s;
+            font-weight: bold;
         }
-        .close-btn:hover { background: #ced4da; }
-        
-        .form-group { margin-bottom: 20px; }
-        .form-label { display: block; font-size: 14px; font-weight: 700; margin-bottom: 8px; color: #1937b0; }
+
+        .close-btn:hover {
+            background: #fde8e8;
+            color: #c53030;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #1937b0;
+        }
+
         .form-control {
-            width: 100%; background: #f0f4f8; border: 1px solid #c0d4e8; border-radius: 12px;
-            padding: 14px 16px; color: #1937b0; font-size: 15px; font-family: inherit;
-            transition: border-color 0.3s; box-sizing: border-box; font-weight: 500;
+            width: 100%;
+            background: #f0f4f8;
+            border: 1px solid #c0d4e8;
+            border-radius: 12px;
+            padding: 14px 16px;
+            color: #1937b0;
+            font-size: 15px;
+            font-family: inherit;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+            font-weight: 500;
         }
-        .form-control:focus { outline: none; border-color: #1937b0; }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #1937b0;
+        }
+
         select.form-control {
             appearance: none;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%231937b0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-            background-repeat: no-repeat; background-position: right 16px center; background-size: 16px;
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            background-size: 16px;
         }
-        
+
         .btn-primary {
-            width: 100%; background: #1937b0; color: white; border: none; border-radius: 12px;
-            padding: 16px; font-size: 16px; font-weight: 900; cursor: pointer; transition: background 0.3s;
+            width: 100%;
+            background: #1937b0;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: 900;
+            cursor: pointer;
+            transition: background 0.3s;
         }
-        .btn-primary:hover { background: #112885; }
-        .btn-primary:disabled { opacity: 0.7; cursor: not-allowed; }
+
+        .btn-primary:hover {
+            background: #112885;
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
 
         .btn-mp {
-            background: #009EE3; color: white; display: flex; align-items: center; justify-content: center;
-            box-shadow: none; border: none;
+            background: #009EE3;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: none;
+            border: none;
         }
-        .btn-mp:hover { background: #0081ba; }
+
+        .btn-mp:hover {
+            background: #0081ba;
+        }
 
         /* Helpers */
         .info-alert {
-            background: #e6f7ff; border-left: 3px solid #006ee9; padding: 12px 16px;
-            border-radius: 4px 8px 8px 4px; font-size: 14px; color: #1937b0;
-            margin-bottom: 24px; line-height: 1.5; font-weight: 500;
+            background: #e6f7ff;
+            border-left: 3px solid #006ee9;
+            padding: 12px 16px;
+            border-radius: 4px 8px 8px 4px;
+            font-size: 14px;
+            color: #1937b0;
+            margin-bottom: 24px;
+            line-height: 1.5;
+            font-weight: 500;
         }
+
         .status-message {
-            margin-top: 16px; text-align: center; font-size: 14px; display: none;
-            padding: 10px; border-radius: 8px; font-weight: bold;
+            margin-top: 16px;
+            text-align: center;
+            font-size: 14px;
+            display: none;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: bold;
         }
-        .status-success { color: #166534; background: #dcfce7; display: block; }
-        .status-error { color: #991b1b; background: #fee2e2; display: block; }
+
+        .status-success {
+            color: #166534;
+            background: #dcfce7;
+            display: block;
+        }
+
+        .status-error {
+            color: #991b1b;
+            background: #fee2e2;
+            display: block;
+        }
 
         .search-results {
             margin-top: 24px;
@@ -272,49 +413,145 @@
             flex-direction: column;
             gap: 16px;
         }
+
         .oferta-card {
-            background: #f8fcff; border-left: 4px solid #1937b0; padding: 16px;
-            border-radius: 8px; font-size: 14px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); color: #333;
+            background: #f8fcff;
+            border-left: 4px solid #1937b0;
+            padding: 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            color: #333;
         }
-        .oferta-card h4 { margin: 0 0 8px 0; color: #1937b0; font-size: 16px; }
-        .oferta-card p { margin: 4px 0; color: #555; }
-        .oferta-card b { color: #1937b0; }
+
+        .oferta-card h4 {
+            margin: 0 0 8px 0;
+            color: #1937b0;
+            font-size: 16px;
+        }
+
+        .oferta-card p {
+            margin: 4px 0;
+            color: #555;
+        }
+
+        .oferta-card b {
+            color: #1937b0;
+        }
 
         /* Custom Scrollbar for Modal */
-        .modal-content::-webkit-scrollbar { width: 8px; }
-        .modal-content::-webkit-scrollbar-track { background: #f0f4f8; border-radius: 4px; }
-        .modal-content::-webkit-scrollbar-thumb { background: #c0d4e8; border-radius: 4px; }
-        .modal-content::-webkit-scrollbar-thumb:hover { background: #90b4d8; }
+        .modal-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .modal-content::-webkit-scrollbar-track {
+            background: #f0f4f8;
+            border-radius: 4px;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb {
+            background: #c0d4e8;
+            border-radius: 4px;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb:hover {
+            background: #90b4d8;
+        }
 
         /* Responsive */
         @media (max-width: 900px) {
-            .grid-container { grid-template-columns: repeat(2, 1fr); }
+            .grid-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
-        
+
         @media (max-width: 768px) {
-            .navbar { flex-direction: column; gap: 15px; padding: 15px 20px; }
-            .hero-section { flex-direction: column; padding: 40px 20px; text-align: center; }
-            .hero-content h1 { font-size: 36px; }
-            .hero-image-placeholder { justify-content: center; margin-top: 30px; }
-            .grid-container { grid-template-columns: 1fr; }
-            .grid-section { padding: 40px 20px; }
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px 20px;
+            }
+
+            .hero-section {
+                flex-direction: column;
+                padding: 40px 20px;
+                text-align: center;
+            }
+
+            .hero-content h1 {
+                font-size: 36px;
+            }
+
+            .hero-image-placeholder {
+                justify-content: center;
+                margin-top: 30px;
+            }
+
+            .grid-container {
+                grid-template-columns: 1fr;
+            }
+
+            .grid-section {
+                padding: 40px 20px;
+            }
 
             .modal-content {
-                width: 95%; padding: 20px; margin-top: 20px; max-height: 90vh; overflow-y: auto;
+                width: 95%;
+                padding: 20px;
+                margin-top: 20px;
+                max-height: 90vh;
+                overflow-y: auto;
             }
-            .form-control, .btn-primary, .btn-mp, select.form-control {
-                padding: 16px; font-size: 16px !important;
+
+            .form-control,
+            .btn-primary,
+            .btn-mp,
+            select.form-control {
+                padding: 16px;
+                font-size: 16px !important;
             }
-            .resultados-grid { grid-template-columns: 1fr !important; }
-            .resultados-grid > div { grid-column: span 1 !important; }
-            #escuelaMap { height: 200px !important; }
+
+            .resultados-grid {
+                grid-template-columns: 1fr !important;
+            }
+
+            .resultados-grid>div {
+                grid-column: span 1 !important;
+            }
+
+            #escuelaMap {
+                height: 200px !important;
+            }
         }
+
+        /* Accordion CSS Animations */
+        details.help-accordion summary::-webkit-details-marker { display: none; }
+        details.help-accordion summary { transition: background 0.3s, box-shadow 0.3s; }
+        details.help-accordion summary:hover { background: #fdf885 !important; box-shadow: inset 0 0 0 1px #1739aa; }
+        details.help-accordion .accordion-content {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out, opacity 0.4s ease-out;
+            padding-top: 0;
+            padding-bottom: 0;
+            border-top-color: transparent !important;
+        }
+        details.help-accordion[open] .accordion-content {
+            max-height: 500px;
+            opacity: 1;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            border-top-color: #c0d4e8 !important;
+        }
+        .chevron { transition: transform 0.4s ease; transform-origin: center; display: inline-block; }
+        details.help-accordion[open] .chevron { transform: rotate(180deg); }
     </style>
 </head>
 
 <body>
 
-    
+
     <div class="navbar">
         <div class="nav-brand">PROFEPORTAL <span style="font-weight: 300;">CONURBANO</span></div>
         <div class="nav-buttons">
@@ -326,7 +563,8 @@
     <div class="hero-section">
         <div class="hero-content">
             <h1>LA WEB QUE TE<br>ACERCA AL AULA</h1>
-            <p>Te ayudamos a simplificar el proceso de búsqueda para achicar barreras en el ejercicio de la docencia, desde y para el Conurbano Bonaerense.</p>
+            <p>Te ayudamos a simplificar el proceso de búsqueda para achicar barreras en el ejercicio de la docencia,
+                desde y para el Conurbano Bonaerense.</p>
         </div>
         <div class="hero-image-placeholder">
             <!-- image goes here eventually -->
@@ -345,19 +583,22 @@
                 <!-- Tarjeta 2: Plan Gratis -->
                 <div class="card card-2" onclick="openModal('modalFree')">
                     <h3 class="card-title">Alertas<br>Gratis</h3>
-                    <p class="card-desc">El Plan Gratis está limitado a 1 distrito y 1 materia. Ideal para monitorear un único perfil docente.</p>
+                    <p class="card-desc">El Plan Gratis está limitado a 1 distrito y 1 materia. Ideal para monitorear un
+                        único perfil docente.</p>
                 </div>
 
                 <!-- Tarjeta 3: Premium -->
                 <div class="card card-3" onclick="openModal('modalPremium')">
                     <h3 class="card-title">Alertas<br>Ilimitadas</h3>
-                    <p class="card-desc">Monitoreá todos tus habilitantes de manera profesional y aumentá tus posibilidades de tomar horas.</p>
+                    <p class="card-desc">Monitoreá todos tus habilitantes de manera profesional y aumentá tus
+                        posibilidades de tomar horas.</p>
                 </div>
 
                 <!-- Tarjeta 4: Buscador de Escuelas -->
                 <div class="card card-4" onclick="openModal('modalEscuelas')">
                     <h3 class="card-title">Buscador<br>de Escuelas</h3>
-                    <p class="card-desc">Filtrá y encontrá la ubicación y contacto de cualquier escuela de la Provincia.</p>
+                    <p class="card-desc">Filtrá y encontrá la ubicación y contacto de cualquier escuela de la Provincia.
+                    </p>
                 </div>
             </div>
         </div>
@@ -715,7 +956,8 @@
 
             <a href="https://mpago.la/1s7fyUe" target="_blank" style="text-decoration:none;">
                 <button class="btn-primary btn-mp">
-                    <img src="MP_RGB_HANDSHAKE_color_horizontal.svg" alt="Mercado Pago" style="height: 35px; width: auto; margin-right: 12px; vertical-align: middle;">
+                    <img src="MP_RGB_HANDSHAKE_color_horizontal.svg" alt="Mercado Pago"
+                        style="height: 35px; width: auto; margin-right: 12px; vertical-align: middle;">
                     Suscribite con Mercado Pago
                 </button>
             </a>
@@ -735,6 +977,40 @@
             <p style="color: #6f9ac8; font-size:14px; margin-bottom: 24px; line-height: 1.5;">
                 Filtrá y encontrá la ubicación y contacto de cualquier escuela de la Provincia.
             </p>
+
+            <!-- AYUDA DE CÓDIGOS (ACORDEÓN) -->
+            <details class="help-accordion" style="background:#fefca6; border:1px solid #c0d4e8; border-radius:12px; margin-bottom:24px; box-shadow:0 2px 4px rgba(0,0,0,0.02); overflow:hidden;">
+                <summary style="padding:15px 20px; color:#1739aa; font-family:'Archivo Black', sans-serif; font-size:14px; text-transform:uppercase; cursor:pointer; font-weight:900; word-break: break-word; display:flex; justify-content:space-between; align-items:center;">
+                    <span style="display:flex; align-items:center; gap:8px;">
+                        <span style="font-size:18px;">❓</span>
+                        ¿Tenés el código de la escuela? Te enseñamos a entenderlo (ej: 0111MS0051)
+                    </span>
+                    <span class="chevron" style="font-size:16px;">▼</span>
+                </summary>
+                <div class="accordion-content" style="padding:0 20px; background:#f8fcff; border-top:1px solid #c0d4e8;">
+                    <p style="color:#6f9ac8; font-size:14px; margin:15px 0; font-weight:500;">Si tenés el código del
+                        ABC, así es como se divide para que lo encuentres más rápido:</p>
+
+                    <div
+                        style="background:#ffffff; border:1px solid #e0e4eb; border-radius:8px; padding:12px; text-align:center; margin-bottom:15px; font-weight:900; font-size:18px; letter-spacing:1px; color:#1937b0;">
+                        <span style="color:#006ee9;">[011]</span> 1 <span style="color:#d97706;">[MS]</span> <span
+                            style="color:#1935b0;">[0051]</span>
+                    </div>
+
+                    <ul style="color:#6f9ac8; font-size:13.5px; padding-left:20px; margin:0; line-height:1.6;">
+                        <li style="margin-bottom:6px;"><strong style="color:#006ee9;">[011] (Celeste):</strong>
+                            Distrito. Son los primeros 3 números (ej: 062 es Lanús).</li>
+                        <li style="margin-bottom:6px;"><strong style="color:#d97706;">[MS] (Amarillo):</strong>
+                            Nivel/Modalidad. MS es Secundaria, MT es Técnica, PP es Primaria, etc.</li>
+                        <li style="margin-bottom:10px;"><strong style="color:#1935b0;">[0051] (Azul):</strong> Número de
+                            Escuela. Son los últimos 4 números.</li>
+                    </ul>
+
+                    <p style="color:#1739aa; font-size:14px; font-weight:700; margin:15px 0 0 0; text-align:center;">
+                        Cargá estos datos en los filtros de abajo para encontrar tu escuela rápido.
+                    </p>
+                </div>
+            </details>
 
             <!-- SECCIÓN 1: BÚSQUEDA -->
             <form id="escuelasForm" style="margin-bottom: 20px;" onsubmit="event.preventDefault();">
@@ -769,48 +1045,77 @@
                     </select>
                 </div>
             </form>
-            
+
             <!-- SECCIÓN 2: RESULTADOS -->
-            <div id="seccionResultados" style="display:none; animation: fadeIn 0.4s ease; border-top: 1px solid var(--glass-border); padding-top:20px;">
-                <h3 style="margin-top:0; color: #1937b0; text-align:center; font-size:1.1rem; letter-spacing:1px; margin-bottom: 15px;">RESULTADOS</h3>
-                
+            <div id="seccionResultados"
+                style="display:none; animation: fadeIn 0.4s ease; border-top: 1px solid var(--glass-border); padding-top:20px;">
+                <h3
+                    style="margin-top:0; color: #1937b0; text-align:center; font-size:1.1rem; letter-spacing:1px; margin-bottom: 15px;">
+                    RESULTADOS</h3>
+
                 <h4 id="fichaNombre" style="margin-top:0; color:#1937b0; font-size:1.2rem; margin-bottom:5px;"></h4>
                 <p style="margin:0 0 15px 0; color:#1937b0;"><b>📍 Dirección:</b> <span id="fichaDireccion"></span></p>
-                
-                <div class="resultados-grid" style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:20px;">
-                    <div style="background:#f0f4f8; padding:10px; border-radius:8px; border:1px solid #c0d4e8; text-align:center;">
-                        <span style="display:block; font-size:11px; color: #6f9ac8; text-transform:uppercase;">Sector</span>
+
+                <div class="resultados-grid"
+                    style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:20px;">
+                    <div
+                        style="background:#f0f4f8; padding:10px; border-radius:8px; border:1px solid #c0d4e8; text-align:center;">
+                        <span
+                            style="display:block; font-size:11px; color: #6f9ac8; text-transform:uppercase;">Sector</span>
                         <strong id="fichaSector" style="color:#1937b0; display:block; margin-top:4px;"></strong>
                     </div>
-                    <div style="background:#f0f4f8; padding:10px; border-radius:8px; border:1px solid #c0d4e8; text-align:center;">
-                        <span style="display:block; font-size:11px; color: #6f9ac8; text-transform:uppercase;">Nro de Escuela</span>
+                    <div
+                        style="background:#f0f4f8; padding:10px; border-radius:8px; border:1px solid #c0d4e8; text-align:center;">
+                        <span style="display:block; font-size:11px; color: #6f9ac8; text-transform:uppercase;">Nro de
+                            Escuela</span>
                         <strong id="fichaNro" style="color:#1937b0; display:block; margin-top:4px;"></strong>
                     </div>
-                    <div style="background:#f0f4f8; padding:10px; border-radius:8px; border:1px solid #c0d4e8; text-align:center; grid-column:span 2;">
-                        <span style="display:block; font-size:11px; color: #6f9ac8; text-transform:uppercase;">Nivel / Modalidad</span>
-                        <strong id="fichaNivelMod" style="color:#1937b0; display:block; margin-top:4px; word-break: break-all;"></strong>
+                    <div
+                        style="background:#f0f4f8; padding:10px; border-radius:8px; border:1px solid #c0d4e8; text-align:center; grid-column:span 2;">
+                        <span style="display:block; font-size:11px; color: #6f9ac8; text-transform:uppercase;">Nivel /
+                            Modalidad</span>
+                        <strong id="fichaNivelMod"
+                            style="color:#1937b0; display:block; margin-top:4px; word-break: break-all;"></strong>
                     </div>
-                    <div style="background:#e6f7ff; padding:12px; border-radius:8px; border:1px solid #006ee9; text-align:center; grid-column:span 2;">
-                        <span style="display:block; font-size:12px; color: #1937b0; text-transform:uppercase; font-weight:700;">Desfavorabilidad</span>
-                        <strong id="fichaDesfav" style="color:#1937b0; font-size:1.1rem; display:block; margin-top:5px;"></strong>
+                    <div
+                        style="background:#e6f7ff; padding:12px; border-radius:8px; border:1px solid #006ee9; text-align:center; grid-column:span 2;">
+                        <span
+                            style="display:block; font-size:12px; color: #1937b0; text-transform:uppercase; font-weight:700;">Desfavorabilidad</span>
+                        <strong id="fichaDesfav"
+                            style="color:#1937b0; font-size:1.1rem; display:block; margin-top:5px;"></strong>
                     </div>
-                    <div style="background:#f0f4f8; padding:10px; border-radius:8px; border:1px solid #c0d4e8; text-align:center; grid-column:span 2;">
-                        <span style="display:block; font-size:11px; color: #6f9ac8; text-transform:uppercase;">Teléfono</span>
-                        <strong id="fichaTelText" style="color:#1937b0; display:block; margin-top:4px; word-break: break-all; user-select: text;"></strong>
+                    <div
+                        style="background:#f0f4f8; padding:10px; border-radius:8px; border:1px solid #c0d4e8; text-align:center; grid-column:span 2;">
+                        <span
+                            style="display:block; font-size:11px; color: #6f9ac8; text-transform:uppercase;">Teléfono</span>
+                        <strong id="fichaTelText"
+                            style="color:#1937b0; display:block; margin-top:4px; word-break: break-all; user-select: text;"></strong>
                     </div>
-                    <div style="background:#f0f4f8; padding:10px; border-radius:8px; border:1px solid #c0d4e8; text-align:center; grid-column:span 2;">
-                        <span style="display:block; font-size:11px; color: #6f9ac8; text-transform:uppercase;">Email</span>
-                        <strong id="fichaMailText" style="color:#1937b0; display:block; margin-top:4px; word-break: break-all; user-select: text;"></strong>
+                    <div
+                        style="background:#f0f4f8; padding:10px; border-radius:8px; border:1px solid #c0d4e8; text-align:center; grid-column:span 2;">
+                        <span
+                            style="display:block; font-size:11px; color: #6f9ac8; text-transform:uppercase;">Email</span>
+                        <strong id="fichaMailText"
+                            style="color:#1937b0; display:block; margin-top:4px; word-break: break-all; user-select: text;"></strong>
                     </div>
                 </div>
 
                 <!-- Mapa Leaflet funcional -->
-                <div id="escuelaMap" style="height: 250px; width: 100%; border-radius:12px; border: 1px solid #c0d4e8; z-index:1; margin-bottom:20px; display:none;"></div>
+                <div id="escuelaMap"
+                    style="height: 250px; width: 100%; border-radius:12px; border: 1px solid #c0d4e8; z-index:1; margin-bottom:20px; display:none;">
+                </div>
 
-                <div style="display: flex; flex-direction: column; gap: 10px; align-items: center; width: 100%; margin-top: 15px;">
-                    <a id="fichaMapLink" href="#" target="_blank" style="width:100%; text-align:center; padding:12px 10px; text-decoration:none; font-size:14px; background:#e63946; color:white; border-radius:50px; font-weight:900; border:none; transition:transform 0.2s; font-family:inherit; box-sizing:border-box;">📍 Ver Ubicación (G. Maps)</a>
-                    <a id="fichaTel" href="#" class="btn-primary" style="width:100%; text-align:center; padding:12px 10px; text-decoration:none; font-size:14px; box-sizing:border-box;">📞 Llamar</a>
-                    <a id="fichaMail" href="#" class="btn-primary" style="width:100%; text-align:center; padding:12px 10px; text-decoration:none; font-size:14px; box-sizing:border-box;">✉ Correo</a>
+                <div
+                    style="display: flex; flex-direction: column; gap: 10px; align-items: center; width: 100%; margin-top: 15px;">
+                    <a id="fichaMapLink" href="#" target="_blank"
+                        style="width:100%; text-align:center; padding:12px 10px; text-decoration:none; font-size:14px; background:#e63946; color:white; border-radius:50px; font-weight:900; border:none; transition:transform 0.2s; font-family:inherit; box-sizing:border-box;">📍
+                        Ver Ubicación (G. Maps)</a>
+                    <a id="fichaTel" href="#" class="btn-primary"
+                        style="width:100%; text-align:center; padding:12px 10px; text-decoration:none; font-size:14px; box-sizing:border-box;">📞
+                        Llamar</a>
+                    <a id="fichaMail" href="#" class="btn-primary"
+                        style="width:100%; text-align:center; padding:12px 10px; text-decoration:none; font-size:14px; box-sizing:border-box;">✉
+                        Correo</a>
                 </div>
             </div>
         </div>
@@ -1006,7 +1311,7 @@
                     const response = await fetch('escuelas_pba.json');
                     escuelasData = await response.json();
                     escBtn.options[0].text = 'Selecciona Sector';
-                    
+
                     // Populate Sector
                     const sectores = [...new Set(escuelasData.map(e => e.sector))].filter(Boolean).sort();
                     sectores.forEach(s => {
@@ -1028,19 +1333,19 @@
             document.getElementById('escNivel').disabled = true;
             document.getElementById('escModalidad').disabled = true;
             document.getElementById('escNumero').disabled = true;
-            
+
             document.getElementById('escMunicipio').innerHTML = '<option value="" disabled selected>Selecciona Municipio</option>';
             document.getElementById('escNivel').innerHTML = '<option value="" disabled selected>Selecciona Nivel</option>';
             document.getElementById('escModalidad').innerHTML = '<option value="" disabled selected>Selecciona Modalidad</option>';
             document.getElementById('escNumero').innerHTML = '<option value="" disabled selected>Selecciona Escuela</option>';
-            
+
             document.getElementById('seccionResultados').style.display = 'none';
         }
 
         function fillMunicipios() {
             const sector = document.getElementById('escSector').value;
             const munis = [...new Set(escuelasData.filter(e => e.sector === sector).map(e => e.municipio_nombre))].filter(Boolean).sort();
-            
+
             const sel = document.getElementById('escMunicipio');
             sel.innerHTML = '<option value="" disabled selected>Selecciona Municipio</option>';
             munis.forEach(m => {
@@ -1049,7 +1354,7 @@
                 sel.appendChild(opt);
             });
             sel.disabled = false;
-            
+
             // cascades
             document.getElementById('escNivel').innerHTML = '<option value="" disabled selected>Selecciona Nivel</option>';
             document.getElementById('escNivel').disabled = true;
@@ -1063,9 +1368,9 @@
         function fillNiveles() {
             const sector = document.getElementById('escSector').value;
             const muni = document.getElementById('escMunicipio').value;
-            
+
             const niveles = [...new Set(escuelasData.filter(e => e.sector === sector && e.municipio_nombre === muni).map(e => e.nivel))].filter(Boolean).sort();
-            
+
             const sel = document.getElementById('escNivel');
             sel.innerHTML = '<option value="" disabled selected>Selecciona Nivel</option>';
             niveles.forEach(n => {
@@ -1074,7 +1379,7 @@
                 sel.appendChild(opt);
             });
             sel.disabled = false;
-            
+
             // cascades
             document.getElementById('escModalidad').innerHTML = '<option value="" disabled selected>Selecciona Modalidad</option>';
             document.getElementById('escModalidad').disabled = true;
@@ -1087,9 +1392,9 @@
             const sector = document.getElementById('escSector').value;
             const muni = document.getElementById('escMunicipio').value;
             const nivel = document.getElementById('escNivel').value;
-            
+
             const mods = [...new Set(escuelasData.filter(e => e.sector === sector && e.municipio_nombre === muni && e.nivel === nivel).map(e => e.modalidad))].filter(Boolean).sort();
-            
+
             const sel = document.getElementById('escModalidad');
             sel.innerHTML = '<option value="" disabled selected>Selecciona Modalidad</option>';
             mods.forEach(m => {
@@ -1098,7 +1403,7 @@
                 sel.appendChild(opt);
             });
             sel.disabled = false;
-            
+
             // cascades
             document.getElementById('escNumero').innerHTML = '<option value="" disabled selected>Selecciona Escuela</option>';
             document.getElementById('escNumero').disabled = true;
@@ -1110,9 +1415,9 @@
             const muni = document.getElementById('escMunicipio').value;
             const nivel = document.getElementById('escNivel').value;
             const modalidad = document.getElementById('escModalidad').value;
-            
+
             const escList = escuelasData.filter(e => e.sector === sector && e.municipio_nombre === muni && e.nivel === nivel && e.modalidad === modalidad);
-            
+
             // Can have duplicates if there are different courses, filter unique by nro_escuela/establecimiento_nombre
             const uniqueMap = new Map();
             escList.forEach(e => {
@@ -1121,21 +1426,21 @@
                     uniqueMap.set(key, e);
                 }
             });
-            
+
             const sel = document.getElementById('escNumero');
             sel.innerHTML = '<option value="" disabled selected>Selecciona Escuela</option>';
             Array.from(uniqueMap.values())
-                 .sort((a,b) => (a.nro_escuela || 0) - (b.nro_escuela || 0))
-                 .forEach((e, idx) => {
-                const opt = document.createElement('option');
-                opt.value = idx; // temporary index to fetch from unique array
-                opt.textContent = `Nº ${e.nro_escuela || '-'} - ${e.establecimiento_nombre}`;
-                // store complete object to retrieve later
-                opt.dataset.escuela = JSON.stringify(e);
-                sel.appendChild(opt);
-            });
+                .sort((a, b) => (a.nro_escuela || 0) - (b.nro_escuela || 0))
+                .forEach((e, idx) => {
+                    const opt = document.createElement('option');
+                    opt.value = idx; // temporary index to fetch from unique array
+                    opt.textContent = `Nº ${e.nro_escuela || '-'} - ${e.establecimiento_nombre}`;
+                    // store complete object to retrieve later
+                    opt.dataset.escuela = JSON.stringify(e);
+                    sel.appendChild(opt);
+                });
             sel.disabled = false;
-            
+
             document.getElementById('seccionResultados').style.display = 'none';
         }
 
@@ -1143,15 +1448,15 @@
             const sel = document.getElementById('escNumero');
             const opt = sel.options[sel.selectedIndex];
             if (!opt.value) return;
-            
+
             const e = JSON.parse(opt.dataset.escuela);
-            
+
             document.getElementById('fichaNombre').textContent = e.establecimiento_nombre || 'Escuela sin nombre';
             document.getElementById('fichaDireccion').textContent = e.direccion || 'No registrada';
             document.getElementById('fichaSector').textContent = e.sector || '-';
             document.getElementById('fichaNro').textContent = e.nro_escuela || '-';
             document.getElementById('fichaNivelMod').textContent = (e.nivel || '') + ' / ' + (e.modalidad || '');
-            
+
             let desfavText = 'No declarada';
             if (e.desfavorabilidad !== undefined && e.desfavorabilidad !== null && e.desfavorabilidad !== '') {
                 desfavText = e.desfavorabilidad;
@@ -1163,7 +1468,7 @@
 
             const mailStr = (e.email && e.email !== '-') ? e.email : 'No registrado';
             document.getElementById('fichaMailText').textContent = mailStr;
-            
+
             const btnTel = document.getElementById('fichaTel');
             if (e.telefono && e.telefono !== '-') {
                 btnTel.href = 'tel:' + e.telefono;
@@ -1185,21 +1490,21 @@
                 btnMail.style.pointerEvents = 'none';
                 btnMail.style.opacity = '0.5';
             }
-            
+
             const btnMap = document.getElementById('fichaMapLink');
             const mapDiv = document.getElementById('escuelaMap');
             if (e.latitud && e.longitud && !isNaN(e.latitud) && !isNaN(e.longitud)) {
                 btnMap.href = `https://www.google.com/maps?q=${e.latitud},${e.longitud}`;
                 btnMap.style.display = 'block';
                 mapDiv.style.display = 'block';
-                
+
                 if (!mapInstance) {
                     mapInstance = L.map('escuelaMap');
                     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
                         attribution: '&copy; <a href="https://www.openstreetmap.org/">OSM</a>'
                     }).addTo(mapInstance);
                 }
-                
+
                 setTimeout(() => {
                     mapInstance.invalidateSize();
                     mapInstance.setView([e.latitud, e.longitud], 16);
@@ -1213,9 +1518,9 @@
                 btnMap.style.display = 'none';
                 mapDiv.style.display = 'none';
             }
-            
+
             document.getElementById('seccionResultados').style.display = 'block';
-            
+
             setTimeout(() => {
                 document.getElementById('seccionResultados').scrollIntoView({ behavior: 'smooth' });
             }, 100);
