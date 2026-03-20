@@ -26,7 +26,9 @@
             --text-muted: #6f9ac8;
         }
 
-        html { scroll-behavior: smooth; }
+        html {
+            scroll-behavior: smooth;
+        }
 
         body {
             margin: 0;
@@ -41,7 +43,11 @@
             overflow-x: hidden;
         }
 
-        h1, h2, h3, h4, .card-title {
+        h1,
+        h2,
+        h3,
+        h4,
+        .card-title {
             font-weight: 900 !important;
         }
 
@@ -148,11 +154,29 @@
         }
 
         /* Sections Common */
-        .section-blue { background: var(--bg-blue); padding: 80px 10%; }
-        .section-light { background: var(--bg-light); padding: 80px 10%; }
-        .section-title { font-size: 40px; font-weight: 700; margin-bottom: 40px; }
-        .text-white { color: var(--text-white); }
-        .text-dark { color: var(--text-dark); }
+        .section-blue {
+            background: var(--bg-blue);
+            padding: 80px 10%;
+        }
+
+        .section-light {
+            background: var(--bg-light);
+            padding: 80px 10%;
+        }
+
+        .section-title {
+            font-size: 40px;
+            font-weight: 700;
+            margin-bottom: 40px;
+        }
+
+        .text-white {
+            color: var(--text-white);
+        }
+
+        .text-dark {
+            color: var(--text-dark);
+        }
 
         /* Tools Grid */
         .tools-grid {
@@ -171,28 +195,33 @@
             flex-direction: column;
         }
 
-        .tool-card:hover { transform: translateY(-10px); }
-        .card-yellow { background: var(--accent-yellow); }
-        
-        .tool-icon { 
-            width: 44px; 
-            height: 44px; 
-            margin-bottom: 20px; 
-            object-fit: contain; 
+        .tool-card:hover {
+            transform: translateY(-10px);
         }
 
-        .tool-card h3 { 
-            font-size: 22px; 
-            font-weight: 700; 
-            margin: 0 0 12px 0; 
-            color: var(--text-dark); 
+        .card-yellow {
+            background: var(--accent-yellow);
+        }
+
+        .tool-icon {
+            width: 44px;
+            height: 44px;
+            margin-bottom: 20px;
+            object-fit: contain;
+        }
+
+        .tool-card h3 {
+            font-size: 22px;
+            font-weight: 700;
+            margin: 0 0 12px 0;
+            color: var(--text-dark);
             line-height: 1.2;
         }
 
-        .tool-card p { 
-            font-size: 14px; 
-            line-height: 1.4; 
-            color: var(--text-dark); 
+        .tool-card p {
+            font-size: 14px;
+            line-height: 1.4;
+            color: var(--text-dark);
             margin: 0;
         }
 
@@ -207,9 +236,9 @@
             justify-content: center;
         }
 
-        .cursos-content { 
-            max-width: 600px; 
-            z-index: 10; 
+        .cursos-content {
+            max-width: 600px;
+            z-index: 10;
         }
 
         .pill-blue {
@@ -223,20 +252,51 @@
             margin-bottom: 20px;
         }
 
-        .cursos-content h2 { margin-top: 0; }
-        .cursos-content p { 
-            font-size: 18px; 
-            line-height: 1.5; 
+        .cursos-content h2 {
+            margin-top: 0;
+        }
+
+        .cursos-content p {
+            font-size: 18px;
+            line-height: 1.5;
             font-weight: 500;
         }
 
         /* Absolute decorations */
-        .decor { position: absolute; opacity: 0.8; }
-        .decor-1 { top: 20%; left: 15%; width: 80px; }
-        .decor-2 { top: 25%; right: 15%; width: 100px; }
-        .decor-3 { bottom: 20%; left: 20%; width: 120px; }
-        .decor-4 { bottom: 15%; right: 35%; width: 90px; }
-        .decor-5 { bottom: 20%; right: 15%; width: 110px; }
+        .decor {
+            position: absolute;
+            opacity: 0.8;
+        }
+
+        .decor-1 {
+            top: 20%;
+            left: 15%;
+            width: 80px;
+        }
+
+        .decor-2 {
+            top: 25%;
+            right: 15%;
+            width: 100px;
+        }
+
+        .decor-3 {
+            bottom: 20%;
+            left: 20%;
+            width: 120px;
+        }
+
+        .decor-4 {
+            bottom: 15%;
+            right: 35%;
+            width: 90px;
+        }
+
+        .decor-5 {
+            bottom: 20%;
+            right: 15%;
+            width: 110px;
+        }
 
         /* Quiénes somos section */
         .bottom-section {
@@ -244,43 +304,99 @@
             margin: 0;
         }
 
-        .quienes-content { 
-            max-width: 800px; 
-            text-align: left; 
+        .quienes-content {
+            max-width: 800px;
+            text-align: left;
         }
 
-        .quienes-content p { 
-            font-size: 18px; 
-            line-height: 1.6; 
-            font-weight: 400; 
-            margin-bottom: 20px; 
+        .quienes-content p {
+            font-size: 18px;
+            line-height: 1.6;
+            font-weight: 400;
+            margin-bottom: 20px;
         }
 
-        .quienes-content .btn-yellow { margin-top: 20px; }
+        .quienes-content .btn-yellow {
+            margin-top: 20px;
+        }
 
         /* Animations */
-        .slide-up { transform: translateY(50px); opacity: 0; transition: all 0.6s ease-out; }
-        .scale-in { transform: scale(0); opacity: 0; transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .fade-in { opacity: 0; transition: all 0.6s ease-out; }
+        .slide-up {
+            transform: translateY(50px);
+            opacity: 0;
+            transition: all 0.6s ease-out;
+        }
 
-        .slide-up.visible { transform: translateY(0); opacity: 1; }
-        .scale-in.visible { transform: scale(1); opacity: 1; }
-        .fade-in.visible { opacity: 1; }
+        .scale-in {
+            transform: scale(0);
+            opacity: 0;
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
 
-        .delay-1 { transition-delay: 0.1s; }
-        .delay-2 { transition-delay: 0.2s; }
-        .delay-3 { transition-delay: 0.3s; }
-        .delay-4 { transition-delay: 0.4s; }
-        .delay-5 { transition-delay: 0.5s; }
-        .delay-6 { transition-delay: 0.6s; }
+        .fade-in {
+            opacity: 0;
+            transition: all 0.6s ease-out;
+        }
+
+        .slide-up.visible {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .scale-in.visible {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+        }
+
+        .delay-1 {
+            transition-delay: 0.1s;
+        }
+
+        .delay-2 {
+            transition-delay: 0.2s;
+        }
+
+        .delay-3 {
+            transition-delay: 0.3s;
+        }
+
+        .delay-4 {
+            transition-delay: 0.4s;
+        }
+
+        .delay-5 {
+            transition-delay: 0.5s;
+        }
+
+        .delay-6 {
+            transition-delay: 0.6s;
+        }
 
         /* Desktop specific overriding */
         @media (min-width: 1024px) {
-            .tools-grid { grid-template-columns: repeat(5, 1fr); }
-            .decor { display: block; }
-            .menu-toggle { display: none; }
-            .mobile-menu { display: none !important; }
-            .mobile-text { display: none; }
+            .tools-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
+
+            .decor {
+                display: block;
+            }
+
+            .menu-toggle {
+                display: none;
+            }
+
+            .mobile-menu {
+                display: none !important;
+            }
+
+            .mobile-text {
+                display: none;
+            }
         }
 
         /* Mobile Adjustments */
@@ -289,8 +405,11 @@
                 padding: 16px 20px;
                 position: relative;
             }
-            .nav-links { display: none; }
-            
+
+            .nav-links {
+                display: none;
+            }
+
             .menu-toggle {
                 display: flex;
                 flex-direction: column;
@@ -300,6 +419,7 @@
                 cursor: pointer;
                 z-index: 1000;
             }
+
             .menu-toggle span {
                 display: block;
                 width: 100%;
@@ -320,10 +440,14 @@
                 display: flex;
                 flex-direction: column;
                 padding: 100px 40px 40px 40px;
-                box-shadow: 2px 0 15px rgba(0,0,0,0.1);
+                box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1);
                 transition: left 0.3s ease;
             }
-            .mobile-menu.open { left: 0; }
+
+            .mobile-menu.open {
+                left: 0;
+            }
+
             .mobile-menu a {
                 color: var(--bg-blue);
                 text-decoration: none;
@@ -333,30 +457,107 @@
                 text-transform: uppercase;
             }
 
-            .desktop-text { display: none; }
-            .mobile-text { display: inline; text-transform: lowercase; }
+            .desktop-text {
+                display: none;
+            }
 
-            .tools-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-            .tool-card { padding: 15px 12px; }
-            .tool-icon { width: 32px; height: 32px; margin-bottom: 10px; }
-            .tool-card h3 { font-size: 14px; margin-bottom: 8px; }
-            .tool-card p { font-size: 11px; line-height: 1.3; }
+            .mobile-text {
+                display: inline;
+                text-transform: lowercase;
+            }
 
-            .hero-section { flex-direction: column; text-align: center; padding: 40px 20px; min-height: auto; }
-            .hero-content { max-width: 100%; margin-bottom: 30px; }
-            .hero-content h1 { font-size: 40px; line-height: 1.18; margin-bottom: 15px; }
-            .hero-content p { font-size: 16px; max-width: 100%; }
-            .hero-image { justify-content: center; width: 100%; }
-            .hero-image img { max-width: 150px; margin: 0 auto; }
+            .tools-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
 
-            .section-blue, .section-light { padding: 40px 20px; }
-            .section-title { font-size: 28px; margin-bottom: 30px; }
-            .nav-brand { font-size: 20px; }
-            .decor { display: none; }
-            .cursos-content p { font-size: 15px; }
-            .quienes-content p { font-size: 15px; }
-            .bottom-section { border-radius: 20px 20px 0 0; }
-            .btn-yellow { padding: 10px 16px; font-size: 16px; }
+            .tool-card {
+                padding: 15px 12px;
+            }
+
+            .tool-icon {
+                width: 32px;
+                height: 32px;
+                margin-bottom: 10px;
+            }
+
+            .tool-card h3 {
+                font-size: 14px;
+                margin-bottom: 8px;
+            }
+
+            .tool-card p {
+                font-size: 11px;
+                line-height: 1.3;
+            }
+
+            .hero-section {
+                flex-direction: column;
+                text-align: center;
+                padding: 40px 20px;
+                min-height: auto;
+            }
+
+            .hero-content {
+                max-width: 100%;
+                margin-bottom: 30px;
+            }
+
+            .hero-content h1 {
+                font-size: 40px;
+                line-height: 1.18;
+                margin-bottom: 15px;
+            }
+
+            .hero-content p {
+                font-size: 16px;
+                max-width: 100%;
+            }
+
+            .hero-image {
+                justify-content: center;
+                width: 100%;
+            }
+
+            .hero-image img {
+                max-width: 150px;
+                margin: 0 auto;
+            }
+
+            .section-blue,
+            .section-light {
+                padding: 40px 20px;
+            }
+
+            .section-title {
+                font-size: 28px;
+                margin-bottom: 30px;
+            }
+
+            .nav-brand {
+                font-size: 20px;
+            }
+
+            .decor {
+                display: none;
+            }
+
+            .cursos-content p {
+                font-size: 15px;
+            }
+
+            .quienes-content p {
+                font-size: 15px;
+            }
+
+            .bottom-section {
+                border-radius: 20px 20px 0 0;
+            }
+
+            .btn-yellow {
+                padding: 10px 16px;
+                font-size: 16px;
+            }
         }
 
         /* Modals Overrides */
@@ -653,9 +854,19 @@
         }
 
         /* Accordion CSS Animations */
-        details.help-accordion summary::-webkit-details-marker { display: none; }
-        details.help-accordion summary { transition: background 0.3s, box-shadow 0.3s; }
-        details.help-accordion summary:hover { background: #fdf885 !important; box-shadow: inset 0 0 0 1px #1739aa; }
+        details.help-accordion summary::-webkit-details-marker {
+            display: none;
+        }
+
+        details.help-accordion summary {
+            transition: background 0.3s, box-shadow 0.3s;
+        }
+
+        details.help-accordion summary:hover {
+            background: #fdf885 !important;
+            box-shadow: inset 0 0 0 1px #1739aa;
+        }
+
         details.help-accordion .accordion-content {
             max-height: 0;
             opacity: 0;
@@ -665,6 +876,7 @@
             padding-bottom: 0;
             border-top-color: transparent !important;
         }
+
         details.help-accordion[open] .accordion-content {
             max-height: 500px;
             opacity: 1;
@@ -672,8 +884,16 @@
             padding-bottom: 20px;
             border-top-color: #c0d4e8 !important;
         }
-        .chevron { transition: transform 0.4s ease; transform-origin: center; display: inline-block; }
-        details.help-accordion[open] .chevron { transform: rotate(180deg); }
+
+        .chevron {
+            transition: transform 0.4s ease;
+            transform-origin: center;
+            display: inline-block;
+        }
+
+        details.help-accordion[open] .chevron {
+            transform: rotate(180deg);
+        }
 
         /* Diccionario - Resultados y Textos Largos */
         .materia-item {
@@ -684,7 +904,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
             gap: 10px;
         }
 
@@ -732,10 +952,12 @@
                 align-items: flex-start;
                 gap: 12px;
             }
+
             .materia-text {
                 margin-right: 0;
                 width: 100%;
             }
+
             .materia-btn {
                 align-self: flex-start;
             }
@@ -758,9 +980,10 @@
             <a href="#cursos">Cursos</a>
             <a href="#quienes-somos">Quiénes somos</a>
         </div>
-        <a href="https://cafecito.app/docenteszonasur" target="_blank" class="btn-yellow right-btn" style="text-decoration: none; text-align: center;">
+        <a href="https://cafecito.app/docenteszonasur" target="_blank" class="btn-yellow right-btn"
+            style="text-decoration: none; text-align: center;">
             <span class="desktop-text">Formas de colaborar</span>
-            <span class="mobile-text">colaborar</span>
+            <span class="mobile-text">Colaborar</span>
         </a>
     </nav>
 
@@ -774,7 +997,8 @@
     <section class="hero-section">
         <div class="hero-content fade-in">
             <h1>La web que te acerca al aula.</h1>
-            <p>Te ayudamos a simplificar el proceso de búsqueda para achicar barreras en el ejercicio de la docencia, desde y para el Conurbano Bonaerense.</p>
+            <p>Te ayudamos a simplificar el proceso de búsqueda para achicar barreras en el ejercicio de la docencia,
+                desde y para el Conurbano Bonaerense.</p>
         </div>
         <div class="hero-image fade-in delay-1">
             <img src="icons/puno_lapiz.png" alt="Puño Lápiz">
@@ -792,12 +1016,14 @@
             <div class="tool-card slide-up delay-2" onclick="openModal('modalFree')">
                 <img src="icons/lapiz.png" class="tool-icon" alt="Lápiz">
                 <h3>Alertas<br>gratuitas</h3>
-                <p>El Plan Gratis está limitado a un distrito y materia. Ideal para monitorear un único perfil docente.</p>
+                <p>El Plan Gratis está limitado a un distrito y materia. Ideal para monitorear un único perfil docente.
+                </p>
             </div>
             <div class="tool-card card-yellow slide-up delay-3" onclick="openModal('modalPremium')">
                 <img src="icons/sol.png" class="tool-icon" alt="Sol">
                 <h3>Alertas<br>ilimitadas</h3>
-                <p>Monitoreá todos tus habilitantes de manera profesional y aumentá tus posibilidades de tomar horas.</p>
+                <p>Monitoreá todos tus habilitantes de manera profesional y aumentá tus posibilidades de tomar horas.
+                </p>
             </div>
             <div class="tool-card slide-up delay-4" onclick="openModal('modalEscuelas')">
                 <img src="icons/bandera.png" class="tool-icon" alt="Bandera">
@@ -816,7 +1042,8 @@
         <div class="cursos-content">
             <span class="pill-blue scale-in">PRÓXIMAMENTE</span>
             <h2 class="section-title text-dark slide-up">Cursos y tutoriales</h2>
-            <p class="slide-up delay-1">Estamos trabajando para diseñar capacitaciones que aclaren tus dudas sobre el funcionamiento del sistema de cargos docentes y crear un espacio de apoyo entre profes.</p>
+            <p class="slide-up delay-1">Estamos trabajando para diseñar capacitaciones que aclaren tus dudas sobre el
+                funcionamiento del sistema de cargos docentes y crear un espacio de apoyo entre profes.</p>
         </div>
         <img src="icons/lupa.png" class="decor decor-1 scale-in delay-2" alt="Lupa">
         <img src="icons/bandera.png" class="decor decor-2 scale-in delay-3" alt="Bandera">
@@ -828,9 +1055,15 @@
     <section id="quienes-somos" class="section-blue bottom-section">
         <div class="quienes-content fade-in">
             <h2 class="section-title text-white">Quiénes somos</h2>
-            <p class="text-white">Somos un equipo formado íntegramente en la educación pública. Como graduad@s del Profesorado Joaquín V. González y de la Universidad Nacional de Lanús (UNLa), conocemos de primera mano el valor de nuestras instituciones, pero también las trabas burocráticas que los docentes enfrentamos al intentar tomar cargos en la PBA.</p>
-            <p class="text-white">Entendemos que el tiempo que pasamos descifrando listados o formularios es tiempo que le restamos a la planificación y al descanso. Por eso, decidimos unir la filosofía y la comunicación visual para crear una herramienta que simplifique lo complejo.</p>
-            <p class="text-white">No somos una empresa externa: somos colegas que detectaron un nudo en el sistema y decidieron programar la solución.</p>
+            <p class="text-white">Somos un equipo formado íntegramente en la educación pública. Como graduad@s del
+                Profesorado Joaquín V. González y de la Universidad Nacional de Lanús (UNLa), conocemos de primera mano
+                el valor de nuestras instituciones, pero también las trabas burocráticas que los docentes enfrentamos al
+                intentar tomar cargos en la PBA.</p>
+            <p class="text-white">Entendemos que el tiempo que pasamos descifrando listados o formularios es tiempo que
+                le restamos a la planificación y al descanso. Por eso, decidimos unir la filosofía y la comunicación
+                visual para crear una herramienta que simplifique lo complejo.</p>
+            <p class="text-white">No somos una empresa externa: somos colegas que detectaron un nudo en el sistema y
+                decidieron programar la solución.</p>
             <button class="btn-yellow slide-up">PRÓXIMAMENTE</button>
         </div>
     </section>
@@ -1003,7 +1236,9 @@
             <h2 style="margin-top:0; color: #1937b0;">Activar Plan Gratis</h2>
             <div class="info-alert">
                 <b>¡Recibí las ofertas en tu mail al instante!</b><br><br>
-                Activá este servicio y te avisamos por correo cada vez que se publique un cargo que coincida con tu búsqueda. Tené en cuenta que el Plan Gratis está limitado a 1 solo código de materia y 1 solo distrito por cada dirección de mail.
+                Activá este servicio y te avisamos por correo cada vez que se publique un cargo que coincida con tu
+                búsqueda. Tené en cuenta que el Plan Gratis está limitado a 1 solo código de materia y 1 solo distrito
+                por cada dirección de mail.
             </div>
 
             <form id="freemiumForm">
@@ -1012,7 +1247,8 @@
                     <input type="text" id="freeNombre" class="form-control" placeholder="Escribí tu nombre">
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Correo Electrónico (el mail por el cual querés que te lleguen las ofertas) *</label>
+                    <label class="form-label">Correo Electrónico (el mail por el cual querés que te lleguen las ofertas)
+                        *</label>
                     <input type="email" id="freeEmail" class="form-control" placeholder="tu@correo.com.ar" required>
                 </div>
                 <div class="form-group">
@@ -1210,15 +1446,18 @@
             </p>
 
             <!-- AYUDA DE CÓDIGOS (ACORDEÓN) -->
-            <details class="help-accordion" style="background:#fefca6; border:1px solid #c0d4e8; border-radius:12px; margin-bottom:24px; box-shadow:0 2px 4px rgba(0,0,0,0.02); overflow:hidden;">
-                <summary style="padding:15px 20px; color:#1739aa; font-family:'Archivo Black', sans-serif; font-size:14px; text-transform:uppercase; cursor:pointer; font-weight:900; word-break: break-word; display:flex; justify-content:space-between; align-items:center;">
+            <details class="help-accordion"
+                style="background:#fefca6; border:1px solid #c0d4e8; border-radius:12px; margin-bottom:24px; box-shadow:0 2px 4px rgba(0,0,0,0.02); overflow:hidden;">
+                <summary
+                    style="padding:15px 20px; color:#1739aa; font-family:'Archivo Black', sans-serif; font-size:14px; text-transform:uppercase; cursor:pointer; font-weight:900; word-break: break-word; display:flex; justify-content:space-between; align-items:center;">
                     <span style="display:flex; align-items:center; gap:8px;">
                         <span style="font-size:18px;">❓</span>
                         ¿Tenés el código de la escuela? Te enseñamos a entenderlo (ej: 0111MS0051)
                     </span>
                     <span class="chevron" style="font-size:16px;">▼</span>
                 </summary>
-                <div class="accordion-content" style="padding:0 20px; background:#f8fcff; border-top:1px solid #c0d4e8;">
+                <div class="accordion-content"
+                    style="padding:0 20px; background:#f8fcff; border-top:1px solid #c0d4e8;">
                     <p style="color:#6f9ac8; font-size:14px; margin:15px 0; font-weight:500;">Si tenés el código del
                         ABC, así es como se divide para que lo encuentres más rápido:</p>
 
@@ -1374,30 +1613,40 @@
             </p>
 
             <!-- SECCIÓN B: Guía '¿Qué puedo dar?' -->
-            <details class="help-accordion" style="background:#fefca6; border:1px solid #c0d4e8; border-radius:12px; margin-bottom:24px; box-shadow:0 2px 4px rgba(0,0,0,0.02); overflow:hidden;">
-                <summary style="padding:15px 20px; color:#1739aa; font-family:'Archivo Black', sans-serif; font-size:14px; text-transform:uppercase; cursor:pointer; font-weight:900; word-break: break-word; display:flex; justify-content:space-between; align-items:center;">
+            <details class="help-accordion"
+                style="background:#fefca6; border:1px solid #c0d4e8; border-radius:12px; margin-bottom:24px; box-shadow:0 2px 4px rgba(0,0,0,0.02); overflow:hidden;">
+                <summary
+                    style="padding:15px 20px; color:#1739aa; font-family:'Archivo Black', sans-serif; font-size:14px; text-transform:uppercase; cursor:pointer; font-weight:900; word-break: break-word; display:flex; justify-content:space-between; align-items:center;">
                     <span style="display:flex; align-items:center; gap:8px;">
                         <span style="font-size:18px;">💡</span>
                         ¿Estás anotadx en algún listado pero no sabés qué cargos podés tomar? Buscalo acá
                     </span>
                     <span class="chevron" style="font-size:16px;">▼</span>
                 </summary>
-                <div class="accordion-content" style="padding:0 20px; background:#f8fcff; border-top:1px solid #c0d4e8;">
+                <div class="accordion-content"
+                    style="padding:0 20px; background:#f8fcff; border-top:1px solid #c0d4e8;">
                     <ul style="color:#6f9ac8; font-size:14px; padding-left:20px; margin:15px 0; line-height:1.6;">
                         <li style="margin-bottom:12px;">
-                            <strong style="color:#1937b0;">Entrá a la web de Puntaje Ingreso Docencia del ABC.</strong><br>
-                            <a href="https://misservicios.abc.gob.ar/servaddo/puntaje.ingreso.docencia/" target="_blank" style="display:inline-block; margin-top:8px; padding:10px 18px; background:#006ee9; color:white; border-radius:50px; text-decoration:none; font-weight:bold; font-size:13px; box-shadow:0 2px 4px rgba(0,0,0,0.1); transition:transform 0.2s;">🔗 Ir a Puntaje Ingreso Docencia</a>
+                            <strong style="color:#1937b0;">Entrá a la web de Puntaje Ingreso Docencia del
+                                ABC.</strong><br>
+                            <a href="https://misservicios.abc.gob.ar/servaddo/puntaje.ingreso.docencia/" target="_blank"
+                                style="display:inline-block; margin-top:8px; padding:10px 18px; background:#006ee9; color:white; border-radius:50px; text-decoration:none; font-weight:bold; font-size:13px; box-shadow:0 2px 4px rgba(0,0,0,0.1); transition:transform 0.2s;">🔗
+                                Ir a Puntaje Ingreso Docencia</a>
                         </li>
-                        <li style="margin-bottom:8px;"><strong style="color:#1937b0;">Poné tu DNI, seleccioná el año y listado.</strong></li>
-                        <li style="margin-bottom:8px;"><strong style="color:#1937b0;">En la sección de 'Títulos', fijate en la columna 'Área'.</strong> Esos son los códigos que tenés que usar en nuestro buscador de cargos (ej: CCD, /PR, etc).</li>
+                        <li style="margin-bottom:8px;"><strong style="color:#1937b0;">Poné tu DNI, seleccioná el año y
+                                listado.</strong></li>
+                        <li style="margin-bottom:8px;"><strong style="color:#1937b0;">En la sección de 'Títulos', fijate
+                                en la columna 'Área'.</strong> Esos son los códigos que tenés que usar en nuestro
+                            buscador de cargos (ej: CCD, /PR, etc).</li>
                     </ul>
                 </div>
             </details>
 
             <div class="form-group" style="margin-bottom: 20px;">
-                <input type="text" id="searchMateriaInput" class="form-control" placeholder="Ej: Geografía o GGF" onkeyup="filtrarMaterias()">
+                <input type="text" id="searchMateriaInput" class="form-control" placeholder="Ej: Geografía o GGF"
+                    onkeyup="filtrarMaterias()">
             </div>
-            
+
             <div id="materiasResults" style="display: flex; flex-direction: column; gap: 10px;">
                 <!-- Result items injected here -->
             </div>
@@ -1412,7 +1661,7 @@
             openModal('modalMaterias');
             document.getElementById('searchMateriaInput').value = '';
             document.getElementById('materiasResults').innerHTML = '';
-            
+
             if (listadoMaterias.length === 0) {
                 try {
                     const response = await fetch('materias.json');
@@ -1431,7 +1680,7 @@
         function filtrarMaterias() {
             const rawQuery = document.getElementById('searchMateriaInput').value.trim();
             const resultsContainer = document.getElementById('materiasResults');
-            
+
             if (rawQuery.length < 2) {
                 resultsContainer.innerHTML = '<p style="text-align:center; color:#6f9ac8; margin-top:20px;">Escribí al menos 2 letras para buscar...</p>';
                 return;
@@ -1464,7 +1713,7 @@
             });
 
             const topResults = uniqueResults;
-            
+
             if (topResults.length === 0) {
                 resultsContainer.innerHTML = '<p style="text-align:center; color:#e53e3e; margin-top:20px; font-weight:bold;">No se encontraron materias.</p>';
                 return;
@@ -1892,7 +2141,7 @@
         document.addEventListener("DOMContentLoaded", () => {
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
-                    if(entry.isIntersecting) {
+                    if (entry.isIntersecting) {
                         entry.target.classList.add('visible');
                     }
                 });
