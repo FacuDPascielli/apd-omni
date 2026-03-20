@@ -41,6 +41,7 @@ jobs:
         run: python main.py
 
       - name: Guardar Memoria Multiusuario y DB
+        if: always()
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'

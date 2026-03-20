@@ -112,7 +112,13 @@ def tarea_notificacion():
         print("No hay usuarios activos validos para notificar. Saliendo.")
         return
 
-    # 2. Cargar ofertas enviadas históricamente
+    # 2. Cargar ofertas enviadas históricamente y preparar fechas
+    from datetime import datetime, timedelta
+    ahora_utc = datetime.utcnow()
+    ahora_art = ahora_utc - timedelta(hours=3)
+    hoy_str = ahora_art.strftime('%Y-%m-%d')
+    ayer_str = (ahora_art - timedelta(days=1)).strftime('%Y-%m-%d')
+
     historial = cargar_historial()
     any_new_match = False
 
@@ -123,8 +129,12 @@ def tarea_notificacion():
         distritos_usuario = usuario.get("distritos", [])
         materias_usuario = usuario.get("materias", [])
         
-        usuario_sent_ids = historial.get(mail_destino, [])
-        
+        # El historial puede ser una lista (old format) o un dict {id: "YYYY-MM-DD"}
+        usuario_hist = historial.get(mail_destino, {})
+        if isinstance(usuario_hist, list):
+            # Migración: asumimos que las pasadas se enviaron ayer
+            usuario_hist = {oid: ayer_str for oid in usuario_hist}
+            
         print(f"\n--- Evaluando {nombre_usuario} ({mail_destino}) ---")
         print(f"  Filtros -> Distritos: {distritos_usuario} | Materias: {materias_usuario}")
         
@@ -133,19 +143,26 @@ def tarea_notificacion():
         ofertas_a_enviar = []
         
         for oferta in matches_db:
-            if oferta["id"] not in usuario_sent_ids:
+            oid = oferta["id"]
+            fecha_enviado = usuario_hist.get(oid)
+            
+            # Si no se envió NUNCA, o si se envió pero NO HOY, la mandamos
+            if fecha_enviado != hoy_str:
                 ofertas_a_enviar.append(oferta)
                 
         if ofertas_a_enviar:
             print(f"¡Match! {len(ofertas_a_enviar)} nuevas ofertas a enviar.")
             enviar_correo(ofertas_a_enviar, mail_destino, nombre_usuario)
             
-            # Registrar e Historial
-            usuario_sent_ids.extend([o["id"] for o in ofertas_a_enviar])
-            historial[mail_destino] = usuario_sent_ids
+            # Registrar envío con la fecha de hoy
+            for o in ofertas_a_enviar:
+                usuario_hist[o["id"]] = hoy_str
+                
+            historial[mail_destino] = usuario_hist
             any_new_match = True
+            guardar_historial(historial)
         else:
-            print("Sin novedades no notificadas.")
+            print("Sin novedades no notificadas para hoy.")
 
     if any_new_match:
         guardar_historial(historial)
