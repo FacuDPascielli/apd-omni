@@ -112,13 +112,7 @@ def tarea_notificacion():
         print("No hay usuarios activos validos para notificar. Saliendo.")
         return
 
-    # 2. Cargar ofertas enviadas históricamente y preparar fechas
-    from datetime import datetime, timedelta
-    ahora_utc = datetime.utcnow()
-    ahora_art = ahora_utc - timedelta(hours=3)
-    hoy_str = ahora_art.strftime('%Y-%m-%d')
-    ayer_str = (ahora_art - timedelta(days=1)).strftime('%Y-%m-%d')
-
+    # 2. Cargar ofertas enviadas históricamente
     historial = cargar_historial()
     any_new_match = False
 
@@ -129,11 +123,34 @@ def tarea_notificacion():
         distritos_usuario = usuario.get("distritos", [])
         materias_usuario = usuario.get("materias", [])
         
-        # El historial puede ser una lista (old format) o un dict {id: "YYYY-MM-DD"}
-        usuario_hist = historial.get(mail_destino, {})
-        if isinstance(usuario_hist, list):
-            # Migración: asumimos que las pasadas se enviaron ayer
-            usuario_hist = {oid: ayer_str for oid in usuario_hist}
+        # El historial del usuario debe ser estrictamente una lista de IGEs
+        usuario_hist_raw = historial.get(mail_destino, [])
+        usuario_hist_iges = []
+        
+        if isinstance(usuario_hist_raw, dict):
+            # Migración desde dict {id: fecha} a lista de IGEs
+            for k in usuario_hist_raw.keys():
+                k_str = str(k)
+                if k_str.startswith("IGE_"):
+                    partes = k_str.split("_")
+                    if len(partes) >= 2:
+                        usuario_hist_iges.append(str(partes[1]))
+                    else:
+                        usuario_hist_iges.append(k_str)
+                else:
+                    usuario_hist_iges.append(k_str)
+        elif isinstance(usuario_hist_raw, list):
+            # Asegurar que sean strings puros de IGE
+            for item in usuario_hist_raw:
+                item_str = str(item)
+                if item_str.startswith("IGE_"):
+                    partes = item_str.split("_")
+                    if len(partes) >= 2:
+                        usuario_hist_iges.append(str(partes[1]))
+                    else:
+                        usuario_hist_iges.append(item_str)
+                else:
+                    usuario_hist_iges.append(item_str)
             
         print(f"\n--- Evaluando {nombre_usuario} ({mail_destino}) ---")
         print(f"  Filtros -> Distritos: {distritos_usuario} | Materias: {materias_usuario}")
@@ -143,22 +160,23 @@ def tarea_notificacion():
         ofertas_a_enviar = []
         
         for oferta in matches_db:
-            oid = oferta["id"]
-            fecha_enviado = usuario_hist.get(oid)
+            ige = str(oferta.get("ige", ""))
             
-            # Si no se envió NUNCA, o si se envió pero NO HOY, la mandamos
-            if fecha_enviado != hoy_str:
+            # Regla de negocio estricta: si el IGE no está en el historial, se envía
+            if ige and ige not in usuario_hist_iges:
                 ofertas_a_enviar.append(oferta)
                 
         if ofertas_a_enviar:
             print(f"¡Match! {len(ofertas_a_enviar)} nuevas ofertas a enviar.")
             enviar_correo(ofertas_a_enviar, mail_destino, nombre_usuario)
             
-            # Registrar envío con la fecha de hoy
+            # Registrar envío guardando el IGE en la lista
             for o in ofertas_a_enviar:
-                usuario_hist[o["id"]] = hoy_str
+                ige = str(o.get("ige", ""))
+                if ige and ige not in usuario_hist_iges:
+                    usuario_hist_iges.append(ige)
                 
-            historial[mail_destino] = usuario_hist
+            historial[mail_destino] = usuario_hist_iges
             any_new_match = True
             guardar_historial(historial)
         else:

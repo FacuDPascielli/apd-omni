@@ -15,15 +15,16 @@ env/
 # Logs y Archivos de Debugging
 *.log
 
-# Bases de datos y memoria local
+# Bases de datos locas NO versionadas
 ofertas.db
 notified_ids.json
 usuarios.json
 
-
 # ==========================================================
-# IMPORTANTE: NO IGNORAR ofertas_enviadas.json
+# IMPORTANTE: ARCHIVOS DE PERSISTENCIA EN LA NUBE
 # ==========================================================
-# El archivo ofertas_enviadas.json no está en esta lista.
-# Esto asegura que Git lo rastree y GitHub Actions pueda 
-# hacerle "push" para guardar la memoria de los correos.
+# Los siguientes archivos guardan el estado y memoria del bot.
+# Deben estar trackeados para que GitHub Actions los pueda leer y actualizar.
+!ofertas_enviadas.json
+!ofertas_db.json
+!vencimientos.json
