@@ -1511,61 +1511,67 @@
 
     <!-- MODAL 3: Plan Premium -->
     <div class="modal-overlay" id="modalPremium">
-        <div class="modal-content" style="padding: 35px 25px;">
+        <!-- Paso 1: Captura de Email -->
+        <div class="modal-content" style="padding: 35px 25px;" id="premiumStep1">
             <button class="close-btn" onclick="closeModal('modalPremium')">×</button>
             <h2 style="margin-top:0; color: #1937b0; text-align: center;">Ascender a Premium</h2>
             <p style="color: #6f9ac8; font-size:14px; margin-bottom: 20px; line-height:1.5; text-align: center;">
-                Monitoreá todos tus habilitantes de manera profesional y aumentá drásticamente tus posibilidades de
-                tomar horas.<br><br>
+                Monitoreá todos tus habilitantes de manera profesional y aumentá drásticamente tus posibilidades de tomar horas.<br><br>
                 ✔️ <b>Distritos Ilimitados</b><br>
                 ✔️ <b>Materias Ilimitadas</b><br>
                 ✔️ <b>Actualizaciones Diarias</b><br>
                 ✔️ <b>Notificaciones Directas al correo</b>
             </p>
+            
+            <div class="form-group" style="margin-top: 25px;">
+                <label class="form-label">Ingresá el mail donde querés recibir las alertas *</label>
+                <input type="email" id="premiumEmail" class="form-control" placeholder="tu@correo.com.ar" required>
+                <div id="premiumEmailError" style="color: #e53e3e; font-size: 13px; margin-top: 5px; display: none;">Por favor, ingresá un correo electrónico válido.</div>
+            </div>
+            
+            <button type="button" class="btn-primary" onclick="goToPremiumStep2()">Continuar</button>
+        </div>
 
-            <div class="info-alert" style="text-align:center; font-size:17px; margin-bottom: 20px;">
+        <!-- Paso 2: Opciones de Pago -->
+        <div class="modal-content" style="padding: 35px 25px; display: none;" id="premiumStep2">
+            <button class="close-btn" onclick="closeModal('modalPremium')">×</button>
+            <button type="button" onclick="goToPremiumStep1()" style="position: absolute; top: 20px; left: 20px; background: none; border: none; color: #6f9ac8; font-size: 24px; cursor: pointer;">←</button>
+            
+            <h2 style="margin-top:0; color: #1937b0; text-align: center;">Elegí tu plan</h2>
+            
+            <div class="info-alert" style="text-align:center; font-size:17px; margin-bottom: 20px; margin-top: 20px;">
                 Suscripción Mensual: <b>$2.500 ARS</b>
             </div>
 
-            <!-- LINK DE PAGO: SUSCRIPCIÓN DÉBITO AUTOMÁTICO (#) -->
-            <a href="https://www.mercadopago.com.ar/subscriptions/checkout?preapproval_plan_id=5df9175419314a2d805cd74efabc18b8"
-                target="_blank" style="text-decoration:none;">
+            <a id="linkSuscripcion" href="https://www.mercadopago.com.ar/subscriptions/checkout?preapproval_plan_id=5df9175419314a2d805cd74efabc18b8" target="_blank" style="text-decoration:none;">
                 <button class="btn-primary btn-mp" style="font-size: 15px;">
-                    <img src="MP_RGB_HANDSHAKE_color_horizontal.svg" alt="Mercado Pago"
-                        style="height: 28px; width: auto; margin-right: 12px; vertical-align: middle;">
-                    Suscribirme con débito automático (MercadoPago)
+                    <img src="MP_RGB_HANDSHAKE_color_horizontal.svg" alt="Mercado Pago" style="height: 28px; width: auto; margin-right: 12px; vertical-align: middle;">
+                    Suscribirme con débito automático
                 </button>
             </a>
-            <p
-                style="text-align:center; font-size: 13px; color: #6f9ac8; margin-top:8px; margin-bottom: 20px; font-weight: 500;">
+            <p style="text-align:center; font-size: 13px; color: #6f9ac8; margin-top:8px; margin-bottom: 20px; font-weight: 500;">
                 Se debita de tu cuenta o tarjeta automáticamente todos los meses.
             </p>
 
-            <!-- SEPARADOR -->
-            <div
-                style="display: flex; align-items: center; text-align: center; margin: 20px 0; color: #c0d4e8; font-size: 14px; font-weight: 600;">
+            <div style="display: flex; align-items: center; text-align: center; margin: 20px 0; color: #c0d4e8; font-size: 14px; font-weight: 600;">
                 <hr style="flex: 1; border: none; border-top: 1px solid #e0e4eb;">
                 <span style="padding: 0 15px;">o</span>
                 <hr style="flex: 1; border: none; border-top: 1px solid #e0e4eb;">
             </div>
 
-            <!-- LINK DE PAGO: ÚNICO MANUAL (#) -->
-            <a href="https://mpago.la/1s7fyUe" target="_blank" style="text-decoration:none;">
+            <a id="linkPagoUnico" href="https://mpago.la/1s7fyUe" target="_blank" style="text-decoration:none;">
                 <button class="btn-outline">
-                    Suscribirte manualmente con MercadoPago
-                    <span style="font-size:12px; font-weight:500; margin-top:4px;">(Transferencia de pago único)</span>
+                    Abonar manualmente con MercadoPago
+                    <span style="font-size:12px; font-weight:500; margin-top:4px;">(Transferencia de pago único - Sin débito)</span>
                 </button>
             </a>
-            <p
-                style="text-align:center; font-size: 13px; color: #6f9ac8; margin-top:8px; margin-bottom: 20px; font-weight: 500;">
-                La suscripción vence a los 30 días y requiere renovación manual.
+            <p style="text-align:center; font-size: 13px; color: #6f9ac8; margin-top:8px; margin-bottom: 20px; font-weight: 500;">
+                El acceso vence a los 30 días y requiere renovación manual.
             </p>
-
-            <div
-                style="background: #f8fcff; border: 1px solid #c0d4e8; padding: 12px; border-radius: 8px; margin-top: 24px;">
+            
+            <div style="background: #f8fcff; border: 1px solid #c0d4e8; padding: 12px; border-radius: 8px; margin-top: 24px;">
                 <p style="text-align:center; font-size: 13px; color: #1937b0; margin:0; line-height: 1.5;">
-                    <b>Importante:</b> Con Débito Automático la renovación es instantánea. Con Pago Manual, puede
-                    demorar hasta 24hs hábiles.
+                    <b>Importante:</b> Al finalizar el pago, tu cuenta se activará o creará automáticamente para el correo ingresado de forma inmediata.
                 </p>
             </div>
         </div>
@@ -1885,6 +1891,44 @@
             if (id === 'modalEscuelas') {
                 initEscuelasBusqueda();
             }
+            if (id === 'modalPremium') {
+                goToPremiumStep1();
+                document.getElementById('premiumEmail').value = '';
+                document.getElementById('premiumEmailError').style.display = 'none';
+            }
+        }
+
+        function goToPremiumStep1() {
+            document.getElementById('premiumStep1').style.display = 'block';
+            document.getElementById('premiumStep2').style.display = 'none';
+        }
+
+        function goToPremiumStep2() {
+            const emailInput = document.getElementById('premiumEmail');
+            const errorDiv = document.getElementById('premiumEmailError');
+            const email = emailInput.value.trim().toLowerCase();
+            
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!email || !emailRegex.test(email)) {
+                errorDiv.style.display = 'block';
+                emailInput.focus();
+                return;
+            }
+            
+            errorDiv.style.display = 'none';
+            document.getElementById('premiumStep1').style.display = 'none';
+            document.getElementById('premiumStep2').style.display = 'block';
+            
+            // Inyectar el email como external_reference en los enlaces de pago
+            const linkSuscripcion = document.getElementById('linkSuscripcion');
+            const baseSuscripcion = "https://www.mercadopago.com.ar/subscriptions/checkout?preapproval_plan_id=5df9175419314a2d805cd74efabc18b8";
+            linkSuscripcion.href = baseSuscripcion + "&external_reference=" + encodeURIComponent(email);
+            
+            const linkPagoUnico = document.getElementById('linkPagoUnico');
+            const basePagoUnico = "https://mpago.la/1s7fyUe";
+            // Nota: Con mpago.la el external_reference puede perderse en la redireccion a veces, 
+            // la Guía de configuracion recomendará usar links completos si no funciona.
+            linkPagoUnico.href = basePagoUnico + "?external_reference=" + encodeURIComponent(email);
         }
         function closeModal(id) {
             document.getElementById(id).classList.remove('active');
