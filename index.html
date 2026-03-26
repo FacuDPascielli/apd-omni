@@ -1927,10 +1927,9 @@
                 const urlSuscripcion = "https://www.mercadopago.com.ar/subscriptions/checkout?preapproval_plan_id=5df9175419314a2d805cd74efabc18b8&external_reference=" + param;
                 window.open(urlSuscripcion, '_blank');
             } else if (tipo === 'unico') {
-                // ATENCIÓN: Los links mpago.la ACORTADOS a veces eliminan el external_reference en la redirección interna de MercadoPago.
-                // Si continuás viendo que en pago manual se omite el external_reference y se graba con el mail del pagador,
-                // deberás borrar "https://mpago.la/1s7fyUe" y reemplazarlo por la URL LARGA original de ese botón de Checkout Pro.
-                const urlUnico = "https://mpago.la/1s7fyUe?external_reference=" + param;
+                // ATENCIÓN: Usamos la URL larga de Checkout Pro en lugar del mpago.la/1s7fyUe
+                // para evitar que el acortador de MercadoPago elimine el external_reference en el redirect
+                const urlUnico = "https://www.mercadopago.com.ar/payment-link/v1/redirect?link-id=0b78d89f-3f8c-4edf-a750-b684fde55829&source=link&external_reference=" + param;
                 window.open(urlUnico, '_blank');
             }
         }
