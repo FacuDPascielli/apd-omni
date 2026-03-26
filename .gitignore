@@ -28,3 +28,20 @@ usuarios.json
 !ofertas_enviadas.json
 !ofertas_db.json
 !vencimientos.json
+
+# ==========================================================
+# SEGURIDAD WEBHOOK Y MERCADO PAGO
+# ==========================================================
+# IGNORAR el backend porque contiene el MP_ACCESS_TOKEN real.
+# IGNORAR scripts de prueba porque contienen la URL secreta del webhook.
+webhook_mercado_pago.gs
+form_apps_script.gs
+*.gs
+test_webhook.py
+
+# Archivos temporales locales de testeo y logs
+output*.txt
+test_results*.txt
+error*.txt
+debug*.png
+error*.png

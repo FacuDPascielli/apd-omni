@@ -8,55 +8,70 @@ const MP_ACCESS_TOKEN = 'APP_USR-ACA_VA_TU_ACCESS_TOKEN_REAL_DE_PRODUCCION'; // 
 const URL_FORMULARIO_INGRESO = 'https://tuweb.com/index.html#modalFree'; // URL de tu formulario/modal
 
 // ==========================================
-// FUNCIÓN PARA LOGUEAR EN LA PLANILLA
+// FUNCIÓN PARA LOGS (EN PRODUCCIÓN NO SE ESCRIBE EN SHEET)
 // ==========================================
 function logToSheet(mensaje) {
-  try {
-    const ss = SpreadsheetApp.openById(SHEET_ID);
-    const sheet = ss.getSheetByName(SHEET_NAME);
-    if (!sheet) return;
-    const row = [new Date(), "[LOG_WEBHOOK]", mensaje, "", "", "", "", "", "", "", "", "", ""];
-    const primeraVacia = findFirstEmptyRow(sheet);
-    sheet.getRange(primeraVacia, 1, 1, row.length).setValues([row]);
-  } catch(e) {
-    console.error("Error guardando log: " + e);
-  }
+  // Los logs intrusivos han sido desactivados para el entorno de Producción.
+  // Ahora solo se registran en la consola nativa de Google Apps Script.
+  console.log("[WEBHOOK] " + mensaje);
 }
 
 // ==========================================
-// FUNCIÓN PRINCIPAL PARA EL WEBHOOK
+// FUNCIÓN PRINCIPAL PARA EL WEBHOOK / IPN
 // ==========================================
 function doPost(e) {
   try {
+    let action = null;
+    let paymentId = null;
+
+    // 1. Verificamos si viene como Webhook moderno (Body JSON)
     if (typeof e !== 'undefined' && e.postData && e.postData.contents) {
-      const payload = JSON.parse(e.postData.contents);
-      const action = payload.action || payload.topic || payload.type;
-      
-      logToSheet("Recibido POST de MP. Action/Topic: " + action);
-      
-      // Manejar notificaciones de pagos individuales o cobros de suscripción
-      if (action === 'payment' || action === 'payment.created' || action === 'payment.updated') {
-        const paymentId = (payload.data && payload.data.id) ? payload.data.id : null;
+      try {
+        const payload = JSON.parse(e.postData.contents);
+        action = payload.action || payload.topic || payload.type;
+        paymentId = (payload.data && payload.data.id) ? payload.data.id : null;
         
-        let finalId = paymentId;
-        if (!finalId && payload.resource) {
+        if (!paymentId && payload.resource) {
           const parts = payload.resource.split('/');
-          finalId = parts[parts.length - 1];
+          paymentId = parts[parts.length - 1];
         }
-        
-        if (finalId) {
-          logToSheet("ID de pago detectado: " + finalId + ". Verificando en API...");
-          procesarNotificacionDePago(finalId);
-        } else {
-          logToSheet("Advertencia: Se recibió un action payment pero no se encontró el ID.");
-        }
+      } catch(ex) {
+        logToSheet("Info: El body no era JSON (Posiblemente sea formato IPN antiguo).");
       }
-      
-      return ContentService.createTextOutput("OK").setMimeType(ContentService.MimeType.TEXT);
     }
     
-    logToSheet("Error: Datos recibidos vacíos o no reconocidos.");
-    return ContentService.createTextOutput("Datos no reconocidos.").setMimeType(ContentService.MimeType.TEXT);
+    // 2. Verificamos si viene como Notificación IPN clásica (Parámetros URL)
+    if (!paymentId && e && e.parameter) {
+      action = e.parameter.topic || e.parameter.type || action;
+      paymentId = e.parameter.id || paymentId;
+      // Para suscripciones a veces viene preapproval_id
+      if (!paymentId && e.parameter.preapproval_id) {
+         paymentId = e.parameter.preapproval_id;
+      }
+    }
+    
+    if (action || paymentId) {
+      logToSheet("Recibido aviso de MercadoPago | Acción: " + action + " | ID: " + paymentId);
+    } else {
+      logToSheet("Error: Recibido POST ciego sin Action ni ID de Pago.");
+      return ContentService.createTextOutput("Datos no reconocidos.").setMimeType(ContentService.MimeType.TEXT);
+    }
+    
+    // Manejar notificaciones
+    if (action === 'payment' || action === 'payment.created' || action === 'payment.updated') {
+      if (paymentId) {
+        logToSheet("ID de pago detectado: " + paymentId + ". Verificando en API...");
+        procesarNotificacionDePago(paymentId);
+      } else {
+        logToSheet("Advertencia: Se recibió un action payment pero sin ID usable.");
+      }
+    } else if (action === 'subscription_preapproval') {
+       const subId = e.parameter.id || paymentId;
+       logToSheet("Suscripción registrada con ID: " + subId + ". Esperando el cobro asociado a la misma para actualizar.");
+    }
+    
+    // Siempre devolver 200 OK
+    return ContentService.createTextOutput("OK").setMimeType(ContentService.MimeType.TEXT);
 
   } catch (error) {
     logToSheet("Error fatal en doPost: " + error.toString());

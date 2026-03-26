@@ -1543,12 +1543,10 @@
                 Suscripción Mensual: <b>$2.500 ARS</b>
             </div>
 
-            <a id="linkSuscripcion" href="https://www.mercadopago.com.ar/subscriptions/checkout?preapproval_plan_id=5df9175419314a2d805cd74efabc18b8" target="_blank" style="text-decoration:none;">
-                <button class="btn-primary btn-mp" style="font-size: 15px;">
-                    <img src="MP_RGB_HANDSHAKE_color_horizontal.svg" alt="Mercado Pago" style="height: 28px; width: auto; margin-right: 12px; vertical-align: middle;">
-                    Suscribirme con débito automático
-                </button>
-            </a>
+            <button class="btn-primary btn-mp" style="font-size: 15px;" onclick="iniciarPago('suscripcion')">
+                <img src="MP_RGB_HANDSHAKE_color_horizontal.svg" alt="Mercado Pago" style="height: 28px; width: auto; margin-right: 12px; vertical-align: middle;">
+                Suscribirme con débito automático
+            </button>
             <p style="text-align:center; font-size: 13px; color: #6f9ac8; margin-top:8px; margin-bottom: 20px; font-weight: 500;">
                 Se debita de tu cuenta o tarjeta automáticamente todos los meses.
             </p>
@@ -1559,12 +1557,10 @@
                 <hr style="flex: 1; border: none; border-top: 1px solid #e0e4eb;">
             </div>
 
-            <a id="linkPagoUnico" href="https://mpago.la/1s7fyUe" target="_blank" style="text-decoration:none;">
-                <button class="btn-outline">
-                    Abonar manualmente con MercadoPago
-                    <span style="font-size:12px; font-weight:500; margin-top:4px;">(Transferencia de pago único - Sin débito)</span>
-                </button>
-            </a>
+            <button class="btn-outline" onclick="iniciarPago('unico')">
+                Abonar manualmente con MercadoPago
+                <span style="font-size:12px; font-weight:500; margin-top:4px;">(Transferencia de pago único - Sin débito)</span>
+            </button>
             <p style="text-align:center; font-size: 13px; color: #6f9ac8; margin-top:8px; margin-bottom: 20px; font-weight: 500;">
                 El acceso vence a los 30 días y requiere renovación manual.
             </p>
@@ -1919,16 +1915,24 @@
             document.getElementById('premiumStep1').style.display = 'none';
             document.getElementById('premiumStep2').style.display = 'block';
             
-            // Inyectar el email como external_reference en los enlaces de pago
-            const linkSuscripcion = document.getElementById('linkSuscripcion');
-            const baseSuscripcion = "https://www.mercadopago.com.ar/subscriptions/checkout?preapproval_plan_id=5df9175419314a2d805cd74efabc18b8";
-            linkSuscripcion.href = baseSuscripcion + "&external_reference=" + encodeURIComponent(email);
+            // Ya no hace falta inyectar hrefs acá porque lo hacemos al hacer clic (iniciarPago)
+        }
+
+        function iniciarPago(tipo) {
+            const emailInput = document.getElementById('premiumEmail');
+            const email = emailInput.value.trim().toLowerCase();
+            const param = encodeURIComponent(email);
             
-            const linkPagoUnico = document.getElementById('linkPagoUnico');
-            const basePagoUnico = "https://mpago.la/1s7fyUe";
-            // Nota: Con mpago.la el external_reference puede perderse en la redireccion a veces, 
-            // la Guía de configuracion recomendará usar links completos si no funciona.
-            linkPagoUnico.href = basePagoUnico + "?external_reference=" + encodeURIComponent(email);
+            if (tipo === 'suscripcion') {
+                const urlSuscripcion = "https://www.mercadopago.com.ar/subscriptions/checkout?preapproval_plan_id=5df9175419314a2d805cd74efabc18b8&external_reference=" + param;
+                window.open(urlSuscripcion, '_blank');
+            } else if (tipo === 'unico') {
+                // ATENCIÓN: Los links mpago.la ACORTADOS a veces eliminan el external_reference en la redirección interna de MercadoPago.
+                // Si continuás viendo que en pago manual se omite el external_reference y se graba con el mail del pagador,
+                // deberás borrar "https://mpago.la/1s7fyUe" y reemplazarlo por la URL LARGA original de ese botón de Checkout Pro.
+                const urlUnico = "https://mpago.la/1s7fyUe?external_reference=" + param;
+                window.open(urlUnico, '_blank');
+            }
         }
         function closeModal(id) {
             document.getElementById(id).classList.remove('active');
