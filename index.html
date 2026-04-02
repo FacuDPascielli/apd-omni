@@ -1179,8 +1179,8 @@
         <p style="margin: 0; font-size: 16px; font-weight: 500; color: var(--text-white);">
             &copy; Brújula docente &middot; De profes para profes &middot; <a
                 href="https://www.instagram.com/brujula.docente.pba/" target="_blank"
-                style="color: var(--accent-yellow); text-decoration: none; font-weight: 700;">Instagram</a> &middot; Diseño UX/UI por <a
-                href="https://www.instagram.com/mica_caggi/" target="_blank"
+                style="color: var(--accent-yellow); text-decoration: none; font-weight: 700;">Instagram</a> &middot;
+            Diseño UX/UI por <a href="https://www.instagram.com/mica_caggi/" target="_blank"
                 style="color: var(--accent-yellow); text-decoration: none; font-weight: 700;">Mica Caggi</a>
         </p>
         <p style="margin: 15px 0 0 0; font-size: 14px; font-weight: 400; color: #a0a0a0;">
@@ -1603,6 +1603,27 @@
                 ✔️ <b>Notificaciones Directas al correo</b>
             </p>
 
+            <!-- Opción de Autogestión Premium -->
+            <div
+                style="background: #f8fcff; border: 1px solid #c0d4e8; padding: 15px; border-radius: 12px; margin-bottom: 25px; text-align: center;">
+                <p style="color: #1937b0; font-size: 14px; margin-top: 0; margin-bottom: 12px; font-weight: 600;">
+                    ¿Ya sos Premium? Autogestioná tu cuenta
+                </p>
+                <div style="display: flex; gap: 10px; justify-content: center;">
+                    <button type="button" class="btn-outline" style="padding: 10px; font-size: 13px; font-weight: 700;"
+                        onclick="abrirModalModificarPremium()">
+                        Modificar Mis Datos
+                    </button>
+                    <button type="button" class="btn-outline"
+                        style="padding: 10px; font-size: 13px; font-weight: 700; border-color: #e53e3e; color: #e53e3e;"
+                        onclick="window.open('https://www.mercadopago.com.ar/subscriptions', '_blank'); setTimeout(() => { window.open('https://docs.google.com/forms/u/1/d/1At6-9aOuVPA_oSjc122lpz6Uqo6DaDm5L-tE1wAVRxU/edit?usp=drive_web&ouid=106040616818185769622', '_blank') }, 1000);">
+                        Cancelar Suscripción
+                    </button>
+                </div>
+                <p style="font-size: 11px; color: #6f9ac8; margin-top: 10px; margin-bottom:0;">*Al cancelar, debés
+                    pausar el débito en Mercado Pago y luego llenar el <a href="https://docs.google.com/forms/d/e/1FAIpQLSdn6pJoHFKmBdUKqyyLGYsbf7MBx5lqP-Q6EMXWMZSUiEhH8w/viewform?usp=sharing&ouid=106040616818185769622" target="_blank" style="color: #1937b0; font-weight: 600; text-decoration: underline;">formulario de baja</a>.</p>
+            </div>
+
             <div class="form-group" style="margin-top: 25px;">
                 <label class="form-label">Ingresá el mail donde querés recibir las alertas *</label>
                 <input type="email" id="premiumEmail" class="form-control" placeholder="tu@correo.com.ar" required>
@@ -1659,6 +1680,70 @@
                     correo ingresado de forma inmediata.
                 </p>
             </div>
+        </div>
+    </div>
+
+    <!-- MODAL 8: Modificar Datos Premium -->
+    <div class="modal-overlay" id="modalModificarPremium">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal('modalModificarPremium')">×</button>
+            <h2 style="margin-top:0; color: #1937b0;">Modificar Perfil Premium</h2>
+            <p style="color: #6f9ac8; font-size:14px; margin-bottom: 24px; line-height: 1.5;">
+                Actualizá tus datos de envío de alertas.
+            </p>
+
+            <form id="modificarPremiumForm">
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label class="form-label" style="display:inline-block; margin-right: 15px;">¿Querés cambiar el Email
+                        a donde llegan las alertas?</label>
+                    <label style="margin-right: 10px; font-size:14px; color:#1937b0;"><input type="radio"
+                            name="cambiaEmailPremium" value="si"
+                            onclick="document.getElementById('emailDoblePremium').style.display = 'block'; document.getElementById('emailUnicoPremium').style.display = 'none';">
+                        Sí</label>
+                    <label style="font-size:14px; color:#1937b0;"><input type="radio" name="cambiaEmailPremium"
+                            value="no"
+                            onclick="document.getElementById('emailDoblePremium').style.display = 'none'; document.getElementById('emailUnicoPremium').style.display = 'block';"
+                            checked> No</label>
+                </div>
+
+                <!-- Si NO cambia el email, solo pide el actual para buscarlo -->
+                <div id="emailUnicoPremium" class="form-group">
+                    <label class="form-label">Email actual *</label>
+                    <input type="email" id="modPremiumEmailUnico" class="form-control"
+                        placeholder="El correo donde recibís actualmente" required>
+                </div>
+
+                <!-- Si SÍ cambia el email, pide los dos -->
+                <div id="emailDoblePremium" style="display: none;">
+                    <div class="form-group">
+                        <label class="form-label">Email actual *</label>
+                        <input type="email" id="modPremiumEmailViejo" class="form-control"
+                            placeholder="El correo donde recibís actualmente">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Nuevo Email para Alertas *</label>
+                        <input type="email" id="modPremiumEmailNuevo" class="form-control"
+                            placeholder="Tu nuevo correo">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Nuevos Distritos (Opcional)</label>
+                    <select id="modPremiumDistritos" class="form-control">
+                        <option value="" disabled selected>Dejar como está y no modificar</option>
+                        <option value="TODOS">Todos los distritos (Toda la Provincia)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Nuevos Códigos de Materia/Cargo (Opcional)</label>
+                    <input type="text" id="modPremiumMaterias" class="form-control" placeholder="Ej: TODOS, /PR, CCD">
+                </div>
+
+                <button type="submit" class="btn-primary" id="btnModificarPremiumSubmit"
+                    style="background:#d97706;">Guardar Cambios Premium</button>
+                <div id="modificarPremiumStatus" class="status-message"></div>
+            </form>
         </div>
     </div>
 
@@ -2007,6 +2092,18 @@
             // Ya no hace falta inyectar hrefs acá porque lo hacemos al hacer clic (iniciarPago)
         }
 
+        // ==========================================
+        // FUNCIONES PREMIUM / LEGAJO
+        // ==========================================
+        function generarIdProfe() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let id = 'PROFE-';
+            for (let i = 0; i < 4; i++) {
+                id += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return id;
+        }
+
         async function iniciarPago(tipo) {
             const emailInput = document.getElementById('premiumEmail');
             const email = emailInput.value.trim().toLowerCase();
@@ -2027,7 +2124,11 @@
 
             try {
                 const urlGAS = "https://script.google.com/macros/s/AKfycby2b6jJG5tfsym3iLY-xRKuF8fk2Ij6dp7xBOncuwDStlfir5bwMmytM10IlYPL4Nqehg/exec";
-                const peticionBackend = urlGAS + "?action=" + tipo + "&email=" + encodeURIComponent(email);
+                // Generamos el Legajo y lo unimos al email. El formato será: PROFE-XYZ1|usuario@correo.com
+                const legajoUnico = generarIdProfe();
+                const externalRefCombinada = legajoUnico + "|" + email;
+
+                const peticionBackend = urlGAS + "?action=" + tipo + "&email=" + encodeURIComponent(email) + "&external_reference=" + encodeURIComponent(externalRefCombinada);
 
                 const response = await fetch(peticionBackend);
                 const data = await response.json();
@@ -2072,6 +2173,28 @@
             }
 
             openModal('modalModificarGratis');
+        }
+
+        function abrirModalModificarPremium() {
+            closeModal('modalPremium');
+            document.getElementById('modificarPremiumStatus').style.display = 'none';
+
+            const selectOriginal = document.getElementById('searchDistrito');
+            const selectDestino = document.getElementById('modPremiumDistritos');
+            // Si solo tiene las dos opciones por defecto ("Dejar como está" y "TODOS"), le clonamos los demás
+            if (selectDestino.options.length <= 2) {
+                Array.from(selectOriginal.options).forEach((opt, index) => {
+                    // index 0 es "Todos", pero nosotros ya agregamos una opción "TODOS" con un texto más claro arriba
+                    if (index > 0) {
+                        const newOpt = document.createElement('option');
+                        newOpt.value = opt.value;
+                        newOpt.textContent = opt.textContent;
+                        selectDestino.appendChild(newOpt);
+                    }
+                });
+            }
+
+            openModal('modalModificarPremium');
         }
 
         function toggleEmailInputsModificar(cambia) {
@@ -2236,6 +2359,81 @@
             } finally {
                 btn.disabled = false;
                 btn.textContent = "Guardar Cambios";
+            }
+        });
+
+        // --- SUBMIT FORM MODIFICAR PERFIL PREMIUM ---
+        document.getElementById('modificarPremiumForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const btn = document.getElementById('btnModificarPremiumSubmit');
+            const statusDiv = document.getElementById('modificarPremiumStatus');
+            const cambiaEmail = document.querySelector('input[name="cambiaEmailPremium"]:checked').value === "si";
+
+            let emailViejo = "";
+            let emailNuevo = "";
+
+            if (cambiaEmail) {
+                emailViejo = document.getElementById('modPremiumEmailViejo').value.trim().toLowerCase();
+                emailNuevo = document.getElementById('modPremiumEmailNuevo').value.trim().toLowerCase();
+            } else {
+                emailViejo = document.getElementById('modPremiumEmailUnico').value.trim().toLowerCase();
+            }
+
+            const distritos = document.getElementById('modPremiumDistritos').value;
+            const materias = document.getElementById('modPremiumMaterias').value.trim().toUpperCase();
+
+            if (!emailViejo) {
+                statusDiv.textContent = "Por favor ingresá tu email actual.";
+                statusDiv.className = "status-message status-error";
+                statusDiv.style.display = 'block';
+                return;
+            }
+            if (!cambiaEmail && !distritos && !materias) {
+                statusDiv.textContent = "No completaste ningún dato para modificar.";
+                statusDiv.className = "status-message status-error";
+                statusDiv.style.display = 'block';
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = "Guardando...";
+            statusDiv.style.display = "none";
+
+            // NOTA: Esta URL debe apuntar al nuevo script_modificar_premium.js
+            const URL_SCRIPT_PREMIUM = 'https://script.google.com/macros/s/AKfycbwQjdkmqmA16R2ErUSxcetPWWhEwDOQQWxM-XzmiUd9LPoEQpcBPsrLiWsWgKOamkGq/exec'; // Rellenar con la URL real después
+
+            const payload = {
+                accion: 'modificar_premium',
+                email_viejo: emailViejo,
+                email_nuevo: cambiaEmail ? emailNuevo : "",
+                nuevo_distrito: distritos,
+                nueva_materia: materias
+            };
+
+            try {
+                const response = await fetch(URL_SCRIPT_PREMIUM, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'text/plain' },
+                    body: JSON.stringify(payload)
+                });
+
+                statusDiv.textContent = '¡Perfil Premium actualizado! Te enviamos un correo de confirmación.';
+                statusDiv.className = "status-message status-success";
+                statusDiv.style.display = 'block';
+
+                document.getElementById('modificarPremiumForm').reset();
+                setTimeout(() => {
+                    closeModal('modalModificarPremium');
+                }, 3000);
+            } catch (err) {
+                statusDiv.textContent = 'Error de conexión. Intentá de nuevo.';
+                statusDiv.className = "status-message status-error";
+                statusDiv.style.display = 'block';
+                console.error("Error", err);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Guardar Cambios Premium';
             }
         });
 

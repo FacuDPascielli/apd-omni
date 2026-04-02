@@ -11,12 +11,14 @@ from dotenv import load_dotenv
 
 from scraper import scrape_ofertas
 from database_google import obtener_usuarios_desde_sheets
-from notifier import enviar_correo, enviar_correo_vencimiento
+from notifier import enviar_correo, enviar_correo_vencimiento, enviar_correo_bienvenida, enviar_correo_espera, enviar_correo_sin_ofertas_hoy
 from database_manager import sincronizar_ofertas, obtener_ofertas_por_filtros
 from playwright.sync_api import sync_playwright
+from datetime import datetime, timedelta
 
 HISTORIAL_FILE = "ofertas_enviadas.json"
 VENCIMIENTOS_FILE = "vencimientos.json"
+ESTADOS_FILE = "estados_usuarios.json"
 
 def cargar_json_local(ruta):
     if not os.path.exists(ruta):
@@ -40,6 +42,9 @@ guardar_historial = lambda h: guardar_json_local(HISTORIAL_FILE, h)
 
 cargar_vencimientos = lambda: cargar_json_local(VENCIMIENTOS_FILE)
 guardar_vencimientos = lambda v: guardar_json_local(VENCIMIENTOS_FILE, v)
+
+cargar_estados = lambda: cargar_json_local(ESTADOS_FILE)
+guardar_estados = lambda e: guardar_json_local(ESTADOS_FILE, e)
 
 def tarea_cosecha():
     """Ejecuta el Scraper en Barrido Total y sincroniza la DB local."""
@@ -90,7 +95,7 @@ def procesar_vencimientos(usuarios_vencidos):
     if hubo_cambios:
         guardar_vencimientos(vencimientos)
 
-def tarea_notificacion():
+def tarea_notificacion(es_cierre_dia=False):
     """Lee la DB Local usando los índices invertidos y avisa a los usuarios anotados."""
     print("\n" + "="*60)
     print("Iniciando Emisión de Alertas a Usuarios Registrados...")
@@ -112,9 +117,23 @@ def tarea_notificacion():
         print("No hay usuarios activos validos para notificar. Saliendo.")
         return
 
-    # 2. Cargar ofertas enviadas históricamente
+    # 2. Cargar estado y ofertas enviadas históricamente
     historial = cargar_historial()
+    estados = cargar_estados()
+    
+    fecha_hoy = datetime.now().strftime("%Y-%m-%d")
+    if "fecha_actual" not in estados or estados.get("fecha_actual") != fecha_hoy:
+        estados["fecha_actual"] = fecha_hoy
+        estados["usuarios"] = estados.get("usuarios", {})
+        # Resetear el tracker diario
+        for f in estados["usuarios"].values():
+            if isinstance(f, dict):
+                f["ofertas_recibidas_hoy"] = False
+                
+    usuarios_estado = estados.setdefault("usuarios", {})
+    
     any_new_match = False
+    hubo_cambio_estado = False
 
     # 3. Cruzar datos locales
     for usuario in usuarios:
@@ -128,7 +147,7 @@ def tarea_notificacion():
         usuario_hist_iges = []
         
         if isinstance(usuario_hist_raw, dict):
-            # Migración desde dict {id: fecha} a lista de IGEs
+            # Migración desde dict a lista de IGEs
             for k in usuario_hist_raw.keys():
                 k_str = str(k)
                 if k_str.startswith("IGE_"):
@@ -140,7 +159,6 @@ def tarea_notificacion():
                 else:
                     usuario_hist_iges.append(k_str)
         elif isinstance(usuario_hist_raw, list):
-            # Asegurar que sean strings puros de IGE
             for item in usuario_hist_raw:
                 item_str = str(item)
                 if item_str.startswith("IGE_"):
@@ -155,6 +173,12 @@ def tarea_notificacion():
         print(f"\n--- Evaluando {nombre_usuario} ({mail_destino}) ---")
         print(f"  Filtros -> Distritos: {distritos_usuario} | Materias: {materias_usuario}")
         
+        u_estado = usuarios_estado.setdefault(mail_destino, {
+            "bienvenida_enviada": False,
+            "espera_enviada": False,
+            "ofertas_recibidas_hoy": False
+        })
+        
         # Consultar la DB Local Instantánea (usa los índices)
         matches_db = obtener_ofertas_por_filtros(distritos_usuario, materias_usuario)
         ofertas_a_enviar = []
@@ -162,7 +186,7 @@ def tarea_notificacion():
         for oferta in matches_db:
             ige = str(oferta.get("ige", ""))
             
-            # Regla de negocio estricta: si el IGE no está en el historial, se envía
+            # Regla estricta: si el IGE no está en el historial
             if ige and ige not in usuario_hist_iges:
                 ofertas_a_enviar.append(oferta)
                 
@@ -170,7 +194,6 @@ def tarea_notificacion():
             print(f"¡Match! {len(ofertas_a_enviar)} nuevas ofertas a enviar.")
             enviar_correo(ofertas_a_enviar, mail_destino, nombre_usuario)
             
-            # Registrar envío guardando el IGE en la lista
             for o in ofertas_a_enviar:
                 ige = str(o.get("ige", ""))
                 if ige and ige not in usuario_hist_iges:
@@ -178,12 +201,53 @@ def tarea_notificacion():
                 
             historial[mail_destino] = usuario_hist_iges
             any_new_match = True
+            
+            # Actualizar Estado
+            u_estado["ofertas_recibidas_hoy"] = True
+            if not u_estado["bienvenida_enviada"]:
+                u_estado["bienvenida_enviada"] = True # Recibió oferta, no hace falta bienvenida
+            hubo_cambio_estado = True
+            
             guardar_historial(historial)
         else:
-            print("Sin novedades no notificadas para hoy.")
+            print("Sin novedades no notificadas para hoy en este barrido.")
+            
+            # Manejo de Bienvenidas
+            if not u_estado["bienvenida_enviada"]:
+                print(f"  -> {mail_destino} es nuevo y no recibió ofertas. Enviando Bienvenida Única.")
+                if enviar_correo_bienvenida(mail_destino, nombre_usuario):
+                    u_estado["bienvenida_enviada"] = True
+                    hubo_cambio_estado = True
+            else:
+                # Si nunca se enviaron ofertas históricamente y pasó 1 día
+                if not usuario_hist_iges and not u_estado.get("espera_enviada", False):
+                    fecha_registro = usuario.get("fecha_registro")
+                    if fecha_registro:
+                        if (datetime.now() - fecha_registro).total_seconds() >= 86400:
+                            print(f"  -> {mail_destino} lleva >24hs sin ofertas. Enviando correo de espera.")
+                            if enviar_correo_espera(mail_destino, nombre_usuario):
+                                u_estado["espera_enviada"] = True
+                                hubo_cambio_estado = True
+
+    # 4. Envío del cierre diario (solo si superó el umbral de la tarde)
+    if es_cierre_dia:
+        print(f"\n--- EJECUTANDO CIERRE DEL DÍA ({fecha_hoy}) ---")
+        for usuario in usuarios:
+            mail_destino = usuario.get("email")
+            nombre_usuario = usuario.get("nombre", "Colega")
+            distritos_usuario = usuario.get("distritos", [])
+            materias_usuario = usuario.get("materias", [])
+            u_est = usuarios_estado.get(mail_destino, {})
+            
+            if u_est.get("bienvenida_enviada", False) and not u_est.get("ofertas_recibidas_hoy", False):
+                print(f"  Avisando cierre de día sin ofertas a {mail_destino}...")
+                enviar_correo_sin_ofertas_hoy(mail_destino, nombre_usuario, distritos_usuario, materias_usuario)
 
     if any_new_match:
         guardar_historial(historial)
+        
+    if hubo_cambio_estado or es_cierre_dia:
+        guardar_estados(estados)
     else:
         print("\nEmisión finalizada. No hubo correos nuevos que enviar.")
 
@@ -212,25 +276,23 @@ def main():
             tarea_cosecha()
             tarea_notificacion()
         else:
-            # Modo AUTO por defecto: Cosecha siempre, Notifica solo en horarios clave
             from datetime import datetime, timedelta
             
-            # Obtener hora actual en UTC y convertir a ART (UTC-3)
             ahora_utc = datetime.utcnow()
             ahora_art = ahora_utc - timedelta(hours=3)
             
             print(f"Hora detectada (ART): {ahora_art.strftime('%H:%M')} hs.")
             
-            # 1) Ejecutar siempre la cosecha
             tarea_cosecha()
             
-            # 2) Evaluar si la hora coincide con el ciclo de notificación (y si es de Lunes a Viernes)
             horarios_notificacion = [8, 10, 14, 18]
-            es_dia_habil = ahora_art.weekday() < 5  # 0=Lunes, 4=Viernes, 5=Sábado, 6=Domingo
+            es_dia_habil = ahora_art.weekday() < 5
+            
+            es_cierre_dia = (ahora_art.hour == 18)
             
             if ahora_art.hour in horarios_notificacion and es_dia_habil:
-                print("Hora y día hábiles coincidentes. Ejecutando alertas...")
-                tarea_notificacion()
+                print(f"Hora y día hábiles coincidentes. Ejecutando alertas... (Cierre de día: {es_cierre_dia})")
+                tarea_notificacion(es_cierre_dia=es_cierre_dia)
             else:
                 if not es_dia_habil:
                     print(f"Es fin de semana (día {ahora_art.weekday()}). Saltando fase de alertas.")
@@ -238,10 +300,7 @@ def main():
                     print(f"La hora actual ({ahora_art.hour} hs) no corresponde al envío de notificaciones. Saltando fase de alertas.")
                 
         sys.exit(0)
-
-    # Entorno Local: Programación de Tareas
     
-    # 1. Horarios de Cosecha Masiva (Cada 1 Hora exacta, de 08:00 a 21:00)
     horarios_cosecha = [
         "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", 
         "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00"
@@ -249,16 +308,17 @@ def main():
     for hc in horarios_cosecha:
         schedule.every().day.at(hc).do(tarea_cosecha)
         
-    # 2. Horarios de Notificación (Rondas de emails)
-    horarios_notificacion = ["08:30", "11:00", "14:00", "19:00"]
+    horarios_notificacion = ["08:30", "11:00", "14:00", "18:00"]
     for hn in horarios_notificacion:
-        schedule.every().day.at(hn).do(tarea_notificacion)
+        if hn == "18:00":
+            schedule.every().day.at(hn).do(tarea_notificacion, es_cierre_dia=True)
+        else:
+            schedule.every().day.at(hn).do(tarea_notificacion, es_cierre_dia=False)
 
     print("Bot Lector ABC - Cosechador Masivo Local.")
     print(f"Cosecha programada: {', '.join(horarios_cosecha)}")
     print(f"Notificación programada: {', '.join(horarios_notificacion)}")
     
-    # Prueba inicial al levantar
     print("\n[Inicialización] Ejecutando ronda cero de cosecha y notificación...")
     tarea_cosecha()
     tarea_notificacion()

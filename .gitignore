@@ -28,6 +28,7 @@ usuarios.json
 !ofertas_enviadas.json
 !ofertas_db.json
 !vencimientos.json
+!estados_usuarios.json
 
 # ==========================================================
 # SEGURIDAD WEBHOOK Y MERCADO PAGO

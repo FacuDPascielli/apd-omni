@@ -8,6 +8,7 @@ import os
 import json
 import re
 from oauth2client.service_account import ServiceAccountCredentials
+from datetime import datetime, timedelta
 
 SCOPES = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
 
@@ -16,30 +17,18 @@ def limpiar_texto_abc(texto):
         return ""
     texto = str(texto).strip().upper()
     
-    # 1. Pre-limpieza del Efecto Cañuelas (caracteres rotos del ABC)
-    # Atrapa CA#UELAS, CAUELAS, CA UELAS, y CAÑUELAS
     texto = re.sub(r'CA[^A-Z0-9]?UELAS', 'CANUELAS', texto)
     texto = texto.replace("CAÑUELAS", "CANUELAS")
-    
-    # 2. Descompone los caracteres especiales (ej: á -> a + ´)
     texto = unicodedata.normalize('NFD', texto)
-    
-    # 3. Codifica a ASCII ignorando los caracteres extraños (las tildes sueltas)
     texto = texto.encode('ascii', 'ignore').decode("utf-8")
     
-    # 4. Excepciones Estrictas del ABC
     if texto == "9 DE JULIO":
         texto = "N DE JULIO"
     elif "JOSE C" in texto and "PAZ" in texto:
         texto = "JOSE C PAZ"
 
-    # 5. Limpieza general de puntos y caracteres especiales que puedan fallar
     texto = texto.replace(".", " ").replace(",", " ")
-    
-    # 6. Remover múltiples espacios
     texto = re.sub(r'\s+', ' ', texto).strip()
-
-    # 7. Post-limpieza: Restaurar la Ñ de Cañuelas como estándar absoluto para la DB
     texto = texto.replace("CANUELAS", "CAÑUELAS")
 
     return texto
@@ -51,7 +40,6 @@ def coincide_distrito(buscado, leido):
     buscado_norm = limpiar_texto_abc(buscado)
     leido_norm = limpiar_texto_abc(leido)
     
-    # Expansión de prefijos/abreviaturas seguras multiletra
     expansiones = {
         "ALMTE": "ALMIRANTE",
         "PTE": "PRESIDENTE",
@@ -66,32 +54,22 @@ def coincide_distrito(buscado, leido):
     palabras_clave_buscado = []
     
     for p in palabras_buscado:
-        # 1. Expandimos si está en nuestro diccionario seguro
         if p in expansiones:
             p = expansiones[p]
-            
-        # 2. Descartar palabras de 1 o 2 caracteres (elimina L., T., V., DE, LA, EL...)
         if len(p) > 2:
             palabras_clave_buscado.append(p)
             
-    # Fallback si por alguna razón purgaron todo 
-    # (ej: todas las palabras del distrito tenían <= 2 letras)
     if not palabras_clave_buscado:
         palabras_clave_buscado = palabras_buscado
         
     palabras_leido = leido_norm.split()
     texto_leido_completo = " " + " ".join(palabras_leido) + " "
     
-    # Verificamos que todas las palabras clave estén presentes en lo leído 
-    # (ya sea como palabra aislada o subcadena)
     for clave in palabras_clave_buscado:
         if clave not in palabras_leido and clave not in texto_leido_completo:
             return False
             
     return True
-
-
-from datetime import datetime, timedelta
 
 def parsear_fecha(fecha_str):
     if not fecha_str:
@@ -112,12 +90,7 @@ def parsear_fecha(fecha_str):
     return None
 
 def obtener_usuarios_desde_sheets():
-    """
-    Se conecta a la planilla 'DB_Lector_ABC' y lee la hoja 'Respuestas de formulario 1'.
-    Retorna (usuarios_validos, usuarios_vencidos) para manejar el modelo Freemium.
-    """
     try:
-        # Lógica de Seguridad: Primero la Nube, luego el archivo Local
         google_creds_json = os.environ.get("GOOGLE_CREDENTIALS")
         
         if google_creds_json:
@@ -134,36 +107,23 @@ def obtener_usuarios_desde_sheets():
         sheet = db_lector.worksheet("Respuestas de formulario 1")
         registros = sheet.get_all_records()
 
-        # --- Leer Pagos_MP para fechas de vencimiento ---
-        ultimos_pagos = {}
-        try:
-            sheet_pagos = db_lector.worksheet("Pagos_MP")
-            pagos_records = sheet_pagos.get_all_values()
-            for row in pagos_records:
-                if len(row) >= 2:
-                    fecha_str, email_pago = row[0], row[1].strip().lower()
-                    fecha_obj = parsear_fecha(fecha_str)
-                    if fecha_obj:
-                        if email_pago not in ultimos_pagos or fecha_obj > ultimos_pagos[email_pago]:
-                            ultimos_pagos[email_pago] = fecha_obj
-        except Exception as e:
-            print(f"[GOOGLE SHEETS] No se pudo leer Pagos_MP o está vacía: {e}")
-
         if not registros:
             print("[GOOGLE SHEETS] La hoja está vacía o no tiene registros.")
             return [], []
 
-        # --- Mapeo flexible de encabezados ---
         encabezados = list(registros[0].keys())
+        # FIX: Inicializar todas las variables necesarias para prever excepciones de UnbundLocalError
         col_nombre    = None
         col_email     = None
         col_estado    = None
         col_pago      = None
         col_plan      = None
         col_materias  = None
+        col_fecha     = None
+        col_venc      = None
         cols_distritos = []
 
-        for enc in encabezados:
+        for i, enc in enumerate(encabezados):
             enc_lower = enc.lower().strip()
             if "nombre" in enc_lower and col_nombre is None:
                 col_nombre = enc
@@ -173,14 +133,21 @@ def obtener_usuarios_desde_sheets():
                 col_pago = enc
             elif "plan" in enc_lower and col_plan is None:
                 col_plan = enc
+            elif "vencimiento" in enc_lower and col_venc is None:
+                col_venc = enc
             elif "estado" in enc_lower and "pago" not in enc_lower and col_estado is None:
                 col_estado = enc
             elif ("código" in enc_lower or "codigo" in enc_lower or "materias" in enc_lower) and col_materias is None:
                 col_materias = enc
+            elif ("marca" in enc_lower and "temporal" in enc_lower) or ("fecha" in enc_lower and col_fecha is None):
+                col_fecha = enc
             elif "distrito" in enc_lower:
                 cols_distritos.append(enc)
 
-        # --- Agrupar filas por email de forma cronológica ---
+        # Si no encontramos columna explícita de vencimiento, usamos la Col N (índice 13)
+        if not col_venc and len(encabezados) > 13:
+            col_venc = encabezados[13]
+
         historial_usuarios = {}
 
         for reg in registros:
@@ -191,8 +158,13 @@ def obtener_usuarios_desde_sheets():
             nombre = str(reg.get(col_nombre, "")).strip() if col_nombre else ""
             estado_raw = str(reg.get(col_estado, "")).strip() if col_estado else ""
             pago_raw = str(reg.get(col_pago, "")).strip() if col_pago else ""
-            plan_raw = str(reg.get(col_plan, "")).strip() if col_plan else "Premium" # Por defecto asumimos Premium si no existía la columna antes
+            plan_raw = str(reg.get(col_plan, "")).strip() if col_plan else "Premium" # Default para los viejos
             materias_str = str(reg.get(col_materias, "")).strip() if col_materias else ""
+            fecha_raw = str(reg.get(col_fecha, "")).strip() if col_fecha else ""
+            venc_raw = str(reg.get(col_venc, "")).strip() if col_venc else ""
+            
+            fecha_registro = parsear_fecha(fecha_raw) if fecha_raw else None
+            fecha_vencimiento = parsear_fecha(venc_raw) if venc_raw else None
 
             distritos_crudos = []
             for col_d in cols_distritos:
@@ -211,6 +183,10 @@ def obtener_usuarios_desde_sheets():
                     materias = fila_anterior['materias']
                 if not nombre and fila_anterior['nombre']:
                     nombre = fila_anterior['nombre']
+                if not fecha_registro and fila_anterior['fecha_registro']:
+                    fecha_registro = fila_anterior['fecha_registro']
+                if not fecha_vencimiento and fila_anterior.get('fecha_vencimiento'):
+                    fecha_vencimiento = fila_anterior['fecha_vencimiento']
 
             historial_usuarios[email] = {
                 "nombre": nombre if nombre else "Colega",
@@ -219,10 +195,11 @@ def obtener_usuarios_desde_sheets():
                 "pago_raw": pago_raw,
                 "plan_raw": plan_raw,
                 "distritos": distritos,
-                "materias": materias
+                "materias": materias,
+                "fecha_registro": fecha_registro,
+                "fecha_vencimiento": fecha_vencimiento
             }
 
-        # --- Filtros FREEMIUM ---
         usuarios = []
         usuarios_vencidos = []
         fecha_evaluacion = datetime.now()
@@ -232,32 +209,31 @@ def obtener_usuarios_desde_sheets():
             pago_val = datos["pago_raw"].upper()
             plan_val = datos["plan_raw"].title()
 
-            # 1. Que el Estado NO sea 'baja'
             if estado_val == "baja":
                 continue
 
             es_desarrollador = (pago_val == "DESARROLLADOR" or estado_val == "desarrollador")
             es_pagado = (pago_val == "PAGADO")
             
-            # --- EVALUACIÓN DE VENCIMIENTO PREMIUM ---
-            # Si pasaron más de 30 días del último pago en Pagos_MP, el estado de pago pasa a PENDIENTE
-            ultimo_pago = ultimos_pagos.get(email)
+            # FIX: Evaluacion de caida al plan Gratis puramente a traves de la fecha parseada
             if plan_val == "Premium" and not es_desarrollador:
-                if ultimo_pago and (fecha_evaluacion - ultimo_pago).days > 30:
-                    es_pagado = False
-                    pago_val = "PENDIENTE"
-                    usuarios_vencidos.append(datos) # Notificaremos su caída a Gratis
+                if datos["fecha_vencimiento"]:
+                    if datos["fecha_vencimiento"] < fecha_evaluacion:
+                        es_pagado = False
+                        pago_val = "PENDIENTE"
+                        usuarios_vencidos.append(datos)
+                else:
+                    if datos["fecha_registro"] and (fecha_evaluacion - datos["fecha_registro"]).days > 30:
+                        es_pagado = False
+                        pago_val = "PENDIENTE"
+                        usuarios_vencidos.append(datos)
 
-            # Definir Acceso
             acceso_total = es_desarrollador or (plan_val == "Premium" and es_pagado)
             
-            # Si NO tiene acceso total, recortamos a PLAN GRATIS (1 distrito, 1 materia)
             if not acceso_total:
-                # Si dice PENDIENTE y su plan NO es Gratis, igual lo procesamos como Gratis (modo caída/vencido)
                 datos["distritos"] = [datos["distritos"][0]] if datos["distritos"] else []
                 datos["materias"]  = [datos["materias"][0]] if datos["materias"] else []
                 
-            # Validar que le quede algo
             if not datos["distritos"] or not datos["materias"]:
                 continue
 
@@ -266,11 +242,14 @@ def obtener_usuarios_desde_sheets():
                 "email":    datos["email"],
                 "distritos": datos["distritos"],
                 "materias":  datos["materias"],
+                "fecha_registro": datos["fecha_registro"]
             })
 
         print(f"[GOOGLE SHEETS] Obtenidos {len(usuarios)} usuarios válidos tras procesar Freemium.")
         return usuarios, usuarios_vencidos
 
     except Exception as e:
+        import traceback
+        traceback.print_exc()
         print(f"[GOOGLE SHEETS ERROR] Error al intentar leer DB_Lector_ABC: {e}")
         return [], []

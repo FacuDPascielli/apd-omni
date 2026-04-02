@@ -116,3 +116,110 @@ def enviar_correo_vencimiento(destinatario, nombre="Colega"):
     except Exception as e:
         print(f"Error al enviar correo de vencimiento a {destinatario}: {e}")
         return False
+
+def enviar_correo_bienvenida(destinatario, nombre="Colega"):
+    remitente = os.environ.get("EMAIL_REMITENTE")
+    password = os.environ.get("EMAIL_PASSWORD")
+    if not remitente or not password:
+        return False
+    msg = MIMEMultipart('alternative')
+    msg['Subject'] = "¡Bienvenido/a a Brújula Docente! 🚀"
+    msg['From'] = remitente
+    msg['To'] = destinatario
+    html = f"""
+    <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.5;">
+      <h2 style="color: #1937b0;">¡Alta exitosa en nuestras Alertas!</h2>
+      <p>Hola, <strong>{nombre}</strong>.</p>
+      <p>Queríamos darte la bienvenida a Brújula Docente. Tu cuenta ya está validada y lista para recibir ofertas.</p>
+      <p>A partir de este momento, nuestro sistema buscará coincidencias con tus materias y distritos. Te enviaremos un correo apenas haya novedades compatibles (suele ser de lunes a viernes entre las 8:00 y las 19:00 hs).</p>
+      <p>¡Esperamos que pronto consigas tus horas!</p>
+      <br>
+      <p style="font-size: 13px; color: #555;">Si deseás dejar de recibir estos mensajes, podés <a href="{LINK_BAJA}" style="color: #6c3483; text-decoration: underline;">darte de baja acá</a>.</p>
+      <p style="font-size: 11px; color: #999;"><b>Bot Automático Lector ABC</b></p>
+    </div>
+    """
+    msg.attach(MIMEText(html, 'html'))
+    try:
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        server.login(remitente, password)
+        server.sendmail(remitente, destinatario, msg.as_string())
+        server.quit()
+        return True
+    except Exception as e:
+        print(f"Error al enviar correo de bienvenida a {destinatario}: {e}")
+        return False
+
+def enviar_correo_espera(destinatario, nombre="Colega"):
+    remitente = os.environ.get("EMAIL_REMITENTE")
+    password = os.environ.get("EMAIL_PASSWORD")
+    if not remitente or not password:
+        return False
+    msg = MIMEMultipart('alternative')
+    msg['Subject'] = "Aviso: Seguimos buscando ofertas para vos 🕵️‍♀️"
+    msg['From'] = remitente
+    msg['To'] = destinatario
+    html = f"""
+    <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.5;">
+      <h2 style="color: #1937b0;">Seguimos buscando coincidencias...</h2>
+      <p>Hola, <strong>{nombre}</strong>.</p>
+      <p>Ha pasado tu primer día en el sistema y queríamos contarte que <b>aún no han salido ofertas públicas en el ABC</b> que coincidan con tu distrito y materia.</p>
+      <p>No te preocupes, esto es normal. Algunas materias específicas demoran unos días en salir a la luz, o puede ser un período de baja publicación en tu distrito. Nosotros seguimos trabajando en segundo plano y te avisaremos inmediatamente cuando encontremos una opción para vos.</p>
+      <br>
+      <p style="font-size: 13px; color: #555;">Si deseás dejar de recibir estos mensajes o modificar tus filtros, podés <a href="{LINK_BAJA}" style="color: #6c3483; text-decoration: underline;">darte de baja acá</a> e inscribirte nuevamente.</p>
+      <p style="font-size: 11px; color: #999;"><b>Bot Automático Lector ABC</b></p>
+    </div>
+    """
+    msg.attach(MIMEText(html, 'html'))
+    try:
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        server.login(remitente, password)
+        server.sendmail(remitente, destinatario, msg.as_string())
+        server.quit()
+        return True
+    except Exception as e:
+        print(f"Error al enviar correo de espera a {destinatario}: {e}")
+        return False
+
+def enviar_correo_sin_ofertas_hoy(destinatario, nombre, distritos, materias):
+    remitente = os.environ.get("EMAIL_REMITENTE")
+    password = os.environ.get("EMAIL_PASSWORD")
+    if not remitente or not password:
+        return False
+    msg = MIMEMultipart('alternative')
+    msg['Subject'] = "Reporte Diario Brújula Docente: Sin ofertas nuevas hoy"
+    msg['From'] = remitente
+    msg['To'] = destinatario
+    
+    dist_str = ", ".join(distritos)
+    mat_str = ", ".join(materias)
+    
+    html = f"""
+    <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.5;">
+      <h2 style="color: #6f9ac8;">Resumen del día</h2>
+      <p>Hola, <strong>{nombre}</strong>.</p>
+      <p>Terminaron las tandas de publicación oficiales de la Provincia por el día de hoy.</p>
+      <p>Te escribíamos para confirmarte que <b>hoy no se publicaron nuevas ofertas</b> para tus filtros actuales:</p>
+      <ul>
+         <li><b>Distritos:</b> {dist_str}</li>
+         <li><b>Materias:</b> {mat_str}</li>
+      </ul>
+      <p>Nos parecía importante avisarte para que te quedes tranquilo/a sabiendo que el sistema sí te leyó, pero simplemente no hubo actos públicos para tu perfil hoy. Mañana a la mañana retomaremos la búsqueda automática.</p>
+      <p>¡Que descanses!</p>
+      <br>
+      <p style="font-size: 13px; color: #555;">Si deseás dejar de recibir estos mensajes, podés <a href="{LINK_BAJA}" style="color: #6c3483; text-decoration: underline;">darte de baja acá</a>.</p>
+      <p style="font-size: 11px; color: #999;"><b>Bot Automático Lector ABC</b></p>
+    </div>
+    """
+    msg.attach(MIMEText(html, 'html'))
+    try:
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        server.login(remitente, password)
+        server.sendmail(remitente, destinatario, msg.as_string())
+        server.quit()
+        return True
+    except Exception as e:
+        print(f"Error al enviar resumen sin ofertas a {destinatario}: {e}")
+        return False
