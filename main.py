@@ -121,6 +121,8 @@ def tarea_notificacion(es_cierre_dia=False):
     historial = cargar_historial()
     estados = cargar_estados()
     
+    hubo_cambio_estado = False
+    
     fecha_hoy = datetime.now().strftime("%Y-%m-%d")
     if "fecha_actual" not in estados or estados.get("fecha_actual") != fecha_hoy:
         estados["fecha_actual"] = fecha_hoy
@@ -129,11 +131,11 @@ def tarea_notificacion(es_cierre_dia=False):
         for f in estados["usuarios"].values():
             if isinstance(f, dict):
                 f["ofertas_recibidas_hoy"] = False
+        hubo_cambio_estado = True
                 
     usuarios_estado = estados.setdefault("usuarios", {})
     
     any_new_match = False
-    hubo_cambio_estado = False
 
     # 3. Cruzar datos locales
     for usuario in usuarios:
