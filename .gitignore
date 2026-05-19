@@ -26,7 +26,6 @@ usuarios.json
 # Los siguientes archivos guardan el estado y memoria del bot.
 # Deben estar trackeados para que GitHub Actions los pueda leer y actualizar.
 !ofertas_enviadas.json
-!ofertas_db.json
 !vencimientos.json
 !estados_usuarios.json
 
@@ -47,3 +46,4 @@ test_results*.txt
 error*.txt
 debug*.png
 error*.png
+ofertas_db.json
